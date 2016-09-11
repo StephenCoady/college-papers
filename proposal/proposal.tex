@@ -3,11 +3,12 @@
 
 %-----------------------------------------------PACKAGES-------------------------------------------------------------%
 \usepackage{graphicx} %images
+\DeclareGraphicsExtensions{.pdf,.png,.jpeg} % configures latex to look for the following image extensions
 \usepackage{setspace} % allows for configuring the linespacing in the document
 \usepackage{caption}
 \usepackage{appendix}
 \usepackage[a4paper, total={6in, 8in}]{geometry}
-
+\usepackage{glossaries}
 
 %-----------------------------------------------#########--------------------------------------------------------------%
 
@@ -17,6 +18,8 @@
 \title{Final Year Project Proposal}
 \date{September 12, 2016}
 \onehalfspacing
+\makeglossaries
+
 
 %CONTENT
 \begin{document}
@@ -25,34 +28,45 @@
 
 \newpage
 
-\begin{abstract}
-This is the abstract for my proposal. It should house any vital information about my project.
-\end{abstract}
+\paragraph{Title:}
+\label{par:Title}
+Moodle Analytics Investigation
 
-\newpage
+\paragraph{Introduction:}
+\newglossaryentry{LRS}
+{
+  name={LRS},
+  description={When an action is taken on an electronic learning platform, a record of this is taken. This action is then sent to a Learning Record Store, where it is saved.},
+  sort=LRS
+}
+\label{par:Introduction}
+The electronic learning system Moodle provides users with a way to track their learning, allowing them to have a clearer picture of their learning goals, milestones and achievements. This then begs the question, is this progress tracked anywhere? Is it possible to track whether or not users are using this information to enhance their learning, and if not is it having a negative impact on their overall learning and progress?
 
-\tableofcontents
+The project I am proposing would aim to provide a solution to this problem. The data required to provide an insight into the usage of the system is already there, stored in an \gls{LRS}.
 
-\newpage
+\paragraph{Description:}
+\label{par:Description}
+In WIT, the current Moodle build already contains a plugin, called xAPI (commonly referred to as Tin Can API) which records and sends data about interactions with the system to an LRS. This means that the data is being recorded and stored, but not being acted upon currently. 
 
-\section{Introduction}
+In other words, this data is at the moment exactly that - just data, my proposal is to turn this data into \textit{information}. Information that can be used to gauge how effectively the learning system is being used.
+\begin{figure}[!hb]
+\centering
+\includegraphics*[width=1\textwidth]{components/images/overview}
+\caption{\em Data to LRS and application reading from LRS}
+\label{fig:overview}
+\end{figure}
 
-This will be the introduction for my proposal. It will house the general idea behind the project.
+\paragraph{Technologies and Frameworks:}
+\label{par:Technologies and Frameworks}
+\begin{itemize}
+	\item Some language
+	\item Some framework
+	\item Some testing framework
+\end{itemize}
 
-\section{Background}
+\paragraph{Project Method:}
+\label{par:Project Method}
+Test Driven Development using Agile methodologies.
 
-This may not be needed. If it is it could be a brief intro into the LRS.
-
-\section{Supervisor}
-
-This will make a case for Eamonn deLeaster being my supervisor.
-
-\section{Discussion}
-
-Some discussion here. Possibly about the technology stack or general direction.
-
-\section{Conclusion}
-
-May not be needed, as there isn't a conclusion to be formed. 
 
 \end{document}
