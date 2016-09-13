@@ -1,0 +1,69 @@
+\documentclass{article}
+\setcounter{secnumdepth}{0}
+
+%-----------------------------------------------PACKAGES-------------------------------------------------------------%
+\usepackage{graphicx} %images
+\DeclareGraphicsExtensions{.pdf,.png,.jpeg} % configures latex to look for the following image extensions
+\usepackage{setspace} % allows for configuring the linespacing in the document
+\usepackage{caption}
+\usepackage{appendix}
+\usepackage[a4paper, total={6in, 8in}]{geometry}
+\usepackage{glossaries}
+
+%-----------------------------------------------#########--------------------------------------------------------------%
+
+
+%PREAMBLE
+\author{Stephen Coady}
+\title{Lifecycle Management for Docker UI}
+\onehalfspacing
+
+%CONTENT
+\begin{document}
+\maketitle
+\newpage
+
+\section{Images:}
+Primary Goals: 
+\begin{itemize}
+	\item List
+	\item Push and Pull
+	\item Delete
+	\item Build from Dockerfile
+	\item Visual Representation of an image: 
+	\begin{itemize}
+		\item view the history
+		\item see changes made at each layer
+	\end{itemize}
+\end{itemize}
+
+
+
+\paragraph{Description:}
+\label{par:Description}
+Presently, Docker is command line only, meaning the user must be comfortable with the terminal before they can use Docker. This is not ideal. The aim of this project would be to allow users to run the application and have a graphical access to the containers running on a selected server.
+
+This application would give users access to the Docker API, which effectively allows them to perform any commands they can currently run but using a GUI.
+
+The end goal of the project would also be to have the application itself run inside a Docker container, allowing for extreme portability and ease-of-use.
+
+\paragraph{Technologies and Frameworks:}
+\label{par:Technologies and Frameworks}
+\begin{itemize}
+	\item Node.js server
+	\item Possibly Angular front end
+	\item Mocha testing framework
+  \item Docker for containerisation
+  \item Ansible for deployment and provisioning servers
+  \item Possibly Jenkins for CI/CD
+\end{itemize}
+
+\paragraph{Project Method:}
+\label{par:Project Method}
+Test Driven Development using Agile methodologies.
+
+\paragraph{Supervisor:}
+\label{par:Supervisor}
+If possible, I would like to request Eamonn deLeaster be my supervisor. I think as Docker is such a new technology Eamonn's domain knowledge would be a great advantage to me.
+
+\end{document}
