@@ -8,7 +8,7 @@
 \usepackage{caption}
 \usepackage{appendix}
 \usepackage[a4paper, total={6in, 8in}]{geometry}
-\usepackage{glossaries}
+\usepackage{hyperref}
 
 %-----------------------------------------------#########--------------------------------------------------------------%
 
@@ -23,47 +23,125 @@
 \maketitle
 \newpage
 
-\section{Images:}
-Primary Goals: 
+\section{Images}
+
+\underline{Primary Goals:} 
 \begin{itemize}
 	\item List
 	\item Push and Pull
 	\item Delete
 	\item Build from Dockerfile
+\end{itemize} 
+\underline {Stretch Goals:}
+\begin{itemize}
 	\item Visual Representation of an image: 
 	\begin{itemize}
-		\item view the history
-		\item see changes made at each layer
+		\item This would allow the user to see the history of an image
+		\item It could also graphically show the changes made at each layer of the image. 
 	\end{itemize}
 \end{itemize}
 
+\begin{figure}[!hb]
+\centering
+\includegraphics*[width=.5\textwidth]{components/docker_image_levels}
+\caption{\em Graphically Show what happens at each layer of the image}
+\label{fig:docker_image_levels}
+\end{figure}
 
-
-\paragraph{Description:}
-\label{par:Description}
-Presently, Docker is command line only, meaning the user must be comfortable with the terminal before they can use Docker. This is not ideal. The aim of this project would be to allow users to run the application and have a graphical access to the containers running on a selected server.
-
-This application would give users access to the Docker API, which effectively allows them to perform any commands they can currently run but using a GUI.
-
-The end goal of the project would also be to have the application itself run inside a Docker container, allowing for extreme portability and ease-of-use.
-
-\paragraph{Technologies and Frameworks:}
-\label{par:Technologies and Frameworks}
 \begin{itemize}
-	\item Node.js server
-	\item Possibly Angular front end
-	\item Mocha testing framework
-  \item Docker for containerisation
-  \item Ansible for deployment and provisioning servers
-  \item Possibly Jenkins for CI/CD
+	\item Get a tarfile of all images on a server
+	\begin{itemize}
+		\item This would allow for quick `snapshotting' of all images on a server
+	\end{itemize}
+	\item Load a tarfile with images onto a server
+	\begin{itemize}
+		\item The opposite of above, allow quick startup of containers, however a provisioning tool such as Ansible paired with Docker Compose may make this option impractical if a faster alternative already exists.
+	\end{itemize}
+	\item Searching the Docker hub for images to use
 \end{itemize}
 
-\paragraph{Project Method:}
-\label{par:Project Method}
-Test Driven Development using Agile methodologies.
+\newpage
 
-\paragraph{Supervisor:}
-\label{par:Supervisor}
-If possible, I would like to request Eamonn deLeaster be my supervisor. I think as Docker is such a new technology Eamonn's domain knowledge would be a great advantage to me.
+\section{Containers}
+
+\underline {Primary Goals:}
+\begin{itemize}
+	\item List
+	\item Start/Stop
+	\item Restart
+	\item Remove
+\end{itemize}
+\underline {Stretch Goals:}
+\begin{itemize}
+	\item Sending files to a container.
+	\begin{itemize}
+		\item I would envisage this being useful for quick provisioning or installation of a service. Either way, it is useful to be able to provide a container with files before it starts running so this gives that option.
+	\end{itemize}
+	\item Output/viewing of a running container's log
+	\begin{itemize}
+		\item From experience I know it can be useful to view the console output of a container. This can be cumbersome when the container is remote so providing this option could be something to look at. Where it may come in most handy is during development, when seeing what is happening under the hood of a container can be a great debugging tool.
+	\end{itemize}
+\end{itemize}
+
+\newpage
+\section{Other Goals}
+
+\paragraph{Containerising the application:}\mbox{}\\
+This would be a very valuable end product. It makes running the application exponentially easier having it in a container. With the right development process - i.e. keeping this end goal in mind from the start and using the right tools, this will hopefully be a smooth process.
+\paragraph{Security:}
+\begin{itemize}
+	\item App Level Authentication
+	\begin{itemize}
+		\item On an app level, something like Passport may suit here. It can be used as a node module to authenticate against a given username and password. A simple version of how this could work is as follows: run the container $ \rightarrow $ log in first time using dummy details $ \rightarrow $ prompted to change login details. 
+	\end{itemize}
+	\item Remote Server Authentication
+	\begin{itemize}
+		\item I have built a secure Docker registry which was used in production, so I am aware of how Docker uses certificate validation using client keys and certificates. It essentially means only connections from clients providing the correct certificate will be allowed.
+		\item One downside I see to this is that it is quite cumbersome. It is not ideal for the end user to need to set up and sign certificates for each server they wish to manage.
+	\end{itemize}
+\end{itemize}
+
+\paragraph{Statistics:}
+\begin{itemize}
+	\item Network Monitoring
+	\begin{itemize}
+		\item Monitoring the network and which containers are linked could be an interesting topic to look at. Using something like
+    vis.js we could visualise the containers running on a server and how they are connected.
+	\end{itemize}
+	\item Container Load
+	\begin{itemize}
+		\item Here I think it could be interesting to see how the actual server is performing due to the containers it is running. i.e how was the server running for the past 15 minutes, before I added another container that is network intensive?
+	\end{itemize}
+\end{itemize}
+
+\newpage
+
+\paragraph{Connecting to Multiple Servers:}\mbox{}\\
+This is one part of the proposal I am not certain about. One solution could be to run the app on each server it is needed on, then talk to these servers using a single point of login (on the user's host machine possibly). 
+
+This could consist of the user filling in the details of each server application and then the application authenticating with each server and the UI aggregating the result. 
+
+\paragraph{REST API:}\mbox{}\\
+For this project I would use either Express or HAPI to build the APIs required. 
+
+Express definitely has the larger community, which may prove beneficial, but using Express can sometimes be a tedious task whereas HAPI may do more `out of the box'.
+
+Further investigation is needed here, and the result will depend upon which of the above two will cater for the project requirements more efficiently.
+
+\paragraph{Testing Strategy:}\mbox{}\\
+I would like to complete this project using a Test Driven Development Approach. I feel it suits node applications well, and after the initial outlay of writing tests, allows for rapid development which fits nicely into an agile development environment.
+
+To that extent, I would also look at setting up a continuous integration cycle using something like Jenkins CI. I have previous experience using Jenkins and I feel it would fit well here. 
+
+
+\newpage
+\section{Learning Outcomes}
+\label{sec:Learning Outcomes}
+My ideal learning outcomes from this project are as follows:
+\begin{itemize}
+	\item Gain a greater understanding of Docker. I feel this project could give me a greater appreciation of the possibilities Docker offers, especially since it is not just about building an application using Docker, but actually interacting with the Docker Engine itself.
+	\item Working as part of an agile process with a dedicated product owner in the form of Red Hat and a scrum master in my college supervisor. This will be an invaluable experience.
+	\item Development best practices. Having access to a professional developer will allow me to see the industry standard when it comes to both code and project management. 
+\end{itemize}
 
 \end{document}
