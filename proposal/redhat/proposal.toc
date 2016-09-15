@@ -1,0 +1,18 @@
+\contentsline {section}{Images}{3}{section*.1}
+\contentsline {subsection}{Primary Goals}{3}{subsection*.2}
+\contentsline {subsection}{Stretch Goals}{3}{subsection*.3}
+\contentsline {section}{Containers}{4}{section*.5}
+\contentsline {subsection}{Primary Goals}{4}{subsection*.6}
+\contentsline {subsection}{Stretch Goals}{4}{subsection*.7}
+\contentsline {section}{Other Goals}{5}{section*.8}
+\contentsline {subsection}{Containerising The Application}{5}{subsection*.9}
+\contentsline {subsection}{Security}{5}{subsection*.10}
+\contentsline {subsection}{Statistics}{5}{subsection*.11}
+\contentsline {subsection}{Connecting to Multiple Servers}{6}{subsection*.12}
+\contentsline {subsection}{REST API}{7}{subsection*.14}
+\contentsline {subsection}{Testing Strategy}{7}{subsection*.15}
+\contentsline {subsection}{Other Development Tools/Methods}{8}{subsection*.16}
+\contentsline {subsubsection}{Vagrant}{8}{subsubsection*.17}
+\contentsline {subsubsection}{Ansible}{8}{subsubsection*.18}
+\contentsline {subsubsection}{Documentation}{8}{subsubsection*.19}
+\contentsline {section}{Learning Outcomes}{9}{section*.20}

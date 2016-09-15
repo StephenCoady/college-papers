@@ -8,7 +8,16 @@
 \usepackage{caption}
 \usepackage{appendix}
 \usepackage[a4paper, total={6in, 8in}]{geometry}
+\usepackage[explicit]{titlesec}
 \usepackage{hyperref}
+\hypersetup{
+    colorlinks,
+    citecolor=black,
+    filecolor=black,
+    linkcolor=black,
+    urlcolor=black
+}
+
 
 %-----------------------------------------------#########--------------------------------------------------------------%
 
@@ -16,23 +25,28 @@
 %PREAMBLE
 \author{Stephen Coady}
 \title{Lifecycle Management for Docker UI}
+\date{September 13, 2016}
 \onehalfspacing
 
 %CONTENT
 \begin{document}
 \maketitle
+\thispagestyle{empty}
+\newpage
+
+\tableofcontents
 \newpage
 
 \section{Images}
 
-\underline{Primary Goals:} 
+\subsection{Primary Goals} 
 \begin{itemize}
 	\item List
 	\item Push and Pull
 	\item Delete
 	\item Build from Dockerfile
 \end{itemize} 
-\underline {Stretch Goals:}
+\subsection{Stretch Goals}
 \begin{itemize}
 	\item Visual Representation of an image: 
 	\begin{itemize}
@@ -64,14 +78,14 @@
 
 \section{Containers}
 
-\underline {Primary Goals:}
+\subsection{Primary Goals}
 \begin{itemize}
 	\item List
 	\item Start/Stop
 	\item Restart
 	\item Remove
 \end{itemize}
-\underline {Stretch Goals:}
+\subsection{Stretch Goals}
 \begin{itemize}
 	\item Sending files to a container.
 	\begin{itemize}
@@ -86,9 +100,9 @@
 \newpage
 \section{Other Goals}
 
-\paragraph{Containerising the application:}\mbox{}\\
+\subsection{Containerising The Application}
 This would be a very valuable end product. It makes running the application exponentially easier having it in a container. With the right development process - i.e. keeping this end goal in mind from the start and using the right tools, this will hopefully be a smooth process.
-\paragraph{Security:}
+\subsection{Security}
 \begin{itemize}
 	\item App Level Authentication
 	\begin{itemize}
@@ -97,11 +111,11 @@ This would be a very valuable end product. It makes running the application expo
 	\item Remote Server Authentication
 	\begin{itemize}
 		\item I have built a secure Docker registry which was used in production, so I am aware of how Docker uses certificate validation using client keys and certificates. It essentially means only connections from clients providing the correct certificate will be allowed.
-		\item One downside I see to this is that it is quite cumbersome. It is not ideal for the end user to need to set up and sign certificates for each server they wish to manage.
+		\item One downside I see to this is that it is quite cumbersome. It is not ideal for the end user to need to set up and sign certificates for each server they wish to manage. A possible solution to this is discussed below under ``Connecting to multiple servers''.
 	\end{itemize}
 \end{itemize}
 
-\paragraph{Statistics:}
+\subsection{Statistics}
 \begin{itemize}
 	\item Network Monitoring
 	\begin{itemize}
@@ -116,23 +130,51 @@ This would be a very valuable end product. It makes running the application expo
 
 \newpage
 
-\paragraph{Connecting to Multiple Servers:}\mbox{}\\
-This is one part of the proposal I am not certain about. One solution could be to run the app on each server it is needed on, then talk to these servers using a single point of login (on the user's host machine possibly). 
+\subsection{Connecting to Multiple Servers}
+This is one part of the project which will need further investigation. One solution could be to run the app on each server it is needed on, then talk to these servers using a single point of login (on the user's host machine possibly). 
 
 This could consist of the user filling in the details of each server application and then the application authenticating with each server and the UI aggregating the result. 
 
-\paragraph{REST API:}\mbox{}\\
+One possible way of doing this would be to set up a Docker swarm. This would look like Figure \ref{fig:swarm} below. The idea behind this is that the management node on the user's host would act as a proxy and collect any information about each server where the app is running (i.e. each node). Further research is required here, but this may be something to keep on the backlog going forward.
+\vspace{1.5cm}
+
+\begin{figure}[!hb]
+\centering
+\includegraphics*[width=0.7\textwidth]{components/swarm}
+\caption{\em A Docker Swarm}
+\label{fig:swarm}
+\end{figure}
+
+\newpage
+\subsection{REST API}
 For this project I would use either Express or HAPI to build the APIs required. 
 
 Express definitely has the larger community, which may prove beneficial, but using Express can sometimes be a tedious task whereas HAPI may do more `out of the box'.
 
 Further investigation is needed here, and the result will depend upon which of the above two will cater for the project requirements more efficiently.
 
-\paragraph{Testing Strategy:}\mbox{}\\
+\subsection{Testing Strategy}
 I would like to complete this project using a Test Driven Development Approach. I feel it suits node applications well, and after the initial outlay of writing tests, allows for rapid development which fits nicely into an agile development environment.
 
 To that extent, I would also look at setting up a continuous integration cycle using something like Jenkins CI. I have previous experience using Jenkins and I feel it would fit well here. 
 
+\newpage
+\subsection{Other Development Tools/Methods}
+There are some tools I plan on using to make the development process as fluid and pain-free as possible. These are:
+
+	\subsubsection{Vagrant}
+		I plan on using Vagrant during this project for everything development related. This will mean:
+		\begin{itemize}
+			\item Easy installation of any dependencies and configuration
+			\item Sandboxed environment eliminating any conflicts
+			\item Replicating any staging server the final application may end up running on
+		\end{itemize}
+	\subsubsection{Ansible}
+		For deployment and provisioning of any Linux instance in my project, including my Vagrant VM, I will be using Ansible. One of the greatest advantages of Ansible is that it is clientless, so I can just begin using it straight away without any configuration.
+	\subsubsection{Documentation}
+		My personal preference in this area would be using a tool called AsciiDoc for API documentation and a tool called YUIDoc for everything else. 
+		
+		I am not set on both of these but from using them in the past I know they make it quick to create documents and what they produce is very readable and user friendly. I am however, open to changing this.
 
 \newpage
 \section{Learning Outcomes}
@@ -142,6 +184,7 @@ My ideal learning outcomes from this project are as follows:
 	\item Gain a greater understanding of Docker. I feel this project could give me a greater appreciation of the possibilities Docker offers, especially since it is not just about building an application using Docker, but actually interacting with the Docker Engine itself.
 	\item Working as part of an agile process with a dedicated product owner in the form of Red Hat and a scrum master in my college supervisor. This will be an invaluable experience.
 	\item Development best practices. Having access to a professional developer will allow me to see the industry standard when it comes to both code and project management. 
+	\item Business Intelligence. I hope to gain a better insight into the kind of things the bussiness cares about in IT projects. Analytics is an area where I feel this project can shine, and if I can keep in mind throughout this project what information the business side would want then it will increase the value of the end product ten-fold.
 \end{itemize}
 
 \end{document}
