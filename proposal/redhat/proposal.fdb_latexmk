@@ -1,5 +1,5 @@
 # Fdb version 3
-["pdflatex"] 1473938230 "proposal.tex" "proposal.pdf" "proposal" 1473938230
+["pdflatex"] 1474023611 "proposal.tex" "proposal.pdf" "proposal" 1474023612
   "/usr/local/texlive/2016/texmf-dist/fonts/map/fontname/texfonts.map" 1272929888 3287 e6b82fe08f5336d4d5ebc73fb1152e87 ""
   "/usr/local/texlive/2016/texmf-dist/fonts/tfm/public/cm/cmbx10.tfm" 1136768653 1328 c834bbb027764024c09d3d2bf908b5f0 ""
   "/usr/local/texlive/2016/texmf-dist/fonts/tfm/public/cm/cmbx12.tfm" 1136768653 1324 c910af8c371558dc20f2d7822f66fe64 ""
@@ -65,10 +65,10 @@
   "/usr/local/texlive/2016/texmf.cnf" 1463979140 577 2938757e76f31531e65cc647e3507693 ""
   "components/docker_image_levels.png" 1473800181 23584 ab6e4658ee8aaf8c24f4dc6dfcf21533 ""
   "components/swarm.png" 1473928466 31241 353f634c7ac5d242d2a9d5ec96079f86 ""
-  "proposal.aux" 1473938230 2724 72e7593a564adec4e66587669e06bb6d ""
-  "proposal.out" 1473938230 1126 799bd5c239fe31a74fabc2ff235c013d ""
-  "proposal.tex" 1473938229 9395 be0350e0c18f2b07200eff17a9e7a934 ""
-  "proposal.toc" 1473938230 1106 8a457b85bbb63503b806b22d6d3bec95 ""
+  "proposal.aux" 1474023612 2724 72e7593a564adec4e66587669e06bb6d ""
+  "proposal.out" 1474023612 1126 799bd5c239fe31a74fabc2ff235c013d ""
+  "proposal.tex" 1474023611 9432 0c13b5eb09223289f0f82cf8509099a8 ""
+  "proposal.toc" 1474023612 1106 8a457b85bbb63503b806b22d6d3bec95 ""
   (generated)
   "proposal.out"
   "proposal.pdf"
