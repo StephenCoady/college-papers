@@ -1,0 +1,52 @@
+\documentclass{article}
+\setcounter{secnumdepth}{0}
+
+%-----------------------------------------------PACKAGES-------------------------------------------------------------%
+\usepackage{graphicx} %images
+\DeclareGraphicsExtensions{.pdf,.png,.jpeg} % configures latex to look for the following image extensions
+\usepackage{setspace} % allows for configuring the linespacing in the document
+\usepackage{caption}
+\usepackage{natbib}
+\usepackage{appendix}
+\usepackage[a4paper, total={6in, 8in}]{geometry}
+\usepackage[explicit]{titlesec}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks,
+    citecolor=black,
+    filecolor=black,
+    linkcolor=black,
+    urlcolor=black
+}
+\bibliographystyle{agsm}
+\setcitestyle{authoryear,open={(},close={)}}
+
+%-----------------------------------------------#########--------------------------------------------------------------%
+
+
+%PREAMBLE
+\author{Stephen Coady}
+\title{The Automation of Infrastructure Orchestration and Application Deployment using Ansible and Docker Swarm}
+\onehalfspacing
+
+%CONTENT
+\begin{document}
+\maketitle
+\thispagestyle{empty}
+
+\newpage
+
+\citep{einstein}
+
+and 
+
+\citep{belcher87}
+
+and 
+
+
+
+\bibliography{references}
+
+
+\end{document}
