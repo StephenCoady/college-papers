@@ -1,14 +1,14 @@
 # Fdb version 3
-["bibtex term_paper"] 1475269407 "term_paper.aux" "term_paper.bbl" "term_paper" 1475269487
+["bibtex term_paper"] 1475273610 "term_paper.aux" "term_paper.bbl" "term_paper" 1475273611
   "/usr/local/texlive/2016/texmf-dist/bibtex/bst/harvard/agsm.bst" 1136766823 25549 e3d0f1ab4ae55e777f7352db30e2c6f7 ""
-  "components/title.aux" 1475269459 714 9f02569f036539f57ebbe223bc8d5523 ""
+  "components/title.aux" 1475273611 714 9f02569f036539f57ebbe223bc8d5523 ""
   "references.bib" 1475260070 0 d41d8cd98f00b204e9800998ecf8427e ""
-  "term_paper.aux" 1475269459 1430 5a136d0d79cb789e2916d19600d2d9b5 ""
+  "term_paper.aux" 1475273611 2196 198fc7e1fd7fa5947cedfb3e2207833a ""
   "term_paper.bcf" 0 -1 0 ""
   (generated)
   "term_paper.bbl"
   "term_paper.blg"
-["pdflatex"] 1475269458 "term_paper.tex" "term_paper.pdf" "term_paper" 1475269487
+["pdflatex"] 1475273610 "term_paper.tex" "term_paper.pdf" "term_paper" 1475273611
   "/usr/local/texlive/2016/texmf-dist/fonts/map/fontname/texfonts.map" 1272929888 3287 e6b82fe08f5336d4d5ebc73fb1152e87 ""
   "/usr/local/texlive/2016/texmf-dist/fonts/tfm/public/cm/cmbx10.tfm" 1136768653 1328 c834bbb027764024c09d3d2bf908b5f0 ""
   "/usr/local/texlive/2016/texmf-dist/fonts/tfm/public/cm/cmbx12.tfm" 1136768653 1324 c910af8c371558dc20f2d7822f66fe64 ""
@@ -66,17 +66,17 @@
   "/usr/local/texlive/2016/texmf-var/web2c/pdftex/pdflatex.fmt" 1472653475 3873397 291f6a2d00d605d0d359a97abe0c9244 ""
   "/usr/local/texlive/2016/texmf.cnf" 1463979140 577 2938757e76f31531e65cc647e3507693 ""
   "components/images/wit.jpg" 1475266693 29664 dfd6963f3970423ea7354580cb2db80c ""
-  "components/title.aux" 1475269459 714 9f02569f036539f57ebbe223bc8d5523 ""
+  "components/title.aux" 1475273611 714 9f02569f036539f57ebbe223bc8d5523 ""
   "components/title.tex" 1475269448 554 f11687ee1c03cf92dce0e8477b83708f ""
-  "term_paper.aux" 1475269459 1430 5a136d0d79cb789e2916d19600d2d9b5 ""
-  "term_paper.bbl" 1475269407 51 644c51d86f43488906f29305195f1859 "bibtex term_paper"
-  "term_paper.out" 1475269459 247 3de9a4e46e6e48f0863e6a5bec7578c6 ""
-  "term_paper.tex" 1475267731 1327 a4b84fdf293ff8d93a07b4b9798d73ef ""
-  "term_paper.toc" 1475269459 347 2b4d26e9de89232c2120c306b0f27674 ""
+  "term_paper.aux" 1475273611 2196 198fc7e1fd7fa5947cedfb3e2207833a ""
+  "term_paper.bbl" 1475273610 51 644c51d86f43488906f29305195f1859 "bibtex term_paper"
+  "term_paper.out" 1475273611 537 f4bf795a770c35be7abc360e6c5a6e4c ""
+  "term_paper.tex" 1475273608 1551 b560e9119cd61a792bb4cb9cc0cd816e ""
+  "term_paper.toc" 1475273611 720 943286896c965fae2117f149eadfccd9 ""
   (generated)
   "term_paper.out"
   "term_paper.pdf"
   "term_paper.aux"
   "term_paper.log"
-  "components/title.aux"
   "term_paper.toc"
+  "components/title.aux"

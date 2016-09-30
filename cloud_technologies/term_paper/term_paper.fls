@@ -117,6 +117,7 @@ INPUT term_paper.toc
 INPUT term_paper.toc
 INPUT /usr/local/texlive/2016/texmf-dist/fonts/tfm/public/cm/cmbx10.tfm
 OUTPUT term_paper.toc
+INPUT /usr/local/texlive/2016/texmf-dist/fonts/tfm/public/cm/cmbx12.tfm
 INPUT term_paper.bbl
 INPUT term_paper.bbl
 INPUT term_paper.aux
