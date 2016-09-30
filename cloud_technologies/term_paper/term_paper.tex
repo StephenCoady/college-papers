@@ -1,9 +1,8 @@
 \documentclass{article}
-\setcounter{secnumdepth}{0}
 
 %-----------------------------------------------PACKAGES-------------------------------------------------------------%
 \usepackage{graphicx} %images
-\DeclareGraphicsExtensions{.pdf,.png,.jpeg} % configures latex to look for the following image extensions
+\DeclareGraphicsExtensions{.pdf,.png,.jpg} % configures latex to look for the following image extensions
 \usepackage{setspace} % allows for configuring the linespacing in the document
 \usepackage{caption}
 \usepackage{natbib}
@@ -11,6 +10,7 @@
 \usepackage[a4paper, total={6in, 8in}]{geometry}
 \usepackage[explicit]{titlesec}
 \usepackage{hyperref}
+\usepackage[nottoc,numbib]{tocbibind}
 \hypersetup{
     colorlinks,
     citecolor=black,
@@ -26,26 +26,34 @@
 
 %PREAMBLE
 \author{Stephen Coady}
-\title{The Automation of Infrastructure Orchestration and Application Deployment using Ansible and Docker Swarm}
 \onehalfspacing
 
 %CONTENT
 \begin{document}
-\maketitle
+\include{components/title}
 \thispagestyle{empty}
 
 \newpage
+\tableofcontents
+\newpage
 
-\citep{einstein}
+\newpage
+\section{Introduction}
+\label{sec:Introduction}
 
-and 
+\newpage
+\section{Description/Background}
+\label{sec:Description/Background}
 
-\citep{belcher87}
+\newpage
+\section{Work Carried Out}
+\label{sec:Work}
 
-and 
+\newpage
+\section{Conclusion}
+\label{sec:Conclusion}
 
-
-
+\newpage
 \bibliography{references}
 
 
