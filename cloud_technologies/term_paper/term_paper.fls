@@ -67,6 +67,8 @@ INPUT /usr/local/texlive/2016/texmf-dist/tex/latex/oberdiek/rerunfilecheck.sty
 INPUT /usr/local/texlive/2016/texmf-dist/tex/latex/oberdiek/rerunfilecheck.sty
 INPUT /usr/local/texlive/2016/texmf-dist/tex/latex/tocbibind/tocbibind.sty
 INPUT /usr/local/texlive/2016/texmf-dist/tex/latex/tocbibind/tocbibind.sty
+INPUT /usr/local/texlive/2016/texmf-dist/tex/latex/parskip/parskip.sty
+INPUT /usr/local/texlive/2016/texmf-dist/tex/latex/parskip/parskip.sty
 INPUT term_paper.aux
 INPUT term_paper.aux
 INPUT components/title.aux
@@ -117,9 +119,14 @@ INPUT term_paper.toc
 INPUT term_paper.toc
 INPUT /usr/local/texlive/2016/texmf-dist/fonts/tfm/public/cm/cmbx10.tfm
 OUTPUT term_paper.toc
+INPUT /usr/local/texlive/2016/texmf-dist/fonts/tfm/public/cm/cmti10.tfm
+INPUT components/images/datadog.png
+INPUT ./components/images/datadog.png
+INPUT ./components/images/datadog.png
 INPUT /usr/local/texlive/2016/texmf-dist/fonts/tfm/public/cm/cmbx12.tfm
 INPUT term_paper.bbl
 INPUT term_paper.bbl
+INPUT /usr/local/texlive/2016/texmf-dist/fonts/tfm/public/cm/cmtt10.tfm
 INPUT term_paper.aux
 INPUT components/title.aux
 INPUT components/title.aux
@@ -130,4 +137,6 @@ INPUT /usr/local/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.p
 INPUT /usr/local/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pfb
 INPUT /usr/local/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb
 INPUT /usr/local/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb
+INPUT /usr/local/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb
 INPUT /usr/local/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb
+INPUT /usr/local/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb
