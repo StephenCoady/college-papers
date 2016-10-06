@@ -9,6 +9,8 @@
 \usepackage{appendix}
 \usepackage[a4paper, total={6in, 8in}]{geometry}
 \usepackage[explicit]{titlesec}
+\usepackage{setspace} 
+\onehalfspacing
 \usepackage{hyperref}
 \usepackage{url}
 \usepackage[nottoc,numbib]{tocbibind}
@@ -57,7 +59,7 @@ Here the ``service lifecycle'' is the key term, as it means everything involved 
 
 This model however has shifted. In a survey conducted by \citep{survey}, it is shown that, in general, DevOps orientated teams spend slightly more time on \textit{all} tasks, whereas traditional IT roles will focus more on their primary tasks. This puts emphasis on the fact that developers now need to be more competent at multiple disciplines within IT. This, paired with the fact that the survey also shows DevOps orientated teams tend to automate more, shows that the importance of automated deployments has increased in recent times. 
 
-Also, with the rise in popularity of containers as a deployment vehicle, as can be seen for Docker specifically in Figure \ref{fig:datadog} it is more and more important to make the deployment of complicated applications more streamlined and reproducable.
+Also, with the rise in popularity of containers as a deployment vehicle, as can be seen for Docker specifically in Figure \ref{fig:datadog} it is more and more important to make the deployment of complicated applications more streamlined and reproducible.
 
 To this end, this paper will aim to propose a solution to the problem of provisioning a production server and then deploying a fault-tolerant, scalable application to the server. It will try to show how the process of building infrastructure and deploying an application to that infrastructure can be automated, increasing productivity and also allowing for an easily reproducible environment.
 
@@ -72,8 +74,36 @@ To this end, this paper will aim to propose a solution to the problem of provisi
 \section{Technology Background}
 \label{sec:Background}
 
+In this chapter we will examine a number of technologies that together will aim to solve the problem discussed in Section \ref{sec:Problem}.
+
 \subsection{Containers}
 \label{sub:Containers}
+In software, a container is a process isolated from the host which generally runs in a very lightweight wrapper. It uses the underlying Linux kernel to do the work it needs to but ultimately it is a separate process which is self-contained \citep{Matthias2015}. They contain complete filesystems which can house everything the packaged application needs to run, including code, environment variables, libraries and dependencies.
+
+Containers are often compared with virtual machines, however this view is a bit simplistic. Virtual machines are fully fledged operating systems running on a hypervisor which emulates dedicated hardware. It is made up of virtual devices which emulate the physical devices of a real host. Containers however, are not as full featured. Instead, they can be made so that they only have those resources that they need - and nothing else. So while virtual machines are emulating a real server, it could be said that a container is emulating a single \textit{process} on a server - and only packaging exactly what that process needs to run.
+
+
+\paragraph{Advantages}\mbox{}\\
+
+Some advantages of containers are:
+
+\begin{itemize}
+  \item Lightweight - images can be as small as 15 MB
+  \item Ephemeral - containers lifespan can be as small as is needed, they can be started to perform a single process and then stop as soon as they are done. 
+  \item Cheap - it is not CPU intensive to start a container
+  \item Portable - containers can be built from a single file
+  \item Secure - Using containers ensures applications are isolated from each other. An added benefit here is that multiple versions of the same application be running on the same host.
+\end{itemize}
+
+\paragraph{Disadvantages}\mbox{}\\
+
+There can also be drawbacks to containers, these include:
+
+\begin{itemize}
+  \item Potential for added work - while containers can be useful they can also add to the work load and increase the lifecycle management of the application infrastructure.
+  \item Orchestrating large applications can be complex
+  \item The containers share the same kernel. Any issues with the kernel and the container engine running on it will affect all containers.
+\end{itemize}
 
 \subsection{Docker}
 \label{sub:Docker}
@@ -81,8 +111,21 @@ To this end, this paper will aim to propose a solution to the problem of provisi
 \subsubsection{Swarm}
 \label{subs:Swarm}
 
+\subsubsection{Alternatives}
+\label{subs:Docker-alt}
+
+
 \subsection{Ansible}
 \label{sub:Ansible}
+
+\subsubsection{Alternatives}
+\label{subs:Ansible-alt}
+
+\subsection{Amazon Web Services}
+\label{sub:AWS}
+
+\subsubsection{Alternatives}
+\label{subs:AWS-alt}
 
 
 \newpage
