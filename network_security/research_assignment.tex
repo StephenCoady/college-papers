@@ -11,6 +11,7 @@
 \usepackage[explicit]{titlesec}
 \usepackage{hyperref}
 \usepackage[nottoc,numbib]{tocbibind}
+\usepackage[parfill]{parskip}
 \hypersetup{
     colorlinks,
     citecolor=black,
@@ -39,11 +40,60 @@
 
 \newpage
 \section{Introduction}
-\label{sec:Introduction}
+\label{sec:Introduction} %REVIEW not happy with this
+Traditionally applications are run within a virtual machine which abstracts a real server. This virtual machine is managed and given the tools it needs to run by a hypervisor running on the host server. This process however can be quite expensive in terms of CPU.
+
+Containers, however, are self-contained isolated processes which run on the host kernel. They have their own internal isolated CPU, memory, filesystem and network resources. 
+
+Containers on their own are essentially made using two components, cgroups and namespaces. This is where Docker comes in. Docker is a container management engine which can run and manage these containers \citep{Wang2016}. Usage of containers in production has grown exponentially, in no small part to the rise in popularity of Docker. It began as a project to manage LXC containers and quickly evolved and built on top of LXC \citep{BCN}.
+
+This paper will aim to investigate the overall security of a technology such as Docker. It will look at tools which can help strengthen the security of these containers and then also look at a real-life example of how container security can cause problems.
 
 \newpage
 \section{Description/Background}
 \label{sec:Description/Background}
+
+To fully understand Docker security we must first look at how the containers are managed on the host, to do this we need to understand Linux namespaces and cgroups.
+
+\subsection{Namespaces}
+\label{subs:Namespaces}
+Linux namespaces are designed to wrap a global resource in an abstraction layer, and then present the resource to a process within the namespace in such a way that to the process it appears they have their own isolated instance of the global resource \citep{Kerrisk2013}. It is because of this separation of resources that Linux namespaces form the foundation of containers, and therefore Docker.
+
+Namespaces are also broken up into subgroups, providing different resources to the processes requesting them. We will explore these different namespaces and their functions below.
+
+
+\paragraph{Mount Namespaces}\mbox{}\\
+Isolate the filesystem mount points available to a process or set of processes. This essentially means that two processes running in two separate mount namespaces can have completely different views of the filesystem. It also completely isolates the filesystem as seen from within the namespace from the host's filesystem.
+
+\paragraph{User Namespaces}\mbox{}\\
+This namespace isolates the user and group ID numbers from other user namespaces. This means that a process running within one user namespace can have one user and group ID within the namespace, but have a completely different user and group ID outside of the namespace. This means that a process running within one user namespace may have root privileges within that namespace, but may have no such privileges outside of that namespace \citep{Kerrisk2013}.
+
+\paragraph{Network Namespaces}\mbox{}\\
+Network namespaces isolate all system resources which are concerned with networking. An analogy here would be that each network namespace can essentially be its own private network with all included components such as IP ranges, IP routing, network route tables and port security settings. This is useful as it means any processes running within these namespaces can have their own virtual network device attached to certain ports within the namespace.
+
+\paragraph{PID Namespaces}\mbox{}\\
+The process ID (PID) namespaces can isolate processes based on the namespace they are in. This means it is technically possible to have two processes running in different PID namespaces to have the \textit{same} PID. It also means that each process running within a PID namespace will have two PIDs, one PID within the namespace and the other on the host containing the namespace \citep{Kerrisk2013}.
+
+\paragraph{UTS Namespaces}\mbox{}\\
+UTS namespaces, derived from ``Unix Time-sharing System'', allows each process within the namespace to have its own hostname and domain name. In terms of containers this can be useful when it is necessary to refer to a service or application by its host name \citep{Kerrisk2013}.
+
+\paragraph{IPC Namespaces}\mbox{}\\
+These namespaces provide a mechanism for shared memory spaces, allowing for accelerated inter-process communication. This communication uses the shared memory spaces instead of piping or some other form of communication - which will always be slower than memory \citep{Docker2016}.
+
+\subsection{CGroups}
+\label{subs:CGroups}
+
+
+
+\subsection{Docker}
+\label{subs:Docker}
+
+\subsubsection{Docker Hub}
+
+
+
+
+
 
 \newpage
 \section{Work Carried Out}
