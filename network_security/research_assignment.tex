@@ -12,6 +12,7 @@
 \usepackage{hyperref}
 \usepackage[nottoc,numbib]{tocbibind}
 \usepackage[parfill]{parskip}
+\usepackage{listings}
 \hypersetup{
     colorlinks,
     citecolor=black,
@@ -45,15 +46,27 @@ Traditionally applications are run within a virtual machine which abstracts a re
 
 Containers, however, are self-contained isolated processes which run on the host kernel. They have their own internal isolated CPU, memory, filesystem and network resources. 
 
-Containers on their own are essentially made using two components, cgroups and namespaces. This is where Docker comes in. Docker is a container management engine which can run and manage these containers \citep{Wang2016}. Usage of containers in production has grown exponentially, in no small part to the rise in popularity of Docker. It began as a project to manage LXC containers and quickly evolved and built on top of LXC \citep{BCN}.
+Containers on their own are essentially made using two components, cgroups and namespaces. These will be discussed in sections \ref{subs:Namespaces} and \ref{subs:CGroups}. Usage of containers in production has grown exponentially, in no small part to the rise in popularity of Docker. It began as a project to manage LXC containers and quickly evolved and built on top of LXC \citep{BCN}.
 
 This paper will aim to investigate the overall security of a technology such as Docker. It will look at tools which can help strengthen the security of these containers and then also look at a real-life example of how container security can cause problems.
 
 \newpage
 \section{Description/Background}
 \label{sec:Description/Background}
+%REVIEW need to change this so it doesn't just focus on namespaces and cgroups
+To fully understand Docker security we must first look at how the containers are managed on the host, to do this we need to understand what makes containers different from Virtual Machines.
 
-To fully understand Docker security we must first look at how the containers are managed on the host, to do this we need to understand Linux namespaces and cgroups.
+\subsection{Containers vs. VMs}
+\label{subs:VMs}
+\subsubsection{Overview}
+Containers are often compared to virtual machines. This is not accurate as the container is not actually virtualizing anything. Virtual Machines on the other hand, are complete (virtualized) filesystems, CPUs and other hardware. This machine is then run on a host using a hypervisor which emulates real hardware to allow the virtual machine to run \citep{Hertz2016}. In comparison, containers simply run on the host kernel, with the kernel tasked with isolating processes running within all containers on the host. We will look at this further in section \ref{subs:Namespaces}.
+
+\subsubsection{Security}
+
+A virtual machine will tend to be more secure than a container for a number of reasons. The main reason being that there is no shared kernel. The virtual machine has its own kernel managed by a hypervisor running on top of another kernel. While break outs are still possible it is generally thought of as difficult and rarer than a container break-out \citep{Whitepaper2016}.
+
+A container, on the other hand, shares the same kernel as the guest OS. This removes a layer of abstraction from the process to the host, making it easier for any rogue process to do damage on the host it is running on. To run containers a number of measures are taken and policies put in place. We will now examine namespaces and cgroups and how they simultaneously allow the host to run containers while also protecting the kernel from them.
+
 
 \subsection{Namespaces}
 \label{subs:Namespaces}
@@ -78,22 +91,42 @@ The process ID (PID) namespaces can isolate processes based on the namespace the
 UTS namespaces, derived from ``Unix Time-sharing System'', allows each process within the namespace to have its own hostname and domain name. In terms of containers this can be useful when it is necessary to refer to a service or application by its host name \citep{Kerrisk2013}.
 
 \paragraph{IPC Namespaces}\mbox{}\\
-These namespaces provide a mechanism for shared memory spaces, allowing for accelerated inter-process communication. This communication uses the shared memory spaces instead of piping or some other form of communication - which will always be slower than memory \citep{Docker2016}.
+These namespaces provide a mechanism for shared memory spaces, allowing for accelerated inter-process communication. This communication uses the shared memory spaces instead of piping or some other form of communication - which will always be slower than memory \citep{DockerDocs2016}.
 
-\subsection{CGroups}
+\subsection{Control Groups}
 \label{subs:CGroups}
+Control groups (cgroups) are a way for a Linux host to tightly control hardware resources and limit the access a process or group of processes has to these resources \citep{Whitepaper2016}. 
 
+In terms of containers, cgroups can ensure that no container can misbehave, either through a bug or a malicious piece of code. If a container were to start unnecessarily using CPU cycles it will not affect the host as the maximum access the container already has to this hardware resource is defined by the cgroup.
 
+\subsection{Capabilities}
+\label{subs:Capabilities}
+On Linux systems the user with id 0 has complete root privileges over the system, Linux capabilities are a way to segment this absolute control model by partitioning root access \citep{Whitepaper2016}. While a detailed explanation of Linux capabilities is outside of the scope of this paper it is important to note that modern container systems such as Docker use capabilities to ensure that even though the daemon which started them has root privileges the container itself does \textit{not}. For the container to be run as privileged it must be run with the --privileged flag. 
 
 \subsection{Docker}
 \label{subs:Docker}
 
+Docker, or more specifically the Docker Engine, is made up of two components. The first is the Docker daemon which acts as the server process that will orchestrate and manage all containers and images on the host. The client is the other component, which can be either the command-line interface or the API. This client acts as the control over the server, telling it what to do and how to do it \citep{Docker2016}.
+
+We have already discussed namespaces and cgroups, and now we can see how Docker uses these to build containers. Docker was previously built on top of LXC containers, meaning it utilized LXC when creating containers. For example when the command `docker run' was entered Docker simply used `lxc-start' to start the container. This is turn then created the necessary namespaces and cgroups to control the container \citep{Petazzoni2013}. However Docker has since written its own driver and bundled it with the Docker project to remove a layer of abstraction and mean Docker no longer has to rely on LXC. This new driver is called `libcontainer' \citep{Hykes2014}. It essentially does not change much from a security point of view however, as it means Docker can now directly interact with namespaces and cgroups, without needing to use LXC. The only security concern introduced is that Docker now needs to keep on top of Linux kernel vulnerabilities themselves, although some might say this is an advantage. An outline of this can be seen below in Figure \ref{fig:kernel}.
+
+\begin{figure}[!h]
+\centering
+\includegraphics*[width=\textwidth]{components/images/docker-driver}
+\caption{\em How Docker Operates on the Linux Kernel. Credit: \citep{Hykes2014}}
+\label{fig:kernel}
+\end{figure}
+
+\subsubsection{Docker Privileges}
+
+Now that we know how Docker runs, we can appreciate that to do what it does, (i.e. create namespaces and cgroups) it must have root privileges on the host. The Docker daemon itself is the process which requires root privileges. This essentially means that the Docker daemon has complete control over the Linux kernel. This can have severe security repercussions, as any user who can control the Docker daemon can do damage to the host system. One simple and potentially harmful example of this is if a container is started where the host's root folder is mounted as a volume on the container, effectively giving the running container access to alter the host's complete filesystem.
+
+
 \subsubsection{Docker Hub}
 
+Another security concern for Docker is their own Docker hub. While it is a feature and possibly one of the reasons they emerged as the most popular container engine it is also a cause for concern. Docker Hub allows anybody to push their images for later use or for somebody else to use. While this is a major feature it does also open up novice and experienced users alike to a malicious image. In a previous study, it was found that over 30\% of pre-built containers on Docker Hub contained vulnerabilities \citep{Bettini2015}.
 
-
-
-
+There are two main mitigations here, one is vigilance - when the user takes great care with the images they use, and the other is running a private image registry and only allowing containers to be built from these images which could have been put through security checks. We will look at this further in Section \ref{sec:Work}.
 
 \newpage
 \section{Work Carried Out}
