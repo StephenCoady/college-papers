@@ -1,4 +1,4 @@
-PWD /Users/Stephen/fyp/fyp_documentation/report_v1
+PWD /Users/Stephen/fyp/fyp-documentation/report_v1
 INPUT /usr/local/texlive/2016/texmf.cnf
 INPUT /usr/local/texlive/2016/texmf-dist/web2c/texmf.cnf
 INPUT /usr/local/texlive/2016/texmf-var/web2c/pdftex/pdflatex.fmt
@@ -115,6 +115,11 @@ INPUT /usr/local/texlive/2016/texmf-dist/fonts/tfm/public/cm/cmbx12.tfm
 INPUT /usr/local/texlive/2016/texmf-dist/tex/latex/base/omscmr.fd
 INPUT /usr/local/texlive/2016/texmf-dist/tex/latex/base/omscmr.fd
 INPUT /usr/local/texlive/2016/texmf-dist/fonts/tfm/public/cm/cmti10.tfm
+INPUT images/event_loop.png
+INPUT ./images/event_loop.png
+INPUT ./images/event_loop.png
+INPUT report_v1.bbl
+INPUT report_v1.bbl
 INPUT report_v1.aux
 INPUT ./report_v1.out
 INPUT ./report_v1.out

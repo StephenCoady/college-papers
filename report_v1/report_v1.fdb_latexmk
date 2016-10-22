@@ -1,5 +1,13 @@
 # Fdb version 3
-["pdflatex"] 1476961671 "report_v1.tex" "report_v1.pdf" "report_v1" 1476961671
+["bibtex report_v1"] 1477163242 "report_v1.aux" "report_v1.bbl" "report_v1" 1477163926
+  "/usr/local/texlive/2016/texmf-dist/bibtex/bst/harvard/agsm.bst" 1136766823 25549 e3d0f1ab4ae55e777f7352db30e2c6f7 ""
+  "bibliography.bib" 1477149544 138 c750e4782d51a81869c47e9d41eaa897 ""
+  "report_v1.aux" 1477163926 4000 171fcce20eae3466e770f5df59b7fc6f ""
+  "report_v1.bcf" 0 -1 0 ""
+  (generated)
+  "report_v1.bbl"
+  "report_v1.blg"
+["pdflatex"] 1477163925 "report_v1.tex" "report_v1.pdf" "report_v1" 1477163926
   "/usr/local/texlive/2016/texmf-dist/fonts/map/fontname/texfonts.map" 1272929888 3287 e6b82fe08f5336d4d5ebc73fb1152e87 ""
   "/usr/local/texlive/2016/texmf-dist/fonts/tfm/public/cm/cmbx10.tfm" 1136768653 1328 c834bbb027764024c09d3d2bf908b5f0 ""
   "/usr/local/texlive/2016/texmf-dist/fonts/tfm/public/cm/cmbx12.tfm" 1136768653 1324 c910af8c371558dc20f2d7822f66fe64 ""
@@ -58,10 +66,12 @@
   "/usr/local/texlive/2016/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1472653386 1888048 f2c5faed5981a516f406b2ccc20bff71 ""
   "/usr/local/texlive/2016/texmf-var/web2c/pdftex/pdflatex.fmt" 1472653475 3873397 291f6a2d00d605d0d359a97abe0c9244 ""
   "/usr/local/texlive/2016/texmf.cnf" 1463979140 577 2938757e76f31531e65cc647e3507693 ""
-  "report_v1.aux" 1476961671 3700 870be32867e5c8bc94ceef3cb23dbbae ""
-  "report_v1.out" 1476961671 1084 2645782cdd448103c8760574d7107a39 ""
-  "report_v1.tex" 1476960937 8745 8e6d4e2a2158bd130650eaf1cc375ace ""
-  "report_v1.toc" 1476961671 2252 7bce73f48a986fb0ea8fcfc306584402 ""
+  "images/event_loop.png" 1477152013 190761 400dabc63ba4804343dc6c5950dc89cc ""
+  "report_v1.aux" 1477163926 4000 171fcce20eae3466e770f5df59b7fc6f ""
+  "report_v1.bbl" 1477163242 209 751680a93fa533ceb34df62903024777 "bibtex report_v1"
+  "report_v1.out" 1477163926 1076 468bab0a26ca5c5d23873e8d572b1f51 ""
+  "report_v1.tex" 1477163925 12740 12757440fe657683f585ae659fec6947 ""
+  "report_v1.toc" 1477163926 2121 551b6811d0001b8e7bf3b1b1090b89d2 ""
   (generated)
   "report_v1.log"
   "report_v1.aux"

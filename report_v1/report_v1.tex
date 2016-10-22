@@ -28,7 +28,6 @@
 \tableofcontents
 \newpage
 \section{Project Overview}
-
 \subsection{Problem}
 \label{sub:problem}
 Currently, container lifecycle management is predominantly achieved through the command line. This means that managing images, running containers and managing their interactions with each other can all be time-consuming tasks. One way in which this is aided is by the use of scripts. While this is useful, it does also mean that the user must be comfortable with the command line to manage the containers.
@@ -74,7 +73,7 @@ Although these goals are not deemed immediately important and potentially undeli
 \subsubsection{Non-Functional}
 
 \paragraph{Testing}\mbox{}\\
-This project will aim to deliver a product with extensive unit tests. It will follow a test-driven development (TDD) cycle which will ensure code is hardened and minimize the amount of bugs. This will also mean greater development speed as code will be re-usable with greater efficiency.
+This project will aim to deliver a product with extensive unit tests. It will follow the behavioral driven development (BDD) method which will ensure code is hardened and minimize the amount of bugs. This will also mean greater development speed as code will be re-usable with greater efficiency. This is discussed further in section \ref{subs:support}.
 
 \paragraph{Security}\mbox{}\\%TODO This is essentially just a placeholder as I don't know which security I am going with yet.
 The end product will also be secure. The Docker daemon needs to run on a host with remote privileges, which can have disastrous affects for the host if not managed correctly. Since this application will effectively allow remote control of this daemon it is important that only a trusted user be allowed to use the application. This will be achieved most-likely through a third-party security module. 
@@ -106,36 +105,68 @@ Although a stretch goal, a possible deliverable from this project would be to ha
 \label{subs:agile}
 This project will follow the Agile methodology. Agile has many benefits, such as:
 
-\paragraph{Quality Testing}- testing is integrated into the development cycle, enabling the developer to continuously monitor the functionality and performance of the application
+\paragraph{Quality Testing} Testing is integrated into the development cycle, enabling the developer to continuously monitor the functionality and performance of the application
 Visibility - Agile provides a great environment to see how expectations are managed effectively. It provides a clear view into the project scope and the current track it is on.
 
-\paragraph{Risk Management}- Incremental development cycles allow the developer to accurately assess any challenges early on and make it easier to respond and adapt.
+\paragraph{Risk Management} Incremental development cycles allow the developer to accurately assess any challenges early on and make it easier to respond and adapt.
 
-\paragraph{Flexibility}- Agile allows for change natively. Instead of setting a rigid time plan up front the timescale is set and each sprint allows for the requirements to change and even for more to emerge as development continues.
+\paragraph{Flexibility} Agile allows for change natively. Instead of setting a rigid time plan up front the timescale is set and each sprint allows for the requirements to change and even for more to emerge as development continues.
 
 Each sprint will have a well-defined goal, which allows me to accurately judge the project scope and whether or not it is on track. As part of the Agile process I will have a planning session at the beginning which will help me decide on my project scope. I will then plan a 2 week sprint based on the first list of prioritized items from the backlog.  At the end of the sprint I will then perform a sprint review to evaluate goals achieved versus goals planned and reprioritize the backlog accordingly. I can then perform a retrospective which will analyze my performance and tell me what I can improve on in the next sprint.
 
 
 \subsection{Technologies}
-\subsubsection{Docker}
 \subsubsection{Node.JS}
-\paragraph{Introduction}\mbox{}\\
-\paragraph{Why is it a Good Choice}\mbox{}\\
+Node.js is a server-side JavaScript runtime, it is built on the same V8 engine that powers the popular Chrome browser. It uses an event-driven, non-blocking I/O model that makes it lightweight, efficient and very fast. Node.js' package ecosystem, npm, is the largest ecosystem of open source libraries in the world. \citep{Nodejs.org2016}.
+
+It is node's asynchronous nature which makes it so powerful. Being asynchronous essentially means that it does not create a new thread every time a request needs to be dealt with. Instead, it relies on a single event loop to handle requests which never blocks I/O. This can be seen in Figure \ref{fig:event_loop}.
+
+\begin{figure}[!h]
+\centering
+\includegraphics*[width=0.6\textwidth]{images/event_loop}
+\caption{\em Node Event Loop}
+\label{fig:event_loop}
+\end{figure}
+
+One benefit of Node using a single event loop is that it is less CPU intensive since it does not need a new thread for every new request. Node is also non-blocking, which when combined with using a single event-loop mean it is very fast.
+
+Some advantages of using Node for this project are:
+
+\begin{itemize}
+  \item Large online community - vital for troubleshooting
+  \item One of the largest online ecosystems providing a vast amount of third party modules, meaning it will not be necessary to ``re-invent the wheel''
+  \item It is Javascript so the code base will not be verbose
+\end{itemize}
+
 \subsubsection{Mongo}
-\subsubsection{Supporting Technologies}
+MongoDB is an open source document-oriented database. It is a NoSQL database which means Mongo does not support relationships between tables. Instead, MongoDB uses JSON-like ``documents'' to store information in an ordered way. This is advantageous for a number of reasons, namely:
+
+\begin{itemize}
+  \item Flexibility - Since Mongo does not have relations it is easy to change the database as development continues, without the need for migrations of the current schema.
+  \item Javascript - Since the application itself will be written in Node it will be extremely beneficial to have a database which stores its information in JSON.
+  \item Simplicity - When a database is schema-less it removes the need for complex actions such as joins, while still providing the power of complex queries.
+\end{itemize}
+
+\subsubsection{Supporting Technologies/Processes}
+\label{subs:support}
 \paragraph{Vagrant}\mbox{}\\
+Vagrant is a development tool to provision and `sandbox' the complete development environment from the host machine it is running on. This is very beneficial, as it means all necessary dependencies can be bundled into one virtual machine and updated or changed when needed. 
+
+Vagrant also allows the developer to standardize all of the different environments the application will run on. This means that if the code will be deployed to a specific version of a specific operating system then the developer can easily replicate this on the local development environment. It allows the developer to build the application on one (local) environment and deploy to the \textit{exact same} remote environment. This is extremely beneficial in terms of code reliability and stability - as the runtime can be reproduced easily.
 \paragraph{Ansible}\mbox{}\\
+Ansible is a tool to provision virtual machines running locally or remotely. A formal process of all deployment and provisioning will be employed in this project. Meaning that the same route from running code locally to it running on a remote server will always be followed.
+
+Ansible paired with Vagrant in this project will mean any discrepancies or bugs in the code will not be introduced by the environment or the deployment/provisioning process. This is very important as it can reduce the development workload. 
+
 \paragraph{Testing}\mbox{}\\
+This project will use third party node modules to perform its unit tests. These unit tests will be behavioral-driven, meaning the components will be tested individually with the end-goal of the passing test being validating a certain behavior of the application, as opposed to validating the functionality of each individual component.
+
+In this way, the project will follow the behavioral driven development (BDD) model. 
 
 \subsection{Existing Technologies}
 
 
-
-
-
-
-
-
-
+\newpage
+\bibliography{bibliography}
 
 \end{document}
