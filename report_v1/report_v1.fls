@@ -115,6 +115,9 @@ INPUT /usr/local/texlive/2016/texmf-dist/fonts/tfm/public/cm/cmbx12.tfm
 INPUT /usr/local/texlive/2016/texmf-dist/tex/latex/base/omscmr.fd
 INPUT /usr/local/texlive/2016/texmf-dist/tex/latex/base/omscmr.fd
 INPUT /usr/local/texlive/2016/texmf-dist/fonts/tfm/public/cm/cmti10.tfm
+INPUT images/CI.png
+INPUT ./images/CI.png
+INPUT ./images/CI.png
 INPUT images/event_loop.png
 INPUT ./images/event_loop.png
 INPUT ./images/event_loop.png
