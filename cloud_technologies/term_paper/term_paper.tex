@@ -15,6 +15,7 @@
 \usepackage{url}
 \usepackage[nottoc,numbib]{tocbibind}
 \usepackage[parfill]{parskip}
+\usepackage{listings}
 \hypersetup{
     colorlinks,
     citecolor=black,
@@ -82,9 +83,7 @@ In software, a container is a process isolated from the host which generally run
 
 Containers are often compared with virtual machines, however this view is a bit simplistic. Virtual machines are fully fledged operating systems running on a hypervisor which emulates dedicated hardware. It is made up of virtual devices which emulate the physical devices of a real host. Containers however, are not as full featured. Instead, they can be made so that they only have those resources that they need - and nothing else. So while virtual machines are emulating a real server, it could be said that a container is emulating a single \textit{process} on a server - and only packaging exactly what that process needs to run.
 
-
 \paragraph{Advantages}\mbox{}\\
-
 Some advantages of containers are:
 
 \begin{itemize}

@@ -1,0 +1,9 @@
+FROM debian:wheezy
+
+ENV WORKDIR /stuff
+
+RUN mkdir -p $WORKDIR
+
+VOLUME [ $WORKDIR ]
+
+WORKDIR $WORKDIR

@@ -10,6 +10,7 @@
 \usepackage[a4paper, total={6in, 8in}]{geometry}
 \usepackage[explicit]{titlesec}
 \usepackage{hyperref}
+\usepackage{courier}
 \usepackage[nottoc,numbib]{tocbibind}
 \usepackage[parfill]{parskip}
 \usepackage{listings}
@@ -131,6 +132,186 @@ There are two main mitigations here, one is vigilance - when the user takes grea
 \newpage
 \section{Work Carried Out}
 \label{sec:Work}
+To practically demonstrate some security risks within Docker, two core tasks were performed. The first is an industry standard scan of the host and all containers and images which reside on said host. The second is a proof of concept security breach using a running container. 
+
+\subsection{Security Scan}
+\label{sub:scan}
+The Center for Internet Security (CIS) recently published a benchmark for Docker Security \citep{CenterofInternetSecurity2016}. This benchmark outlines all areas where Docker security should be carefully considered when in a production system. Some of the headings it deals with are:
+
+\begin{itemize}
+  \item Host Configuration
+  \item Docker Daemon Configuration
+  \item Docker Images 
+  \item Docker Containers
+  \item Docker Security Operations
+\end{itemize}
+
+To relate these security issues to real-life vulnerabilities there are two tools available which are specifically designed to test the points outlined in the CIS benchmark report. To that effect they both test each point under the sub-headings outlined above. The first tool is an official script developed by the Docker team themselves and is available at https://github.com/docker/docker-bench-security. It performs a high-level pass through of the system and returns human-readable test results on the command line. It can be run as a bash script or from within a Docker container. The second tool we will look at is an open source tool and checks Docker against the same set of benchmarks however it performs a much lower level of scanning, returning far more detailed descriptions of any problems encountered. It is available at https://github.com/gaia-adm/docker-bench-test.
+
+\subsubsection{The Environment}
+For this test the environment is as follows:
+
+\begin{itemize}
+  \item Ubuntu Trusty 14.04
+  \item Docker Version 1.12.2
+  \item Several Standard Containers and Images on the host which were pulled from the Docker Hub
+\end{itemize}
+
+\subsubsection{Comparing the Tools}
+As both tools perform essentially the same tests using different methods it would be wasteful to details the results of both here. For that reason they were compared and the best-suited was chosen.
+
+\paragraph{Official Docker Tool}\mbox{}\\
+The official Docker Security Benchmark tool provides a human readable output and warns about inefficiencies in the Docker set up of the host. However that is all it does - it does not provide details about \textit{why} the tests failed, just that they failed. It also did not pick up on a red-herring test case I created. This will be discussed further on page \pageref{par:untrusted}.
+
+An example of the output from a scan using this tool can be seen in Figure \ref{fig:host_config}.
+
+\begin{figure}[!h]
+\centering
+\includegraphics*[width=0.8\textwidth]{components/images/docker-benchmark-host-configuration}
+\caption{\em Docker Security Host Configuration Tests}
+\label{fig:host_config}
+\end{figure}
+
+\paragraph{Open Source Tool}\mbox{}\\
+The tool created by Alexei Ledenev was compared to the official tool and was deemed better for the following reasons:
+
+\begin{itemize}
+  \item Provides more feedback on test cases
+  \item Caught the red-herring issue previously mentioned
+  \item It is open source and therefore `third-party' and so its results can be deemed impartial, as opposed to the tool created by Docker themselves
+\end{itemize}
+
+The only drawback of this tool is that it creates reports of test results in TAP format, which is designed to be machine readable. For the purpose of this report however we will be reading the results directly. This means they will not appear as readable as the Docker tool shown above. However this is a sacrifice worth making as the test results are far more detailed. An extract of the test results can be seen in Figure \ref{fig:sec_tool}. The screenshot shows the test result highlighted in red and an explanation of why it failed highlighted in green. For the remainder of this report test results will be pasted as code snippets, as they are more readable than the output of the tool.
+
+\begin{figure}[!h]
+\centering
+\includegraphics*[width=0.8\textwidth]{components/images/open-source-results}
+\caption{\em Open Source Security Tool}
+\label{fig:sec_tool}
+\end{figure}
+
+\newpage
+\subsubsection{Test Results}
+We will examine the recommendations for security in Docker using the CIS benchmark report, outlining the most prominent risks as discovered by using the open source tool discussed previously. 
+
+
+\paragraph{\underline{Create a Separate Partition for Containers}}\mbox{}\\
+
+\textbf{Result:} 
+
+\texttt{\# not ok 1 1.1  - Create a separate partition for containers}
+
+\textbf{Explanation:} By default, all Docker containers and the data they use and produce is stored under the /var/lib/docker directory on the host. In the virtual machine we are using for this demonstration this folder is simply stored on the local filesystem. The scan tool has recognized this and is recommending that this folder be partitioned separately to the host. This is due to the fact that containers may fill this directory quite quickly, making the host unusable, which in a production environment is undesirable. If this folder is free to be used by any container then one example of an attack could be to continuously write to this folder until the host becomes unusable.
+
+\textbf{Remediation:} Create a separate partition for this folder on the host, thereby ensuring it cannot affect host performance.
+
+\paragraph{\underline{Remove All Non-Essential Services from the Host}}\mbox{}\\
+
+\textbf{Result:} 
+
+\texttt{\# not ok 3 1.4  - Remove all non-essential services from the host - Network}
+
+\texttt{\# Host listening on: 9 ports}
+
+\textbf{Explanation:} This test ensures that services which are not required by the Docker daemon are not running on the host. In the case above the host had exposed 9 ports not being used by the Docker daemon. It is not a good idea to have services which require different levels of privilege to be running on the same host, especially one which the Docker daemon is running on as it has root privileges, and so if under the control of a malicious user could be used to do harm to these other services.
+
+\textbf{Remediation:} Perform several different scans such as:
+
+\texttt{ps -ef} to check running processes
+
+\texttt{netstat -nlp} to check open sockets
+
+Then remove any non-necessary processes to a different server.
+
+\paragraph{\underline{Only Allow Trusted Users Control the Docker Daemon}}\mbox{}\\
+\label{par:untrusted}
+
+\textbf{Result:} 
+
+\texttt{\# not ok 5 1.6  - Only allow trusted users to control Docker daemon}
+
+\texttt{\# User unprivileged-user is not a trusted user!}
+
+\textbf{Explanation:} As previously mentioned, a regular user with no root privileges was added to the Docker group - meaning it can control the Docker daemon without needing root privileges. This is not advised, as it means any non-root user can essentially become a root user by being in control of the Docker daemon. This is essentially the basis of the attack which we will detail in Section \ref{sub:attack}.
+
+\textbf{Remediation:} Run the command:
+
+\texttt{getent group docker}
+
+Which will show all users in the Docker group and allow you to remove any that should not be there. 
+
+\paragraph{\underline{Audit All Docker Daemon Activity}}\mbox{}\\
+\label{par:audit}
+
+\textbf{Result:} 
+
+\texttt{\# not ok 6 1.7  - Audit docker daemon - /usr/bin/docker}
+
+\texttt{\# grep: /host/etc/audit/audit.rules: No such file or directory}
+
+\textbf{Explanation:} In Linux it is possible to log events at the kernel level. This can be very useful when it comes to running processes as it can be used to identify `what happened' and `who did it'. In terms of the Docker daemon it is even more important as it has root privileges so monitoring what it does with those privileges is vital. The test above failed as we did not have any audit rules set up on the virtual machine used. 
+
+\textbf{Remediation:} Create an audit rule for the Docker daemon.
+
+
+\paragraph{\underline{Restrict Network Traffic Between Containers}}\mbox{}\\
+\label{par:net_access}
+
+\textbf{Result:} 
+
+\texttt{\# not ok 15 2.1  - Restrict network traffic between containers}
+
+\textbf{Explanation:} By default on containers on the host share the same network and therefore have complete access to each others traffic. This is not ideal as certain containers running without elevated privileges may read a privileged container's sensitive traffic. 
+
+\textbf{Remediation:} Inter-container communication can be disabled by default using the following command:
+
+\texttt{docker daemon --icc=false}
+
+and then only enable on a container by container basis, when it is needed.
+
+\paragraph{\underline{Allow the Docker Daemon to make changes to iptables}}\mbox{}\\
+\label{par:iptables}
+
+\textbf{Result:} 
+
+\texttt{\# ok 17 2.3  - Allow Docker to make changes to iptables}
+
+\textbf{Explanation:} This option is on by default, which is why it has passed above. It can be turned off, however that option is not advised. From a security point of view it is deemed better to allow Docker to handle the rules governing ip packets entering and leaving the linux host, as manually doing so can hamper performance and cause security loopholes the user may not be aware of.
+
+\textbf{Remediation:} Do not disable Docker's ability to edit the iptables of the host.
+
+\paragraph{\underline{Configure TLS on Docker Daemon Port}}\mbox{}\\
+\label{par:tls}
+
+\textbf{Result:} 
+
+\texttt{\# ok 20 2.6  - Configure TLS authentication for Docker daemon}
+
+\textbf{Explanation:} By default the Docker daemon binds to a non-networked Unix port, however it is possible to tell it to listen on any TCP on the host system. This can have serious security implications if that traffic is not properly restricted. If it is necessary to have the Docker daemon listen on a certain networked port then any person (malicious or otherwise) with access to that port will have complete control over the system as they have control over the docker daemon which has root privileges.
+
+\textbf{Remediation:} Do not expose the Docker daemon on a TCP port, but if absolutely necessary to do so then secure said port with TLS. This means only authenticated clients can connect to the Docker daemon.
+
+\paragraph{\underline{Set a Default ulimit on the host}}\mbox{}\\
+\label{par:ulimit}
+
+\textbf{Result:} 
+
+\texttt{\# not ok 21 2.7 - Set default ulimit as appropriate}
+
+\textbf{Explanation:} ulimit provides a mechanism to limit the resources available to a shell and the processes available to it. Theoretically, if no ulimit is set then a sprawl of processes could case the system to crash. This is a security risk as a malicious user could take advantage of this to halt a system.
+
+\textbf{Remediation:} Set the default ulimit for the Docker daemon before running any containers.
+
+\paragraph{\underline{Other Docker Security Considerations The Tool Highlights:}}\mbox{}\\
+
+\begin{itemize}
+  \item Use trusted base images for containers - not as easy to check using a script but this benchmark says to only use official images by trusted vendors
+  \item Always use AppArmor where possible. AppArmor is a Linux application which protects the Linux OS from threats using profiles
+  \item Use SELinux where possible. Similar to above but designed for Red Hat and Fedora distributions. It uses a Mandatory Access Control (MAC) policy to enforce security.
+\end{itemize}
+
+\subsection{Proof of Concept Attack}
+\label{sub:attack}
 
 \newpage
 \section{Conclusion}

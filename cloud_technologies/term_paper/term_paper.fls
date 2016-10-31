@@ -69,6 +69,12 @@ INPUT /usr/local/texlive/2016/texmf-dist/tex/latex/tocbibind/tocbibind.sty
 INPUT /usr/local/texlive/2016/texmf-dist/tex/latex/tocbibind/tocbibind.sty
 INPUT /usr/local/texlive/2016/texmf-dist/tex/latex/parskip/parskip.sty
 INPUT /usr/local/texlive/2016/texmf-dist/tex/latex/parskip/parskip.sty
+INPUT /usr/local/texlive/2016/texmf-dist/tex/latex/listings/listings.sty
+INPUT /usr/local/texlive/2016/texmf-dist/tex/latex/listings/listings.sty
+INPUT /usr/local/texlive/2016/texmf-dist/tex/latex/listings/lstmisc.sty
+INPUT /usr/local/texlive/2016/texmf-dist/tex/latex/listings/lstmisc.sty
+INPUT /usr/local/texlive/2016/texmf-dist/tex/latex/listings/listings.cfg
+INPUT /usr/local/texlive/2016/texmf-dist/tex/latex/listings/listings.cfg
 INPUT term_paper.aux
 INPUT term_paper.aux
 INPUT components/title.aux
