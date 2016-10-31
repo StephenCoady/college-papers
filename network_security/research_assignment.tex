@@ -192,6 +192,7 @@ The only drawback of this tool is that it creates reports of test results in TAP
 
 \newpage
 \subsubsection{Test Results}
+\label{subs:results}
 We will examine the recommendations for security in Docker using the CIS benchmark report, outlining the most prominent risks as discovered by using the open source tool discussed previously. 
 
 
@@ -312,10 +313,173 @@ and then only enable on a container by container basis, when it is needed.
 
 \subsection{Proof of Concept Attack}
 \label{sub:attack}
+We will now look at an attack which will allow an unprivileged user to act as root on a host. We will show how easy it is to do this simply because the user was added to the Docker group on the Linux host. 
+
+\subsubsection{The Setup}
+For this practical we will use the following setup:
+
+\begin{itemize}
+  \item A `vanilla' Ubuntu trusty 14.04 virtual machine
+  \item Docker 1.12.2 installed on the host
+  \item A new unprivileged user added to the Ubuntu server
+  \item A Docker group which contains this users, this essentially means the user can control the Docker daemon, i.e run containers etc
+  \item We will also create a base Docker image to create a container from. There is nothing special about this image, the code can be seen in Figure \ref{fig:dockerfile}.
+\end{itemize}
+
+\begin{figure}[!h]
+\centering
+\includegraphics*[width=0.3\textwidth]{components/images/dockerfile}
+\caption{\em Basic Dockerfile}
+\label{fig:dockerfile}
+\end{figure}
+
+This Dockerfile simply:
+
+\begin{itemize}
+  \item Creates a directory named practical
+  \item Mounts it as a volume on the container
+  \item Sets the working directory (start folder) to this newly created folder
+\end{itemize}
+
+From within the folder this Dockerfile is contained in we can now build the image (named basic-image) which we will run our container from with the following command:
+
+\begin{figure}[!h]
+\centering
+\includegraphics*[width=0.5\textwidth]{components/images/build-image}
+\caption{\em Building a Docker Image}
+\label{fig:build}
+\end{figure}
+
+\newpage
+\subsubsection{The Attack}
+\label{subs:attack}
+Now that we have built the Docker image we can use it to run any containers we wish. To verify that we are logged in as a non-root user we can run the commands shown in Figures \ref{fig:add-user} - \ref{fig:non-root-shadow}. First we add this unprivileged user to the docker group. This can be done as follows:
+
+\begin{figure}[!h]
+\centering
+\includegraphics*[width=0.9\textwidth]{components/images/add-user-to-group}
+\caption{\em Adding our User to the Docker Group}
+\label{fig:add-user}
+\end{figure}
+
+We cannot reboot the system without root privileges:
+\begin{figure}[!h]
+\centering
+\includegraphics*[width=0.9\textwidth]{components/images/non-root-reboot}
+\caption{\em Root Required for Reboot}
+\label{fig:non-root-reboot}
+\end{figure}
+
+Nor can we view or edit the iptables of the system:
+\begin{figure}[!h]
+\centering
+\includegraphics*[width=0.9\textwidth]{components/images/non-root-iptables}
+\caption{\em Root Required for IPTables}
+\label{fig:non-root-iptables}
+\end{figure}
+
+We also cannot see restricted files such as the shadow file:
+\begin{figure}[!h]
+\centering
+\includegraphics*[width=0.9\textwidth]{components/images/non-root-shadow}
+\caption{\em Root Required to view Shadow File}
+\label{fig:non-root-shadow}
+\end{figure}
+
+So it is obvious that the user `unprivileged-user' does not have any root privileges at all, even though we added them to the docker group first. It is important to note that being in the docker group itself does not grant a user root privileges but instead the ability to control a daemon which has root privileges, which we will see can be just as dangerous. 
+
+We will now run our first container, and instruct it to carry out some tasks for us. This container is being run by `unprivileged-user' and so the user itself does not have root privileges, but the Docker daemon creating the container \textit{does}. We can see this command in Figure \ref{fig:run-container-whoami}.
+
+There is a lot happening in Figure \ref{fig:run-container-whoami} above so we will break it into steps. 
+
+\begin{itemize}
+  \item We run a container
+  \item We tell Docker to use the image we build in Figure \ref{fig:build}
+  \item We mount the current directory as a volume to the practical directory we created in the Dockerfile previously
+  \item We set the entry point to the container's shell
+  \item We instruct the container to copy the shell binary from \textit{within} the container to the host and change ownership of that file to root
+  \item We can now run this sh file as a bash script, and verify that we have root access with a simple whoami command
+\end{itemize}
+
+\begin{figure}[!h]
+\centering
+\includegraphics*[width=\textwidth]{components/images/run-container-whoami}
+\caption{\em Running a Container and Verifying Root Access}
+\label{fig:run-container-whoami}
+\end{figure}
+
+We have now effectively created a backdoor into the root users bash shell, which we can see in Figure \ref{fig:verify-ownership}.
+
+\begin{figure}[!h]
+\centering
+\includegraphics*[width=\textwidth]{components/images/verify-ownership}
+\caption{\em Verify Ownership of new sh file}
+\label{fig:verify-ownership}
+\end{figure}
+
+Now that we have access to a root shell we can test it out by trying to run the commands we tried previously in Figures \ref{fig:non-root-reboot} - \ref{fig:non-root-shadow}. Note that we are still running these commands as an unprivileged user, but to the system we appear to be the root user. \newline \newline \newline
+
+\begin{figure}[!h]
+\centering
+\includegraphics*[width=0.6\textwidth]{components/images/root-reboot}
+\caption{\em Reboot Now Possible}
+\label{fig:root-reboot}
+\end{figure}
+
+\begin{figure}[!h]
+\centering
+\includegraphics*[width=0.6\textwidth]{components/images/root-iptables}
+\caption{\em We Can Now View IPTables}
+\label{fig:root-iptables}
+\end{figure}
+
+\begin{figure}[!h]
+\centering
+\includegraphics*[width=0.6\textwidth]{components/images/root-shadow}
+\caption{\em We Can View /etc/shadow as non-root user}
+\label{fig:root-shadow}
+\end{figure}
+
+We can see from Figures \ref{fig:root-reboot} - \ref{fig:root-shadow} that we now have full root access on the server which is running Docker. Another step we could take would be to copy a malicious version of a system program onto the host which will allow us to do anything we wish. 
+
+For instance, we could do the following:
+
+\texttt{cp our-malicious-software /practical/bin/cat}
+
+and then we could insert a malicious piece of code in the software which will send every file the cat program is used on to a remote server for storage.
 
 \newpage
 \section{Conclusion}
 \label{sec:Conclusion}
+We have examined the basic building blocks of how Docker containers are built, i.e. namespaces and cgroups. We have seen that because the containers are run on and share the host kernel that it is necessary to control the access and control the container has over this kernel. However while this is a step in the right direction it is not a complete safeguard in terms of host security. 
+
+We looked at a benchmark for security and showed that even though Docker will look after kernel level security for us it will not prevent containers from being used inappropriately - so steps must be taken to ensure the host's safety.
+
+We have seen how easy it is to take complete control of a host as long as you can control the Docker daemon. If a user knows how to adequately control the Docker daemon then they should be considered a root user of the system, even if the system does not see them as such.
+
+The main points we can draw from this paper are:
+\paragraph{Precautions}\mbox{}\\
+Docker takes extraordinary measures to protect the host by using namespaces and cgroups - however it is not enough to warrant the user forgetting about security completely
+
+\paragraph{Bastion Host}\mbox{}\\
+The server running Docker should ultimately be a Bastion Host. This is a host which 
+\begin{itemize}
+  \item Is security hardened - i.e runs AppArmor or SELinux as discussed in Section \ref{subs:results}
+  \item Runs absolutely no unnecessary services
+  \item Runs no unnecessary software
+\end{itemize}
+
+\paragraph{Disposable}\mbox{}\\
+Due to the nature of containers, the server running them should be disposable. This means that if containers are found to be mis-behaving or have been found to have a security vulnerability which will impact the host then the host along with the containers should be able to be immediately destroyed.
+
+\paragraph{No Sensitive Information}\mbox{}\\
+The server which is running the containers should contain nothing but the Docker runtime files. This is in case of a breach like the one detailed in Section \ref{sub:attack}.
+
+\paragraph{Keeping Everything Up To Date}\mbox{}\\
+By keeping both Docker and the host kernel it is running on up to date you are ensuring that all patches are installed to combat known security vulnerabilities.
+
+\paragraph{Final Note: Be Security Conscious}\mbox{}\\
+Just because Docker is an `isolated container environment' does not mean it does not have access to the host system - so being aware of this fact alone is a start in the right direction. When running applications and especially when doing so in a production environment it is vital to keep in mind the potential risks involved with running these applications in containers.
 
 \newpage
 \bibliography{references}
