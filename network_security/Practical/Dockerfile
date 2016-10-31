@@ -1,6 +1,6 @@
 FROM debian:wheezy
 
-ENV WORKDIR /stuff
+ENV WORKDIR /practical
 
 RUN mkdir -p $WORKDIR
 
