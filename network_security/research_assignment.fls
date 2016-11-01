@@ -129,6 +129,9 @@ INPUT /usr/local/texlive/2016/texmf-dist/fonts/tfm/public/cm/cmbx10.tfm
 OUTPUT research_assignment.toc
 INPUT /usr/local/texlive/2016/texmf-dist/fonts/tfm/public/cm/cmbx12.tfm
 INPUT /usr/local/texlive/2016/texmf-dist/fonts/tfm/public/cm/cmti10.tfm
+INPUT components/images/pid.png
+INPUT ./components/images/pid.png
+INPUT ./components/images/pid.png
 INPUT components/images/docker-driver.png
 INPUT ./components/images/docker-driver.png
 INPUT ./components/images/docker-driver.png

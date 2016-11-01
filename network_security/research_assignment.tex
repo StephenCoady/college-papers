@@ -49,7 +49,7 @@ Containers, however, are self-contained isolated processes which run on the host
 
 Containers on their own are essentially made using two components, cgroups and namespaces. These will be discussed in sections \ref{subs:Namespaces} and \ref{subs:CGroups}. Usage of containers in production has grown exponentially, in no small part to the rise in popularity of Docker. It began as a project to manage LXC containers and quickly evolved and built on top of LXC \citep{BCN}.
 
-This paper will aim to investigate the overall security of a technology such as Docker. It will look at tools which can help strengthen the security of these containers and then also look at a real-life example of how container security can cause problems.
+This paper will aim to investigate the overall security of a technology such as Docker. It will look at the tools at the core of Docker security, how we can ensure they are at their most secure and then also look at a real-life example of how container security can cause problems.
 
 \newpage
 \section{Description/Background}
@@ -64,7 +64,7 @@ Containers are often compared to virtual machines. This is not accurate as the c
 
 \subsubsection{Security}
 
-A virtual machine will tend to be more secure than a container for a number of reasons. The main reason being that there is no shared kernel. The virtual machine has its own kernel managed by a hypervisor running on top of another kernel. While break outs are still possible it is generally thought of as difficult and rarer than a container break-out \citep{Whitepaper2016}.
+Virtual machines tend to be more secure than containers for a number of reasons. The main reason being that there is no shared kernel. The virtual machine has its own kernel managed by a hypervisor running on top of another kernel. While break outs are still possible it is generally thought of as difficult and rarer than a container break-out \citep{Whitepaper2016}.
 
 A container, on the other hand, shares the same kernel as the guest OS. This removes a layer of abstraction from the process to the host, making it easier for any rogue process to do damage on the host it is running on. To run containers a number of measures are taken and policies put in place. We will now examine namespaces and cgroups and how they simultaneously allow the host to run containers while also protecting the kernel from them.
 
@@ -86,7 +86,14 @@ This namespace isolates the user and group ID numbers from other user namespaces
 Network namespaces isolate all system resources which are concerned with networking. An analogy here would be that each network namespace can essentially be its own private network with all included components such as IP ranges, IP routing, network route tables and port security settings. This is useful as it means any processes running within these namespaces can have their own virtual network device attached to certain ports within the namespace.
 
 \paragraph{PID Namespaces}\mbox{}\\
-The process ID (PID) namespaces can isolate processes based on the namespace they are in. This means it is technically possible to have two processes running in different PID namespaces to have the \textit{same} PID. It also means that each process running within a PID namespace will have two PIDs, one PID within the namespace and the other on the host containing the namespace \citep{Kerrisk2013}.
+The process ID (PID) namespaces can isolate processes based on the namespace they are in. This means it is technically possible to have two processes running in different PID namespaces to have the \textit{same} PID. It also means that each process running within a PID namespace will have two PIDs, one PID within the namespace and the other on the host containing the namespace \citep{Kerrisk2013}. This can be seen overleaf in Figure \ref{fig:pid}.
+
+\begin{figure}[!h]
+\centering
+\includegraphics*[width=0.7\textwidth]{components/images/pid}
+\caption{\em Breakdown of Processes. Credit: Toptal.com}
+\label{fig:pid}
+\end{figure}
 
 \paragraph{UTS Namespaces}\mbox{}\\
 UTS namespaces, derived from ``Unix Time-sharing System'', allows each process within the namespace to have its own hostname and domain name. In terms of containers this can be useful when it is necessary to refer to a service or application by its host name \citep{Kerrisk2013}.
@@ -113,7 +120,7 @@ We have already discussed namespaces and cgroups, and now we can see how Docker 
 
 \begin{figure}[!h]
 \centering
-\includegraphics*[width=\textwidth]{components/images/docker-driver}
+\includegraphics*[width=0.5\textwidth]{components/images/docker-driver}
 \caption{\em How Docker Operates on the Linux Kernel. Credit: \citep{Hykes2014}}
 \label{fig:kernel}
 \end{figure}
@@ -146,7 +153,7 @@ The Center for Internet Security (CIS) recently published a benchmark for Docker
   \item Docker Security Operations
 \end{itemize}
 
-To relate these security issues to real-life vulnerabilities there are two tools available which are specifically designed to test the points outlined in the CIS benchmark report. To that effect they both test each point under the sub-headings outlined above. The first tool is an official script developed by the Docker team themselves and is available at https://github.com/docker/docker-bench-security. It performs a high-level pass through of the system and returns human-readable test results on the command line. It can be run as a bash script or from within a Docker container. The second tool we will look at is an open source tool and checks Docker against the same set of benchmarks however it performs a much lower level of scanning, returning far more detailed descriptions of any problems encountered. It is available at https://github.com/gaia-adm/docker-bench-test.
+To relate these security issues to real-life vulnerabilities there are two tools available which are specifically designed to test the points outlined in the CIS benchmark report. To that effect they both test each point under the sub-headings outlined above. The first tool is an official script developed by the Docker team themselves \citep{DockerRepo2016}. It performs a high-level pass through of the system and returns human-readable test results on the command line. It can be run as a bash script or from within a Docker container. The second tool we will look at is an open source tool and checks Docker against the same set of benchmarks however it performs a much lower level of scanning, returning far more detailed descriptions of any problems encountered \citep{Ledenev2016}.
 
 \subsubsection{The Environment}
 For this test the environment is as follows:
@@ -254,7 +261,7 @@ Which will show all users in the Docker group and allow you to remove any that s
 
 \textbf{Remediation:} Create an audit rule for the Docker daemon.
 
-
+\newpage
 \paragraph{\underline{Restrict Network Traffic Between Containers}}\mbox{}\\
 \label{par:net_access}
 
@@ -341,11 +348,11 @@ This Dockerfile simply:
   \item Sets the working directory (start folder) to this newly created folder
 \end{itemize}
 
-From within the folder this Dockerfile is contained in we can now build the image (named basic-image) which we will run our container from with the following command:
+From within the folder this Dockerfile is contained in we can now build the image (named basic-image). This is the image we will run our container from. The image is built using the following command:
 
 \begin{figure}[!h]
 \centering
-\includegraphics*[width=0.5\textwidth]{components/images/build-image}
+\includegraphics*[width=0.3\textwidth]{components/images/build-image}
 \caption{\em Building a Docker Image}
 \label{fig:build}
 \end{figure}
@@ -417,7 +424,7 @@ We have now effectively created a backdoor into the root users bash shell, which
 \label{fig:verify-ownership}
 \end{figure}
 
-Now that we have access to a root shell we can test it out by trying to run the commands we tried previously in Figures \ref{fig:non-root-reboot} - \ref{fig:non-root-shadow}. Note that we are still running these commands as an unprivileged user, but to the system we appear to be the root user. \newline \newline \newline
+Now that we have access to a root shell we can test it out by trying to run the commands we tried previously in Figures \ref{fig:non-root-reboot} - \ref{fig:non-root-shadow}. Note that we are still running these commands (through a shell script) as an unprivileged user, but to the system we appear to be the root user. \newline \newline \newline
 
 \begin{figure}[!h]
 \centering
@@ -448,6 +455,8 @@ For instance, we could do the following:
 
 and then we could insert a malicious piece of code in the software which will send every file the cat program is used on to a remote server for storage.
 
+This is essentially a privilege escalation attack, which means a regular user using some form of nefarious means to give themselves a higher rank of privilege.
+
 \newpage
 \section{Conclusion}
 \label{sec:Conclusion}
@@ -477,6 +486,9 @@ The server which is running the containers should contain nothing but the Docker
 
 \paragraph{Keeping Everything Up To Date}\mbox{}\\
 By keeping both Docker and the host kernel it is running on up to date you are ensuring that all patches are installed to combat known security vulnerabilities.
+
+\paragraph{Be Careful About Letting Users Control Docker}\mbox{}\\
+We have seen that any user who can control the Docker daemon should be considered root. Even if that user's privileges are restricted they will be able to essentially `escalate' themselves to root level by using Docker.
 
 \paragraph{Final Note: Be Security Conscious}\mbox{}\\
 Just because Docker is an `isolated container environment' does not mean it does not have access to the host system - so being aware of this fact alone is a start in the right direction. When running applications and especially when doing so in a production environment it is vital to keep in mind the potential risks involved with running these applications in containers.
