@@ -75,8 +75,8 @@ Although these goals are not deemed immediately important and potentially undeli
 \paragraph{Testing}\mbox{}\\
 This project will aim to deliver a product with extensive unit tests. It will follow the behavioral driven development (BDD) method which will ensure code is hardened and minimize the amount of bugs. This will also mean greater development speed as code will be re-usable with greater efficiency. This is discussed further in section \ref{subs:support}.
 
-\paragraph{Security}\mbox{}\\%TODO This is essentially just a placeholder as I don't know which security I am going with yet.
-The end product will also be secure. The Docker daemon needs to run on a host with remote privileges, which can have disastrous affects for the host if not managed correctly. Since this application will effectively allow remote control of this daemon it is important that only a trusted user be allowed to use the application. This will be achieved most-likely through a third-party security module. 
+\paragraph{Security}\mbox{}\\
+The end product will also be secure. The Docker daemon needs to run on a host with root privileges, which can have disastrous affects for the host if not managed correctly. Since this application will effectively allow remote control of this daemon it is important that only a trusted user be allowed to use the application. 
 
 \paragraph{Scalability}\mbox{}\\
 When the application can run on a server and allow the containers on that server be controlled it is a very useful application. However, in industry it is rarely just one server housing the application. For this reason the end product of this project will need to scale \textit{with} the server it is managing. To achieve this the application will need to be able to communicate with several servers at once.
@@ -100,22 +100,25 @@ Although a stretch goal, a possible deliverable from this project would be to ha
 \section{Investigation}
 
 \subsection{Methodology}
-
-\subsubsection{Agile}
 \label{subs:agile}
-This project will follow the Agile methodology. Agile has many benefits, such as:
 
-\paragraph{Quality Testing} Testing is integrated into the development cycle, enabling the developer to continuously monitor the functionality and performance of the application
+The methodology which this project will be carried out under is an important decision. It will have a significant impact on timelines, deliverables and overall product quality. Therefore which methodology to use should be given careful consideration. The guide by \citep{Manifesto2016} was used as reference when making this decision.
 
-\paragraph{Visibility} Agile provides a great environment to see how expectations are managed effectively. It provides a clear view into the project scope and the current track it is on.
+The two to be considered are Agile and a more traditional approach, named Waterfall. While both have strengths and weaknesses Agile was chosen for this project as it was deemed a better fit for the following reasons:
 
-\paragraph{Risk Management} Incremental development cycles allow the developer to accurately assess any challenges early on and make it easier to respond and adapt.
+\paragraph{Quality Testing} Testing is integrated into the development cycle, enabling the developer to continuously monitor the functionality and performance of the application. In Waterfall testing is not carried out until the very end when development is finished. This can lead to problems for a lone-developer as testing coverage and quality may not be as high. 
+
+\paragraph{Visibility} Agile provides a great environment to see how expectations are managed effectively. It provides a clear view into the project scope and the current track it is on. With Waterfall all expectations and deliverables need to be forecast before any development has begun. This can be difficult to and can mean increased overhead of work.
+
+\paragraph{Risk Management} Incremental development cycles allow the developer to accurately assess any challenges early on and make it easier to respond and adapt. In Waterfall there is very little room for adapting to unforeseen challenges.
 
 \paragraph{Flexibility} Agile allows for change natively. Instead of setting a rigid time plan up front the timescale is set and each sprint allows for the requirements to change and even for more to emerge as development continues.
 
-Each sprint will have a well-defined goal, which will allow for accurate judging of the project scope and whether or not it is on track. As part of the Agile process there will be a planning session to initially scope the product backlog and to inform the total scope of the project. At the end of the initial sprint a sprint review will then be performed which will evaluate goals achieved versus goals planned and the backlog will then be re-prioritized accordingly. A sprint retrospective will then analyze sprint performance and help to highlight areas where improvement can be made. This will also enhance the accuracy of the following sprint.
+Agile uses tools called sprints throughout the development cycle \citep{Agile2016}. These are short incremental development cycles which are planned at the beginning of each sprint itself and analyzed at the end.
 
-\subsubsection{Continuous Integration}
+Each sprint in this project will have a well-defined goal, which will allow for accurate judging of the project scope and whether or not it is on track. As part of the Agile process there will be a planning session to initially scope the product backlog and to inform the total scope of the project. At the end of the initial sprint a sprint review will then be performed which will evaluate goals achieved versus goals planned and the backlog will then be re-prioritized accordingly. A sprint retrospective will then analyze sprint performance and help to highlight areas where improvement can be made. This will also enhance the accuracy of the following sprint.
+
+\subsection{Continuous Integration}
 Continuous Integration is the act of continuously ensuring software is of a suitable standard to be integrated into the current software package. This will ensure that any changes made to the code base will receive immediate test-feedback. Even though this application will not be built in a production environment having a continuous build cycle will ensure maximum quality code and also reduce the risk of a ``bug bottleneck'' further down the line.
 
 \begin{figure}[!h]
@@ -125,18 +128,21 @@ Continuous Integration is the act of continuously ensuring software is of a suit
 \label{fig:CI}
 \end{figure}
 
-\subsection{Technologies}
-\subsubsection{Node.JS}
+\subsection{Existing Solutions}
+Currently there exists several other projects which aim to provide the same solution as this one does. There are, however, subtle differences in either the feature set or implementation of these solutions which validates this project as a worthwhile undertaking. 
+
+\paragraph{Lack of Features}\mbox{}\\
+One of these projects ``UI For Docker'', is an open source project written in Golang \citep{UIRepo2016}. It shares the same basic feature set as this project however it does allow for advanced controls such as starting a container from a Dockerfile or searching for new images to start containers from. Also, upon experimentation with UI For Docker the programs error handling and user feedback was not found to be satisfactory. As an example if renaming a container was attempted while it was still running the container would simply crash instead of telling the user it must be stopped first. While I believe that it is an excellent project this combined with the lack of the previously mentioned features means it is not powerful enough to solve the domain problem discussed in Section \ref{sub:problem}. 
+
+\paragraph{Cost}\mbox{}\\
+Docker themselves provide a lifecycle management solution, however it comes as a monthly subscription \citep{Docker2016}. It is not currently available to run privately which makes the product rather restricted. While the subscription fee is relatively small it is still a barrier for smaller teams or single developers. Since this project aims to produce an open-source application it is catering for an opening in the market.
+sur elook 
+\section{Technologies}
+\subsection{Node.JS}
 Node.js is a server-side JavaScript runtime, it is built on the same V8 engine that powers the popular Chrome browser. It uses an event-driven, non-blocking I/O model that makes it lightweight, efficient and very fast. Node.js' package ecosystem, npm, is the largest ecosystem of open source libraries in the world. \citep{Nodejs.org2016}.
 
 It is node's asynchronous nature which makes it so powerful. Being asynchronous essentially means that it does not create a new thread every time a request needs to be dealt with. Instead, it relies on a single event loop to handle requests which never blocks I/O. This can be seen in Figure \ref{fig:event_loop}.
 
-\begin{figure}[!h]
-\centering
-\includegraphics*[width=0.6\textwidth]{images/event_loop}
-\caption{\em Node Event Loop}
-\label{fig:event_loop}
-\end{figure}
 
 One benefit of Node using a single event loop is that it is less CPU intensive since it does not need a new thread for every new request. Node is also non-blocking, which when combined with using a single event-loop mean it is very fast.
 
@@ -148,8 +154,15 @@ Some advantages of using Node for this project are:
   \item It is Javascript so the code base will not be verbose
 \end{itemize}
 
-\subsubsection{Mongo}
-MongoDB is an open source document-oriented database. It is a NoSQL database which means Mongo does not support relationships between tables. Instead, MongoDB uses JSON-like ``documents'' to store information in an ordered way. This is advantageous for a number of reasons, namely:
+\begin{figure}[!h]
+\centering
+\includegraphics*[width=0.6\textwidth]{images/event_loop}
+\caption{\em Node Event Loop}
+\label{fig:event_loop}
+\end{figure}
+
+\subsection{Mongo}
+MongoDB is an open source document-oriented database. It is a NoSQL database which means Mongo does not support relationships between tables \citep{Mongo216}. Instead, MongoDB uses JSON-like ``documents'' to store information in an ordered way. This is advantageous for a number of reasons, namely:
 
 \begin{itemize}
   \item Flexibility - Since Mongo does not have relations it is easy to change the database as development continues, without the need for migrations of the current schema.
@@ -157,7 +170,7 @@ MongoDB is an open source document-oriented database. It is a NoSQL database whi
   \item Simplicity - When a database is schema-less it removes the need for complex actions such as joins, while still providing the power of complex queries.
 \end{itemize}
 
-\subsubsection{Supporting Technologies/Processes}
+\subsection{Supporting Technologies/Processes}
 \label{subs:support}
 \paragraph{Vagrant}\mbox{}\\
 Vagrant is a development tool to provision and `sandbox' the complete development environment from the host machine it is running on. This is very beneficial, as it means all necessary dependencies can be bundled into one virtual machine and updated or changed when needed. 
@@ -171,17 +184,7 @@ Ansible paired with Vagrant in this project will mean any discrepancies or bugs 
 \paragraph{Testing}\mbox{}\\
 This project will use third party node modules to perform its unit tests. These unit tests will be behavioral-driven, meaning the components will be tested individually with the end-goal of the passing test being validating a certain behavior of the application, as opposed to validating the functionality of each individual component.
 
-In this way, the project will follow the behavioral driven development (BDD) model. 
-
-\subsection{Existing Technologies}
-
-Currently there exists several other projects which aim to provide the same solution as this one does. There are, however, subtle differences in either the feature set or implementation of these solutions which validates this project as a worthwhile undertaking. 
-
-\paragraph{Lack of Features}\mbox{}\\
-One of these projects ``UI For Docker'', is an open source project written in Golang. It shares the same basic feature set as this project however it does allow for advanced controls such as starting a container from a Dockerfile or searching for new images to start containers from. Also, upon experimentation with UI For Docker the programs error handling and user feedback was not found to be satisfactory. As an example if renaming a container was attempted while it was still running the container would simply crash instead of telling the user it must be stopped first. While I believe that it is an excellent project this combined with the lack of the previously mentioned features means it is not powerful enough to solve the domain problem discussed in Section \ref{sub:problem}. 
-
-\paragraph{Complicated}\mbox{}\\
-Another project which aims to allow complete lifecycle management for Docker is ``The Atomic Project''. While this product is much larger in its feature set it is not a simple ``download and run'' application. Instead, it is a platform which requires a command line interface to be installed before the application can be run. This is not ideal as it increased overhead an complicates the start up process. As the end goal of this project is to release it as a node module and run it in a container it would be a simple process to download and run the application, something which cannot be said for The Atomic Project.
+In this way, the project will follow the behavioral driven development (BDD) model. The advantage of this model over pure unit testing in test-driven development (TDD) is that BDD keeps the end result in mind at all times, instead of just the conditions for an individual unit test to pass. This allows the developer to constantly keep in mind the goal of the module being tested.
 
 
 \newpage
