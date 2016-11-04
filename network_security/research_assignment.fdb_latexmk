@@ -1,14 +1,14 @@
 # Fdb version 3
-["bibtex research_assignment"] 1478013458 "research_assignment.aux" "research_assignment.bbl" "research_assignment" 1478013460
+["bibtex research_assignment"] 1478263381 "research_assignment.aux" "research_assignment.bbl" "research_assignment" 1478263383
   "/usr/local/texlive/2016/texmf-dist/bibtex/bst/harvard/agsm.bst" 1136766823 25549 e3d0f1ab4ae55e777f7352db30e2c6f7 ""
-  "components/title.aux" 1478013459 767 9ee9083dcb85af9028c1b7ce76d7b59d ""
-  "references.bib" 1478012747 5789 9982ddaf47d274e2bb64e3626e84c648 ""
-  "research_assignment.aux" 1478013460 11904 b7b3af1e8b7ff7a603a223ed509594f5 ""
+  "components/title.aux" 1478263382 767 9ee9083dcb85af9028c1b7ce76d7b59d ""
+  "references.bib" 1478175652 5789 9982ddaf47d274e2bb64e3626e84c648 ""
+  "research_assignment.aux" 1478263382 11903 1b5e11f9aa234c275f15ac93f2dd3cc7 ""
   "research_assignment.bcf" 0 -1 0 ""
   (generated)
   "research_assignment.blg"
   "research_assignment.bbl"
-["pdflatex"] 1478013458 "research_assignment.tex" "research_assignment.pdf" "research_assignment" 1478013460
+["pdflatex"] 1478263381 "research_assignment.tex" "research_assignment.pdf" "research_assignment" 1478263383
   "/usr/local/texlive/2016/texmf-dist/fonts/enc/dvips/base/8r.enc" 1165713224 4850 80dc9bab7f31fb78a000ccfed0e27cab ""
   "/usr/local/texlive/2016/texmf-dist/fonts/map/fontname/texfonts.map" 1272929888 3287 e6b82fe08f5336d4d5ebc73fb1152e87 ""
   "/usr/local/texlive/2016/texmf-dist/fonts/tfm/adobe/courier/pcrr7t.tfm" 1136768653 960 379cc0019370a9e0208a0a3f949f847a ""
@@ -96,17 +96,17 @@
   "components/images/run-container-whoami.png" 1477911949 28851 5d4f510b02bad61b65cd9a12ea598a2b ""
   "components/images/verify-ownership.png" 1477917171 46181 1906471280210f3fe4ce0e7ad5401fa4 ""
   "components/images/wit.jpg" 1475266693 29664 dfd6963f3970423ea7354580cb2db80c ""
-  "components/title.aux" 1478013459 767 9ee9083dcb85af9028c1b7ce76d7b59d ""
+  "components/title.aux" 1478263382 767 9ee9083dcb85af9028c1b7ce76d7b59d ""
   "components/title.tex" 1475267118 463 7e1a82312b1fba167ca2603c174cc737 ""
-  "research_assignment.aux" 1478013460 11904 b7b3af1e8b7ff7a603a223ed509594f5 ""
-  "research_assignment.bbl" 1478013458 2739 8a513863d0346591f33522495cc69176 "bibtex research_assignment"
-  "research_assignment.out" 1478013460 1337 dcc5cc78b45b6e67b75216353a2f08e3 ""
-  "research_assignment.tex" 1478013456 32872 244c979c0dbe2f4fde493baa34cc9c36 ""
-  "research_assignment.toc" 1478013460 3994 46332758d506033e24ba6a7e7a0d8254 ""
+  "research_assignment.aux" 1478263382 11903 1b5e11f9aa234c275f15ac93f2dd3cc7 ""
+  "research_assignment.bbl" 1478263381 2739 8a513863d0346591f33522495cc69176 "bibtex research_assignment"
+  "research_assignment.out" 1478263383 1337 dcc5cc78b45b6e67b75216353a2f08e3 ""
+  "research_assignment.tex" 1478263370 32913 27a7d1b1589229c06747b7183bbad50d ""
+  "research_assignment.toc" 1478263383 3993 bffc5058a3da1a02d63769de9779c5e6 ""
   (generated)
   "research_assignment.pdf"
   "research_assignment.log"
   "research_assignment.out"
   "components/title.aux"
-  "research_assignment.toc"
   "research_assignment.aux"
+  "research_assignment.toc"

@@ -47,7 +47,7 @@ Traditionally applications are run within a virtual machine which abstracts a re
 
 Containers, however, are self-contained isolated processes which run on the host kernel. They have their own internal isolated CPU, memory, filesystem and network resources. 
 
-Containers on their own are essentially made using two components, cgroups and namespaces. These will be discussed in sections \ref{subs:Namespaces} and \ref{subs:CGroups}. Usage of containers in production has grown exponentially, in no small part to the rise in popularity of Docker. It began as a project to manage LXC containers and quickly evolved and built on top of LXC \citep{BCN}.
+Containers on their own are essentially made using two components, cgroups and namespaces. These will be discussed in sections \ref{subs:Namespaces} and \ref{subs:CGroups}. Usage of containers in production has grown exponentially, in no small due part to the rise in popularity of Docker. It began as a project to manage LXC containers and quickly evolved and built on top of LXC \citep{BCN}.
 
 This paper will aim to investigate the overall security of a technology such as Docker. It will look at the tools at the core of Docker security, how we can ensure they are at their most secure and then also look at a real-life example of how container security can cause problems.
 
@@ -86,7 +86,7 @@ This namespace isolates the user and group ID numbers from other user namespaces
 Network namespaces isolate all system resources which are concerned with networking. An analogy here would be that each network namespace can essentially be its own private network with all included components such as IP ranges, IP routing, network route tables and port security settings. This is useful as it means any processes running within these namespaces can have their own virtual network device attached to certain ports within the namespace.
 
 \paragraph{PID Namespaces}\mbox{}\\
-The process ID (PID) namespaces can isolate processes based on the namespace they are in. This means it is technically possible to have two processes running in different PID namespaces to have the \textit{same} PID. It also means that each process running within a PID namespace will have two PIDs, one PID within the namespace and the other on the host containing the namespace \citep{Kerrisk2013}. This can be seen overleaf in Figure \ref{fig:pid}.
+The process ID (PID) namespaces can isolate processes based on the namespace they are in. This means it is technically possible to have two processes running in different PID namespaces to have the \textit{same} PID. It also means that each process running within a PID namespace will have two PIDs, one PID within the namespace and the other on the host containing the namespace \citep{Kerrisk2013}. A visualisation of this can be seen overleaf in Figure \ref{fig:pid}.
 
 \begin{figure}[!h]
 \centering
@@ -116,7 +116,7 @@ On Linux systems the user with id 0 has complete root privileges over the system
 
 Docker, or more specifically the Docker Engine, is made up of two components. The first is the Docker daemon which acts as the server process that will orchestrate and manage all containers and images on the host. The client is the other component, which can be either the command-line interface or the API. This client acts as the control over the server, telling it what to do and how to do it \citep{Docker2016}.
 
-We have already discussed namespaces and cgroups, and now we can see how Docker uses these to build containers. Docker was previously built on top of LXC containers, meaning it utilized LXC when creating containers. For example when the command `docker run' was entered Docker simply used `lxc-start' to start the container. This is turn then created the necessary namespaces and cgroups to control the container \citep{Petazzoni2013}. However Docker has since written its own driver and bundled it with the Docker project to remove a layer of abstraction and mean Docker no longer has to rely on LXC. This new driver is called `libcontainer' \citep{Hykes2014}. It essentially does not change much from a security point of view however, as it means Docker can now directly interact with namespaces and cgroups, without needing to use LXC. The only security concern introduced is that Docker now needs to keep on top of Linux kernel vulnerabilities themselves, although some might say this is an advantage. An outline of this can be seen below in Figure \ref{fig:kernel}.
+We have already discussed namespaces and cgroups, and now we can see how Docker uses these to build containers. Docker was previously built on top of LXC containers, meaning it utilized LXC when creating containers. For example when the command `docker run' was entered Docker simply used `lxc-start' to start the container. This in turn then created the necessary namespaces and cgroups to control the container \citep{Petazzoni2013}. However Docker has since written its own driver and bundled it with the Docker project to remove a layer of abstraction and mean Docker no longer has to rely on LXC. This new driver is called `libcontainer' \citep{Hykes2014}. It essentially does not change much from a security point of view however, as it means Docker can now directly interact with namespaces and cgroups, without needing to use LXC. The only security concern introduced is that Docker now needs to keep on top of Linux kernel vulnerabilities themselves, although it could be argues this is an advantage. An outline of this can be seen in Figure \ref{fig:kernel}.
 
 \begin{figure}[!h]
 \centering
@@ -132,9 +132,9 @@ Now that we know how Docker runs, we can appreciate that to do what it does, (i.
 
 \subsubsection{Docker Hub}
 
-Another security concern for Docker is their own Docker hub. While it is a feature and possibly one of the reasons they emerged as the most popular container engine it is also a cause for concern. Docker Hub allows anybody to push their images for later use or for somebody else to use. While this is a major feature it does also open up novice and experienced users alike to a malicious image. In a previous study, it was found that over 30\% of pre-built containers on Docker Hub contained vulnerabilities \citep{Bettini2015}.
+Another security concern for Docker is their own Docker hub. While it is a huge feature of the Docker ecosystem and possibly one of the reasons they emerged as the most popular container engine it is also a cause for concern. Docker Hub allows anybody to push their images for later use or for somebody else to use. While this is a major feature it does also open up novice and experienced users alike to a malicious image. In a previous study, it was found that over 30\% of pre-built containers on Docker Hub contained vulnerabilities \citep{Bettini2015}.
 
-There are two main mitigations here, one is vigilance - when the user takes great care with the images they use, and the other is running a private image registry and only allowing containers to be built from these images which could have been put through security checks. We will look at this further in Section \ref{sec:Work}.
+There are two main mitigations here, one is vigilance - when the user takes great care with the images they use, and the other is running a private image registry and only allowing containers to be built from images which have passed internal security checks. We will look at a practical example of these security checks in Section \ref{sec:Work}.
 
 \newpage
 \section{Work Carried Out}
@@ -165,7 +165,7 @@ For this test the environment is as follows:
 \end{itemize}
 
 \subsubsection{Comparing the Tools}
-As both tools perform essentially the same tests using different methods it would be wasteful to details the results of both here. For that reason they were compared and the best-suited was chosen.
+As both tools perform essentially the same tests using different methods it would be pointless to detail the results of both here. For that reason they were compared and the best-suited was chosen.
 
 \paragraph{Official Docker Tool}\mbox{}\\
 The official Docker Security Benchmark tool provides a human readable output and warns about inefficiencies in the Docker set up of the host. However that is all it does - it does not provide details about \textit{why} the tests failed, just that they failed. It also did not pick up on a red-herring test case I created. This will be discussed further on page \pageref{par:untrusted}.
@@ -188,7 +188,7 @@ The tool created by Alexei Ledenev was compared to the official tool and was dee
   \item It is open source and therefore `third-party' and so its results can be deemed impartial, as opposed to the tool created by Docker themselves
 \end{itemize}
 
-The only drawback of this tool is that it creates reports of test results in TAP format, which is designed to be machine readable. For the purpose of this report however we will be reading the results directly. This means they will not appear as readable as the Docker tool shown above. However this is a sacrifice worth making as the test results are far more detailed. An extract of the test results can be seen in Figure \ref{fig:sec_tool}. The screenshot shows the test result highlighted in red and an explanation of why it failed highlighted in green. For the remainder of this report test results will be pasted as code snippets, as they are more readable than the output of the tool.
+The only drawback of this tool is that it creates reports of test results in TAP format, which is designed to be machine readable. For the purpose of this report however we will be reading the results directly. While the results may not be formatted in a human-readable fashion it is a sacrifice worth making as the test results are far more detailed. An extract of the test results can be seen in Figure \ref{fig:sec_tool}. The screenshot shows the test result highlighted in red and an explanation of why it failed highlighted in green. For the remainder of this report test results will be pasted as code snippets, as they are more readable than the output of the tool.
 
 \begin{figure}[!h]
 \centering
@@ -329,7 +329,7 @@ For this practical we will use the following setup:
   \item A `vanilla' Ubuntu trusty 14.04 virtual machine
   \item Docker 1.12.2 installed on the host
   \item A new unprivileged user added to the Ubuntu server
-  \item A Docker group which contains this users, this essentially means the user can control the Docker daemon, i.e run containers etc
+  \item A Docker group which contains this user, this essentially means the user can control the Docker daemon, i.e run containers etc
   \item We will also create a base Docker image to create a container from. There is nothing special about this image, the code can be seen in Figure \ref{fig:dockerfile}.
 \end{itemize}
 
@@ -397,7 +397,7 @@ So it is obvious that the user `unprivileged-user' does not have any root privil
 
 We will now run our first container, and instruct it to carry out some tasks for us. This container is being run by `unprivileged-user' and so the user itself does not have root privileges, but the Docker daemon creating the container \textit{does}. We can see this command in Figure \ref{fig:run-container-whoami}.
 
-There is a lot happening in Figure \ref{fig:run-container-whoami} above so we will break it into steps. 
+There is a lot happening in Figure \ref{fig:run-container-whoami} so we will break it into steps. 
 
 \begin{itemize}
   \item We run a container
@@ -488,7 +488,7 @@ The server which is running the containers should contain nothing but the Docker
 By keeping both Docker and the host kernel it is running on up to date you are ensuring that all patches are installed to combat known security vulnerabilities.
 
 \paragraph{Be Careful About Letting Users Control Docker}\mbox{}\\
-We have seen that any user who can control the Docker daemon should be considered root. Even if that user's privileges are restricted they will be able to essentially `escalate' themselves to root level by using Docker.
+We have seen that any user who can control the Docker daemon should be considered root. Even if that user's privileges are restricted they will be able to essentially escalate themselves to root level by using Docker.
 
 \paragraph{Final Note: Be Security Conscious}\mbox{}\\
 Just because Docker is an `isolated container environment' does not mean it does not have access to the host system - so being aware of this fact alone is a start in the right direction. When running applications and especially when doing so in a production environment it is vital to keep in mind the potential risks involved with running these applications in containers.
