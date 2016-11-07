@@ -85,8 +85,6 @@ INPUT components/overview.aux
 INPUT components/overview.aux
 INPUT components/investigation.aux
 INPUT components/investigation.aux
-INPUT components/technologies.aux
-INPUT components/technologies.aux
 INPUT components/tech_feasibility.aux
 INPUT components/tech_feasibility.aux
 OUTPUT report_v1.aux
@@ -132,15 +130,12 @@ INPUT components/investigation.tex
 INPUT images/CI.png
 INPUT ./images/CI.png
 INPUT ./images/CI.png
-OUTPUT components/technologies.aux
-INPUT components/technologies.tex
-INPUT components/technologies.tex
-INPUT images/event_loop.png
-INPUT ./images/event_loop.png
-INPUT ./images/event_loop.png
 OUTPUT components/tech_feasibility.aux
 INPUT components/tech_feasibility.tex
 INPUT components/tech_feasibility.tex
+INPUT images/event_loop.png
+INPUT ./images/event_loop.png
+INPUT ./images/event_loop.png
 INPUT images/module_counts.png
 INPUT ./images/module_counts.png
 INPUT ./images/module_counts.png
@@ -154,8 +149,6 @@ INPUT components/overview.aux
 INPUT components/overview.aux
 INPUT components/investigation.aux
 INPUT components/investigation.aux
-INPUT components/technologies.aux
-INPUT components/technologies.aux
 INPUT components/tech_feasibility.aux
 INPUT components/tech_feasibility.aux
 INPUT ./report_v1.out

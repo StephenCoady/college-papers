@@ -5,12 +5,23 @@ To evaluate the technological stack of the project a prototype application was b
 \begin{itemize}
   \item Node.js Server Application
   \item Express.js API
+	\item Mongo Database
   \item Docker Image + Container
   \item Docker Engine installed on Mac OS X \& Linux 14.04 
 \end{itemize}
 
 \subsection{Node.js Application}
 \label{sub:nodejs}
+Node.js is a server-side JavaScript runtime, it is built on the same V8 engine that powers the popular Chrome browser. It uses an event-driven, non-blocking I/O model that makes it lightweight, efficient and very fast. Node.js' package ecosystem, npm, is the largest ecosystem of open source libraries in the world. \citep{Nodejs.org2016}.
+
+It is node's asynchronous nature which makes it so powerful. Being asynchronous essentially means that it does not create a new thread every time a request needs to be dealt with. Instead, it relies on a single event loop to handle requests which never blocks I/O. This can be seen in Figure \ref{fig:event_loop}.
+
+\begin{figure}[!h]
+\centering
+\includegraphics*[width=0.6\textwidth]{images/event_loop}
+\caption{\em Node Event Loop}
+\label{fig:event_loop}
+\end{figure}
 
 Node.js was deemed a good fit for this project as it has an excellent community and ecosystem which will increase development speed and allow for more complex features with less overhead. We can see in Figure \ref{fig:counts} that there are currently (as of November 2016) more node modules available through the node package manager NPM than any other of the large package managers such as the ones used by Go, PHP, Python and Ruby. 
 
@@ -20,6 +31,33 @@ Node.js was deemed a good fit for this project as it has an excellent community 
 \caption{\em Various Module Counts (Credit: modulecounts.com)}
 \label{fig:counts}
 \end{figure}
+
+\subsection{MongoDB}
+MongoDB is an open source document-oriented database. It is a NoSQL database which means Mongo does not support relationships between tables \citep{Mongo216}. Instead, MongoDB uses JSON-like ``documents'' to store information in an ordered way. This is advantageous for a number of reasons, namely:
+
+\begin{itemize}
+  \item Flexibility - Since Mongo does not have relations it is easy to change the database as development continues, without the need for migrations of the current schema.
+  \item Javascript - Since the application itself will be written in Node it will be extremely beneficial to have a database which stores its information in JSON.
+  \item Simplicity - When a database is schema-less it removes the need for complex actions such as joins, while still providing the power of complex queries.
+\end{itemize}
+
+Since we are using a javascript runtime on the server we can see that it is trivial to use connect to Mongo using mongoose ODM in Listing \ref{lst:mongo}.
+
+\begin{lstlisting}[caption={Communicating with Mongo},label={lst:mongo}]
+	var mongoose = require('mongoose');
+	mongoose.connect('mongodb://localhost/test');
+
+	var Container = mongoose.model('Container', { name: String, id: String });
+
+	var built_container = new Container({ name: 'NGNIX', id: '4f5t5e3'});
+	built_container.save(function (err) {
+	  if (err) {
+	    console.log(err);
+	  } else {
+	    console.log('Saved!');
+	  }
+	});
+\end{lstlisting}
 
 \subsection{Dockerode}
 \label{sub:dockerode}
@@ -114,3 +152,19 @@ To evaluate whether or not it was feasible to put the final application in a con
 \end{lstlisting}
 
 Once this container was run the complete application could be run locally from within a container.
+
+\subsection{Supporting Technologies/Processes}
+\label{subs:support}
+\paragraph{Vagrant}\mbox{}\\
+Vagrant is a development tool to provision and `sandbox' the complete development environment from the host machine it is running on. This is very beneficial, as it means all necessary dependencies can be bundled into one virtual machine and updated or changed when needed. 
+
+Vagrant also allows the developer to standardize all of the different environments the application will run on. This means that if the code will be deployed to a specific version of a specific operating system then the developer can easily replicate this on the local development environment. It allows the developer to build the application on one (local) environment and deploy to the \textit{exact same} remote environment. This is extremely beneficial in terms of code reliability and stability - as the runtime can be reproduced easily.
+\paragraph{Ansible}\mbox{}\\
+Ansible is a tool to provision virtual machines running locally or remotely. A formal process of all deployment and provisioning will be employed in this project. Meaning that the same route from running code locally to it running on a remote server will always be followed.
+
+Ansible paired with Vagrant in this project will mean any discrepancies or bugs in the code will not be introduced by the environment or the deployment/provisioning process. This is very important as it can reduce the development workload. 
+
+\paragraph{Testing}\mbox{}\\
+This project will use third party node modules to perform its unit tests. These unit tests will be behavioral-driven, meaning the components will be tested individually with the end-goal of the passing test being validating a certain behavior of the application, as opposed to validating the functionality of each individual component.
+
+In this way, the project will follow the behavioral driven development (BDD) model. The advantage of this model over pure unit testing in test-driven development (TDD) is that BDD keeps the end result in mind at all times, instead of just the conditions for an individual unit test to pass. This allows the developer to constantly keep in mind the goal of the module being tested.
