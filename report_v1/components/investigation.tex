@@ -1,0 +1,39 @@
+\section{Investigation}
+
+\subsection{Methodology}
+\label{subs:agile}
+
+The methodology which this project will be carried out under is an important decision. It will have a significant impact on timelines, deliverables and overall product quality. Therefore which methodology to use should be given careful consideration. The guide by \citep{Manifesto2016} was used as reference when making this decision.
+
+The two to be considered are Agile and a more traditional approach, named Waterfall. While both have strengths and weaknesses Agile was chosen for this project as it was deemed a better fit for the following reasons:
+
+\paragraph{Quality Testing} Testing is integrated into the development cycle, enabling the developer to continuously monitor the functionality and performance of the application. In Waterfall testing is not carried out until the very end when development is finished. This can lead to problems for a lone-developer as testing coverage and quality may not be as high. 
+
+\paragraph{Visibility} Agile provides a great environment to see how expectations are managed effectively. It provides a clear view into the project scope and the current track it is on. With Waterfall all expectations and deliverables need to be forecast before any development has begun. This can be difficult to and can mean increased overhead of work.
+
+\paragraph{Risk Management} Incremental development cycles allow the developer to accurately assess any challenges early on and make it easier to respond and adapt. In Waterfall there is very little room for adapting to unforeseen challenges.
+
+\paragraph{Flexibility} Agile allows for change natively. Instead of setting a rigid time plan up front the timescale is set and each sprint allows for the requirements to change and even for more to emerge as development continues.
+
+Agile uses tools called sprints throughout the development cycle \citep{Agile2016}. These are short incremental development cycles which are planned at the beginning of each sprint itself and analyzed at the end.
+
+Each sprint in this project will have a well-defined goal, which will allow for accurate judging of the project scope and whether or not it is on track. As part of the Agile process there will be a planning session to initially scope the product backlog and to inform the total scope of the project. At the end of the initial sprint a sprint review will then be performed which will evaluate goals achieved versus goals planned and the backlog will then be re-prioritized accordingly. A sprint retrospective will then analyze sprint performance and help to highlight areas where improvement can be made. This will also enhance the accuracy of the following sprint.
+
+\subsection{Continuous Integration}
+Continuous Integration is the act of continuously ensuring software is of a suitable standard to be integrated into the current software package. This will ensure that any changes made to the code base will receive immediate test-feedback. Even though this application will not be built in a production environment having a continuous build cycle will ensure maximum quality code and also reduce the risk of a ``bug bottleneck'' further down the line.
+
+\begin{figure}[!h]
+\centering
+\includegraphics*[width=0.8\textwidth]{images/CI}
+\caption{\em Continuous Integration}
+\label{fig:CI}
+\end{figure}
+
+\subsection{Existing Solutions}
+Currently there exists several other projects which aim to provide the same solution as this one does. There are, however, subtle differences in either the feature set or implementation of these solutions which validates this project as a worthwhile undertaking. 
+
+\paragraph{Lack of Features}\mbox{}\\
+One of these projects ``UI For Docker'', is an open source project written in Golang \citep{UIRepo2016}. It shares the same basic feature set as this project however it does allow for advanced controls such as starting a container from a Dockerfile or searching for new images to start containers from. Also, upon experimentation with UI For Docker the programs error handling and user feedback was not found to be satisfactory. As an example if renaming a container was attempted while it was still running the container would simply crash instead of telling the user it must be stopped first. While I believe that it is an excellent project this combined with the lack of the previously mentioned features means it is not powerful enough to solve the domain problem discussed in Section \ref{sub:problem}. 
+
+\paragraph{Cost}\mbox{}\\
+Docker themselves provide a lifecycle management solution, however it comes as a monthly subscription \citep{Docker2016}. It is not currently available to run privately which makes the product rather restricted. While the subscription fee is relatively small it is still a barrier for smaller teams or single developers. Since this project aims to produce an open-source application it is catering for an opening in the market.

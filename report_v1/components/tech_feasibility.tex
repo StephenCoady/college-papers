@@ -1,0 +1,116 @@
+\section{Technical Feasibility}
+\label{sec:feasibility}
+To evaluate the technological stack of the project a prototype application was built to communicate with the Docker API. This application is available in Appendix \ref{appendix:code}. This application consisted of the following components:
+
+\begin{itemize}
+  \item Node.js Server Application
+  \item Express.js API
+  \item Docker Image + Container
+  \item Docker Engine installed on Mac OS X \& Linux 14.04 
+\end{itemize}
+
+\subsection{Node.js Application}
+\label{sub:nodejs}
+
+Node.js was deemed a good fit for this project as it has an excellent community and ecosystem which will increase development speed and allow for more complex features with less overhead. We can see in Figure \ref{fig:counts} that there are currently (as of November 2016) more node modules available through the node package manager NPM than any other of the large package managers such as the ones used by Go, PHP, Python and Ruby. 
+
+\begin{figure}[!h]
+\centering
+\includegraphics*[width=0.7\textwidth]{images/module_counts}
+\caption{\em Various Module Counts (Credit: modulecounts.com)}
+\label{fig:counts}
+\end{figure}
+
+\subsection{Dockerode}
+\label{sub:dockerode}
+
+The node.js app is the main component of the application, and serves a way to communicate with the Docker Engine. This is done using the Docker API, which is exposed by default on any system Docker is installed on. As it is bound to a non-networked Unix socket it was necessary to communicate with this socket somehow. To communicate with this API a third party module was used, Dockerode. This module is available in Appendix \ref{appendix:dockerode}. Using this module allows the application to retrieve any information needed from the Docker API quickly and without needing to make complicated API calls to it. 
+
+Dockerode was chosen as the primary method to communicate with the Docker API using node for the following reasons:
+
+\begin{itemize}
+	\item Active developers - new major release on average once a month
+	\item Full test suite
+	\item Feature rich - aims to keep all Docker API features implemented and tested
+	\item It has a large set of contributors (49 as of November 2016) with an active issues board, meaning a greater chance of any issues encountered being resolved
+\end{itemize}
+
+An example call to the dockerode module can be seen in Listing \ref{lst:dockerode}, which generates the JSON response shown in Listing \ref{lst:response}.
+
+\begin{lstlisting}[caption={Listing All Containers on a Host},label={lst:dockerode}]
+const Docker = require('dockerode');
+const docker = new Docker({
+  socketPath: '/var/run/docker.sock'
+});
+
+exports.listContainers = (req, res, next) => {
+  docker.listContainers({'all': 1}, (err, data) => {
+    if (data === null) {
+      res.status(404).json({
+        response: "No containers found",
+        error: err
+      })
+    } else {
+      res.status(200).json({
+        response: data
+      })
+    }
+  });
+}
+\end{lstlisting}
+
+\begin{lstlisting}[caption={Response From Server},label={lst:response}]
+  {
+    "response": [
+      {
+        "Id": "f8ea3a2c0...",
+        "Names": [
+          "/my_nginx_container"
+        ],
+        "Image": "nginx",
+        "ImageID": "sha256:e43d838...",
+                .
+                .
+                .
+      }
+    ]
+  }
+\end{lstlisting}
+
+\subsection{Express.js}
+\label{sub:express}
+
+To expose the Docker API externally a web API is needed. Upon investigation several strong choices were available and any of these would have made a suitable API. However Express.js was chosen for its simplicity and, as with node, its large online community. To create a router which our API will use is a relatively straight forward process, a small sample of which can be seen in Listing \ref{lst:router}. Express also supports many different types of authentication, which is a non-functional goal of this project. 
+
+\begin{lstlisting}[caption={Creating an Express.js Router},label={lst:router}]
+	let express	= require('express');
+	let containers = controllers.containers;
+	let router = express.Router();
+
+	router.get('/', function(req, res, next) {
+	    res.send('Welcome to the Docker Lifecycle Management v1 API');
+	});
+
+	/* Container Routes */
+	router.get('/containers', containers.listRunningContainers);
+	router.get('/containers/all', containers.listContainers);
+	router.get('/containers/:id/', containers.listSpecificContainer);
+
+	module.exports = router;
+\end{lstlisting}
+
+\subsection{Docker}
+To evaluate whether or not it was feasible to put the final application in a container a sample Docker image was built locally and a container was run from this image. The file this container was built from can be seen in Listing \ref{lst:docker}.
+
+\begin{lstlisting}[caption={Creating a Docker Image},label={lst:docker}]
+	FROM node:6.9.1-slim
+
+	ADD . /app  
+	WORKDIR /app  
+	RUN npm install  
+	EXPOSE 3000
+
+	CMD ["node", "app.js"]  
+\end{lstlisting}
+
+Once this container was run the complete application could be run locally from within a container.

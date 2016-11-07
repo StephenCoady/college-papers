@@ -1,0 +1,68 @@
+\section{Project Overview}
+\subsection{Problem}
+\label{sub:problem}
+Currently, container lifecycle management is predominantly achieved through the command line. This means that managing images, running containers and managing their interactions with each other can all be time-consuming tasks. One way in which this is aided is by the use of scripts. While this is useful, it does also mean that the user must be comfortable with the command line to manage the containers.
+
+Managing containers can quickly become a tedious and error-prone task when the number of containers starts to grow. In a production system it can mean provisioning and managing dozens of containers and their dependencies. This, coupled with the fact that the container must be managed not just at start up but over its complete lifecycle, means that the advantage of using containers can quickly be negated by their lifecycle management.
+
+\subsection{Industry Example}
+\label{sub:industry}
+As a real-life example, Red Hat Mobile's Application platform is made up of between 20-25 Docker images. So in a development environment that means that running all of those images gives around the same number of containers to manage. While this is no small feat, it can be mitigated by things like scripts, Docker Compose etc. However when we start running these containers in production that number can quickly grow, depending on resiliency and load requirements. At this point it is now a much larger task to manage all of these containers. 
+
+Red Hat Mobile also employ a Continuous Integration/Deployment (CI/CD) model when it comes to their software. Whenever a pull request is opened for a component of their application, it triggers a CI build, which in turn (depending on whether it passes or not) can trigger a build of a Docker image related to this component. So essentially for each Docker image there may be many tagged versions of that image built and ready to be used. This process could be aided by a visual component to view and inspect these images.
+
+
+\subsection{Solution}
+With the aim of solving the problem described in Sections \ref{sub:problem} and \ref{sub:industry}, the overall goal is to provide a tool to aid with the management of a container's lifecycle. In other words, the end product of this project will aim to tie together the basic container and image controls to build one cohesive management unit. This unit will allow for a graphical information panel and console to carry out any tasks needed.
+
+It will aim to provide a means to remotely manage a server and orchestrate the containers and container images on that instance, therefore greatly reducing the overhead in management of that server.
+
+\subsection{Goals}
+In terms of goals of the project, the core or primary goals can be broken up into functional and non-function goals as follows:
+
+\subsubsection{Functional}
+
+\begin{itemize}
+  \item Image Manipulation/Control
+  \item Container Manipulation/Control
+  \item Remote Control of the application through an API
+  \item View Running statistics of containers
+  \item Search Docker Hub/Private Registry 
+\end{itemize}
+\mbox{}\\
+These are the minimum goals which will solve the problem discussed in Section \ref{sub:problem}. Some stretch goals, which may prove too large to fit into the project are:
+\mbox{}\\
+\begin{itemize}
+  \item Mobile Application
+  \item Having the final application itself run within a container
+  \item Connecting to multiple servers running the application at once
+  \item CI/CD Integration
+\end{itemize}
+\mbox{}\\
+Although these goals are not deemed immediately important and potentially undeliverable it is still important to keep them on the backlog. We will look at the reason for this in Section \ref{subs:agile}.
+
+\subsubsection{Non-Functional}
+
+\paragraph{Testing}\mbox{}\\
+This project will aim to deliver a product with extensive unit tests. It will follow the behavioral driven development (BDD) method which will ensure code is hardened and minimize the amount of bugs. This will also mean greater development speed as code will be re-usable with greater efficiency. This is discussed further in section \ref{subs:support}.
+
+\paragraph{Security}\mbox{}\\
+The end product will also be secure. The Docker daemon needs to run on a host with root privileges, which can have disastrous affects for the host if not managed correctly. Since this application will effectively allow remote control of this daemon it is important that only a trusted user be allowed to use the application. 
+
+\paragraph{Scalability}\mbox{}\\
+When the application can run on a server and allow the containers on that server be controlled it is a very useful application. However, in industry it is rarely just one server housing the application. For this reason the end product of this project will need to scale \textit{with} the server it is managing. To achieve this the application will need to be able to communicate with several servers at once.
+
+\subsubsection{Deliverables}
+The deliverables of this project are as follows:
+
+\paragraph{Server-side Application}\mbox{}\\
+This is the main part of the application and will act as the controller of the Docker API.
+
+\paragraph{Front-end Application}\mbox{}\\
+This will be the interface through which the user will communicate with the server application. It will be exposed through an API to allow for remote calls.
+
+\paragraph{Open Source Node Module}\mbox{}\\
+If this project is successful, I intend to release the source code as open source, where it can be built upon and improved by the community.
+
+\paragraph{Containerized Application}\mbox{}\\
+Although a stretch goal, a possible deliverable from this project would be to have the whole application running within a container. This would allow for rapid deployment of the application and would also be a huge learning outcome.
