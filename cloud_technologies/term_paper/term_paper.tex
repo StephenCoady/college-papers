@@ -15,7 +15,6 @@
 \usepackage{url}
 \usepackage[nottoc,numbib]{tocbibind}
 \usepackage[parfill]{parskip}
-\usepackage{listings}
 \hypersetup{
     colorlinks,
     citecolor=black,
@@ -25,6 +24,48 @@
 }
 \bibliographystyle{agsm}
 \setcitestyle{authoryear,open={(},close={)}}
+
+\usepackage[dvipsnames]{xcolor}
+\usepackage{listings}
+
+\newcommand\YAMLcolonstyle{\color{red}\mdseries}
+\newcommand\YAMLkeystyle{\color{black}\bfseries}
+\newcommand\YAMLvaluestyle{\color{blue}\mdseries}
+
+\makeatletter
+
+
+% here is a macro expanding to the name of the language
+% (handy if you decide to change it further down the road)
+\newcommand\language@yaml{yaml}
+
+\expandafter\expandafter\expandafter\lstdefinelanguage
+\expandafter{\language@yaml}
+{
+  keywords={true,false,null,y,n},
+  keywordstyle=\color{darkgray}\bfseries,
+  basicstyle=\YAMLkeystyle,                                 % assuming a key comes first
+  sensitive=false,
+  comment=[l]{\#},
+  morecomment=[s]{/*}{*/},
+  commentstyle=\color{purple}\ttfamily,
+  stringstyle=\YAMLvaluestyle\ttfamily,
+  moredelim=[l][\color{orange}]{\&},
+  moredelim=[l][\color{magenta}]{*},
+  moredelim=**[il][\YAMLcolonstyle{:}\YAMLvaluestyle]{:},   % switch to value style at :
+  morestring=[b]',
+  morestring=[b]",
+  literate =    {---}{{\ProcessThreeDashes}}3
+                {>}{{\textcolor{red}\textgreater}}1     
+                {|}{{\textcolor{red}\textbar}}1 
+                {\ -\ }{{\mdseries\ -\ }}3,
+}
+
+% switch to key style at EOL
+\lst@AddToHook{EveryLine}{\ifx\lst@language\language@yaml\YAMLkeystyle\fi}
+\makeatother
+
+\newcommand\ProcessThreeDashes{\llap{\color{cyan}\mdseries-{-}-}}
 
 %-----------------------------------------------#########--------------------------------------------------------------%
 
@@ -54,7 +95,7 @@ Not only is application deployment a problem, but provisioning the servers which
 \section{Problem Domain}
 \label{sec:Problem}
 
-A fitting definition of DevOps is ``\textit{DevOps is the practice of operations and development engineers participating together in the entire service lifecycle, from design through the development process to production support}'' \citep{devops}.
+One fitting definition of DevOps is ``\textit{DevOps is the practice of operations and development engineers participating together in the entire service lifecycle, from design through the development process to production support}'' \citep{devops}.
 
 Here the ``service lifecycle'' is the key term, as it means everything involved in creating a service and making it available for use in production. In older legacy systems the process would have involved separate teams performing each task along this timeline separately and without much overlap of personnel. In a simplified version of this model, the developers would write the code, the testers would test it, and the operations personnel would then deploy it along with provisioning the servers it would be deployed on.
 
@@ -79,7 +120,7 @@ In this chapter we will examine a number of technologies that together will aim 
 
 \subsection{Containers} %REVIEW need to talk about cgroups and namespaces
 \label{sub:Containers}
-In software, a container is a process isolated from the host which generally runs in a very lightweight wrapper. It uses the underlying Linux kernel to do the work it needs to but ultimately it is a separate process which is self-contained \citep{Matthias2015}. They contain complete filesystems which can house everything the packaged application needs to run, including code, environment variables, libraries and dependencies.
+In software, a container is a process isolated from the host which generally runs in a very lightweight wrapper. It uses the underlying Linux kernel to do the work it needs to but ultimately it is a separate process which is self-contained \citep{Matthias2015}. To achieve this it uses the Linux abstraction method of namespaces and cgroups. Namespaces essentially present a segment of a global resource (such as processes, users, network) to a container and make the container think it has access to the global resource \citep{Kerrisk2013}. It is because of this that they can contain complete filesystems which can house everything the packaged application needs to run, including code, environment variables, libraries and dependencies while never actually having access to the Linux system it is running on.
 
 Containers are often compared with virtual machines, however this view is a bit simplistic. Virtual machines are fully fledged operating systems running on a hypervisor which emulates dedicated hardware. It is made up of virtual devices which emulate the physical devices of a real host. Containers however, are not as full featured. Instead, they can be made so that they only have those resources that they need - and nothing else. So while virtual machines are emulating a real server, it could be said that a container is emulating a single \textit{process} on a server - and only packaging exactly what that process needs to run.
 
@@ -87,7 +128,7 @@ Containers are often compared with virtual machines, however this view is a bit 
 Some advantages of containers are:
 
 \begin{itemize}
-  \item Lightweight - images can be as small as 15 MB
+  \item Lightweight - images can be as small as 5 MB
   \item Ephemeral - containers lifespan can be as small as is needed, they can be started to perform a single process and then stop as soon as they are done. 
   \item Cheap - it is not CPU intensive to start a container
   \item Portable - containers can be built from a single file
@@ -95,38 +136,117 @@ Some advantages of containers are:
 \end{itemize}
 
 \paragraph{Disadvantages}\mbox{}\\
-
 There can also be drawbacks to containers, these include:
 
 \begin{itemize}
   \item Potential for added work - while containers can be useful they can also add to the work load and increase the lifecycle management of the application infrastructure.
-  \item Orchestrating large applications can be complex
+  \item Orchestrating large applications can be complex - more moving parts
   \item The containers share the same kernel. Any issues with the kernel and the container engine running on it will affect all containers.
 \end{itemize}
 
 \subsection{Docker}
 \label{sub:Docker}
+Docker is a software package which aims to orchestrate and manage containers for the user \citep{docker2016}. Docker uses its own driver called libcontainer to manage namespaces, cgroups and other Linux tools \citep{Hykes2014} which in turn allow for containerization on a host. An illustration of this can be seen in Figure \ref{fig:docker-driver}.
+
+\begin{figure}[!h]
+\centering
+\includegraphics*[width=0.5\textwidth]{components/images/docker-driver}
+\caption{\em Docker Using libcontainer. Credit: \citep{Hykes2014}}
+\label{fig:docker-driver}
+\end{figure}
+
+Docker allows for easily building, packaging and sharing of its ``Docker images''. It does this using two main components. The first component is the server-side program, Docker daemon. This is the part of the program which carries out the tasks required to run containers. The second component is the control over this daemon, the client. It can be accessed either via the API which Docker runs by default or through the command line interface \citep{Engine2016}.
+
+A Docker image is basically a set of instructions to create a template from which a container is run. The advantage of this is that multiple containers can be run from the same base image, meaning a reduction in storage size and making everything reusable. 
+
+One of Docker's strengths is the ease with which these images can be shared on used by anybody who wishes. To achieve this, Docker uses a shared repository model. Which means multiple users can `push' images they want to use later to a remote server which can then be pulled later on multiple servers and run at will. To make this even more accessible Docker has its own storage solution, Docker Hub \citep{Hub2016}. This website makes it easy for anybody to push and pull their own images or find new community-built ones to use themselves.
 
 \subsubsection{Swarm}
 \label{subs:Swarm}
+While placing an application in a container makes it trivial to start an application and run it in a cloud service, it also introduces many new challenges. Two new technical challenges which this paper is interested in are:
+\begin{itemize}
+  \item How many containers do we need to individually manage to run our application and across how many hosts? 
+  \item What happens when the application begins to scale? 
+\end{itemize}
+
+To combat these problems Docker has produced an inbuilt tool called Docker Swarm \citep{Swarm2016}. Docker swarm aims to provide a mechanism to automatically manage a group of containers running across multiple remote hosts. In other words, ``\textit{It turns a pool of Docker hosts into a single, virtual Docker host}'' \citep{Swarm2016}.
+
+Docker swarm's aim is to allow the user to run an application within a fault-tolerant, scalable and easily reproducible system. We will look further at how swarm works in section \ref{sec:Build}.
 
 \subsubsection{Alternatives}
 \label{subs:Docker-alt}
+There are many alternatives to Docker. When Docker first started, instead of using libcontainer as discussed in section \ref{sub:Docker} Docker actually relied completely on a project called Linux Containers (LXC). LXC can be seen in Figure \ref{fig:docker-driver} also. However LXC is also a standalone project, enabling users to use container technologies. LXC is currently transitioning to LXD, which is a command line tool and API to interact with the program \citep{LXC2016}. 
 
+Another competing product, which happens to focus on containers at scale is an open source tool to allow for orchestration of large container-based applications \citep{Kubernetes2016}. This is a direct competitor with Docker swarm, offering portable, extensible and self-healing container pools.
+
+There are certain disadvantages to using both of these tools however. With LXC, it is an older technology but the community is not as strong. This means that it does not come with as many images to use. Kubernetes is a strong clustering tool, however the pure volume of Docker images available again means it is probably a better place to start. Kubernetes is also completely aimed at running a cluster or, as they call them, pods. Whereas Docker is aimed at single container applications if necessary and then Docker swarm allows for clustering. 
 
 \subsection{Ansible}
 \label{sub:Ansible}
+Ansible is a tool to manage a server using ssh \citep{Ansible2016}. The server can be either remote or local, once it is available via ssh. The main advantages of Ansible are that it is:
+
+\begin{itemize}
+  \item Agentless - requires no client installed on the machine which needs to be managed.
+  \item Idempotent - can be safely run multiple times and if no change is required then a change will not occur.
+  \item Simple - with Ansible there is a low barrier to entry as all files are written in YAML.
+  \item Powerful - it can be used to manage a single server or one thousand. 
+\end{itemize}
+
+Ansible also uses a file known as an inventory to manage the servers it can connect to. This is useful as it means servers can be grouped by name, location, application etc and Ansible can be instructed to only carry out certain tasks on certain groups of servers depending on our needs. We will look at this further in section \ref{sec:Build}. 
+
+To name just a small subset of Ansible's use cases:
+
+\subsubsection{Provisioning}
+The term provisioning means the setting up of new servers with which you will later interact \citep{Hochstein2015}. In other words, if you start with a blank cloud storage provider running no servers then to provision what servers you need is to create however many virtual machines are needed. Ansible has a number of modules available here, which allow Ansible to talk to third party providers such as Amazon EC2, Microsoft Azure etc. 
+
+We can see a simple example of this in listing \ref{lst:provision}.
+
+\begin{lstlisting}[float,floatplacement=H,language=yaml,caption={Playbook To Create Instances On EC2},label={lst:provision}]
+---
+- hosts: localhost
+  connection: local
+  gather_facts: false
+  user: root
+  tasks:
+  - name: Provision EC2 Nodes
+    local_action:
+      module: ec2
+      key_name: "key.pem"
+      group_id: "security_group_id"
+      instance_type: "t2-micro"
+      image: "some_AMI"
+      vpc_subnet_id: "some_subnet"
+      region: "some_region"
+      assign_public_ip: yes
+      count: "1"
+---
+\end{lstlisting}
+
+\subsubsection{Configuration Management}
+Configuration management is described as \textit{``...writing some kind of state description for our servers, and then using a tool to enforce that the servers are, indeed, in that state...''} \citep{Hochstein2015}. This includes ensuring the correct software packages are installed, the correct services are running and any configuration files needed are present. Ansibles allows us to do this as, as previously stated it is idempotent. This means that if for some reason a server we wish to manage is only 50\% percent set up we can safely run an Ansible playbook which performs the \textit{complete} set up process and not worry that it will cause harm, i.e. Ansible will know it does not need to perform the first 50\% of configuration again and will just inform us that no change was needed for these steps.
+
+\subsubsection{Deployment}
+Deployment can be defined as \textit{``...the process of taking software that was written ... copying the required files to the server(s), and then starting up the services.''} \citep{Hochstein2015}. In this regrard Ansible excels. Ansible uses a concept of playbooks to run tasks against remote servers, an example of which can be seen below in listing \ref{lst:deploy}.
+
+\begin{lstlisting}[float,floatplacement=H,language=yaml,caption={A Simple Playbook To Deploy and Run Code},label={lst:deploy}]
+---
+- hosts: servers
+  gather_facts: false
+  sudo: true
+  tasks:
+  - name: Pull sources from the repository.
+    git: repo={{ project_repo }} dest={{ project_root }}/code/
+  - name: Start Application
+    command: python /code/app.py
+---
+\end{lstlisting}
+
+In this code we are simply copying code from the git repository to the server and then starting the code from within that directory. Although this is a rather simplistic version of what Ansible can do it does show how easy it is to go from a bare server to one running an application.
+
 
 \subsubsection{Alternatives}
 \label{subs:Ansible-alt}
-
-\subsection{Amazon Web Services}
-\label{sub:AWS}
-
-\subsubsection{Alternatives}
-\label{subs:AWS-alt}
-
-
+While there are many other configuration management tools available such as Chef and Puppet, these both require an agent to be installed on the remote server being managed. This is a huge benefit of Ansible over other tools and so Ansible was chosen for this reason. 
 \newpage
 \section{Building an Application}
 \label{sec:Build}
