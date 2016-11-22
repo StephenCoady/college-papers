@@ -10,6 +10,7 @@
 \usepackage[a4paper, total={6in, 8in}]{geometry}
 \usepackage[explicit]{titlesec}
 \usepackage{setspace} 
+\usepackage[T1]{fontenc}
 \onehalfspacing
 \usepackage{hyperref}
 \usepackage{url}
@@ -76,9 +77,10 @@
 
 %CONTENT
 \begin{document}
+\hypersetup{pageanchor=false}
 \include{components/title}
 \thispagestyle{empty}
-
+\hypersetup{pageanchor=true}
 \newpage
 \tableofcontents
 \newpage
@@ -179,7 +181,7 @@ There are many alternatives to Docker. When Docker first started, instead of usi
 
 Another competing product, which happens to focus on containers at scale is an open source tool to allow for orchestration of large container-based applications \citep{Kubernetes2016}. This is a direct competitor with Docker swarm, offering portable, extensible and self-healing container pools.
 
-There are certain disadvantages to using both of these tools however. With LXC, it is an older technology but the community is not as strong. This means that it does not come with as many images to use. Kubernetes is a strong clustering tool, however the pure volume of Docker images available again means it is probably a better place to start. Kubernetes is also completely aimed at running a cluster or, as they call them, pods. Whereas Docker is aimed at single container applications if necessary and then Docker swarm allows for clustering. 
+There are certain disadvantages to using both of these tools however. With LXC, it is an older technology but the community is not as strong. This means that it does not come with as many images to use. Kubernetes is a strong clustering tool, however the pure volume of Docker images available again means it is probably a better place to start. Kubernetes is also completely aimed at running a cluster or, as they call them, pods \citep{Kubernetes2016}. Whereas Docker is aimed at single container applications if necessary and then Docker swarm allows for clustering.
 
 \subsection{Ansible}
 \label{sub:Ansible}
@@ -228,7 +230,7 @@ Configuration management is described as \textit{``...writing some kind of state
 \subsubsection{Deployment}
 Deployment can be defined as \textit{``...the process of taking software that was written ... copying the required files to the server(s), and then starting up the services.''} \citep{Hochstein2015}. In this regrard Ansible excels. Ansible uses a concept of playbooks to run tasks against remote servers, an example of which can be seen below in listing \ref{lst:deploy}.
 
-\begin{lstlisting}[float,floatplacement=H,language=yaml,caption={A Simple Playbook To Deploy and Run Code},label={lst:deploy}]
+\begin{lstlisting}[float,floatplacement=H,language=yaml,caption={A Simple Playbook To Deploy and Run Code},label={lst:deploy},basicstyle=\small]
 ---
 - hosts: servers
   gather_facts: false
@@ -247,9 +249,166 @@ In this code we are simply copying code from the git repository to the server an
 \subsubsection{Alternatives}
 \label{subs:Ansible-alt}
 While there are many other configuration management tools available such as Chef and Puppet, these both require an agent to be installed on the remote server being managed. This is a huge benefit of Ansible over other tools and so Ansible was chosen for this reason. 
+
 \newpage
 \section{Building an Application}
 \label{sec:Build}
+We will now look at building an application using the technologies previously discussed in section \ref{sec:Background}. This will involve several distinct steps, including:
+
+\begin{itemize}
+  \item Running a custom application in a Docker container.
+  \item Provision instances which will host our application.
+  \item Configuring these instances depending on the role they are to play.
+  \item Deploying the application to these instances - this will use Docker Swarm to run the application
+  \item Creating a Docker loadbalancer which will sit in front of the application instances on a seperate instance
+\end{itemize}
+
+All of these steps will then be automated using Ansible. The final infrastructure model can be seen in Figure \ref{fig:swarm}.
+
+\begin{figure}[!h]
+\centering
+\includegraphics*[width=\textwidth]{components/images/swarm}
+\caption{\em Final Application Setup}
+\label{fig:swarm}
+\end{figure}
+
+\subsection{Provisioning The Infrastructure}
+\label{subs:provision}
+We will first look provisioning the servers needed for this application. The only dependency needed to run these playbooks in Ansible is the boto library \citep{Boto2016} installed locally and also python. For the purpose of this report, the EC2 instances required will be split into 3 distinct groups. These are:
+
+\begin{itemize}
+  \item Management
+  \item Node
+  \item Loadbalancer
+\end{itemize}
+
+We will discuss what these terms mean further in section \ref{subs:creating_swarm}, but for now we do not need to know the difference, just that all instances created have an intended role as our application orchestration continues.
+
+To create this infrastructure we can uses Ansible's built in ec2 module, which makes it easy to run commands against AWS. We can see the playbook used to create 3 sets of ec2 instances in Listing \ref{lst:provisionEc2}. This playbook is the set of steps to follow but it relies on Ansible roles and variables to run, as seen in Listing \ref{lst:provisionRole}.
+
+\begin{lstlisting}[float,floatplacement=H,language=yaml,caption={create-instances.yml},label={lst:provisionEc2},basicstyle=\small]
+  ---
+  # create manager nodes 
+  - hosts: localhost
+    connection: local
+    gather_facts: false
+    user: root
+    pre_tasks:
+      - include_vars: ~/dev/docker_with_ansible/ec2_vars/managers.yml
+    roles:
+      - ~/dev/docker_with_ansible/roles/provision-ec2-managers
+
+  # create worker nodes
+  - hosts: localhost
+    connection: local
+    gather_facts: false
+    user: root
+    pre_tasks:
+      - include_vars: ~/dev/docker_with_ansible/ec2_vars/nodes.yml
+    roles:
+      - ~/dev/docker_with_ansible/roles/provision-ec2-nodes
+      
+  # create the loadbalancer
+  - hosts: localhost
+    connection: local
+    gather_facts: false
+    user: root
+    pre_tasks:
+      - include_vars: ~/dev/docker_with_ansible/ec2_vars/loadbalancer.yml
+    roles:
+      - ~/dev/docker_with_ansible/roles/create-ec2-loadbalancer
+\end{lstlisting}
+
+\begin{lstlisting}[float,floatplacement=H,language=yaml,caption={provision-ec2-managers.yml},label={lst:provisionRole},basicstyle=\small]
+  ---
+   - name: Provision EC2 Managers
+     local_action:
+       module: ec2
+       key_name: "{{ec2_keypair}}"
+       group_id: "{{ec2_security_group}}"
+       instance_type: "{{ec2_instance_type}}"
+       image: "{{ec2_image}}"
+       vpc_subnet_id: "{{ec2_subnet_id}}"
+       region: "{{ec2_region}}"
+       instance_tags: '{"Name":"{{ec2_tag_Name}}","Type":"{{ec2_tag_Type}}","Environment":"{{ec2_tag_Environment}}"}'
+       assign_public_ip: yes
+       wait: true
+       count: "{{manager-count}}"
+       volumes: 
+       - device_name: /dev/sda1
+         device_type: gp2
+         volume_size: "{{ec2_volume_size}}"
+         delete_on_termination: true
+     register: ec2
+\end{lstlisting}
+
+The role in Listing \ref{lst:provisionRole} is to provision management nodes, however the roles for regular worker nodes and loadbalancers are the exact same. We can see the use of curly braces - anything in a set of double curly braces are variables within Ansible. These are defined in a separate file and loaded into the role by using the key: \texttt{pre\_tasks} as seen in Listing \ref{lst:provisionEc2}. These variables can be called from within Ansible and used to dynamically assign values. To run the playbook in Listing \ref{lst:provisionEc2} we can now run the command:
+
+\begin{lstlisting}[language=bash]
+ansible-playbook -e "manager-count=1" -e "worker-count=2" 
+-e "loadbalancer-count=1" playbooks/create-instances.yml
+\end{lstlisting}
+
+Here we use the variable flag -e to set the count of how many of each type of instance we require. This variable is then used in the relevant roles. Once we have run this command, we will now have the desired number of instances running in AWS.
+
+\subsection{Ansible as a Configuration Management Tool}
+\label{subs:config_management}
+Now that we have provisioned the number of instances we need we can proceed to make sure they are in the desired state. In other words, we can use Ansible as a configuration management tool to ensure the instances have everything they need to run the processes we will need. 
+
+The only configuration we require for this demonstration is that the correct version of Docker is installed on each instance. Since every instance in the application will use Docker to run its applications, this role will be run on all instances. This role can be seen below in Listing \ref{lst:dockerRole}.
+
+\begin{lstlisting}[float,floatplacement=H,language=yaml,caption={install-docker-engine.yml},label={lst:dockerRole},basicstyle=\small]
+  ---
+  # tasks file for docker-engine
+  - name: Ensure the system can use the HTTPS transport for APT
+    stat:
+      path: /usr/lib/apt/methods/https
+    register: apt_https_transport
+
+  - name: Install HTTPS transport for APT
+    apt:
+      pkg: apt-transport-https
+      state: installed
+    when: not apt_https_transport.stat.exists
+
+  - name: Import Docker key into apt
+    apt_key:
+      keyserver: hkp://p80.pool.sks-keyservers.net:80
+      id: 58118E89F3A912897C070ADBF76221572C52609D
+
+  - name: Add Docker deb repository
+    apt_repository:
+      repo: 'deb https://apt.dockerproject.org/repo ubuntu-trusty main'
+      state: present
+      update_cache: yes
+      
+  - name: Install Docker Engine
+    apt:
+      pkg:
+        - docker-engine={{docker_version}}*
+      state: installed
+
+  - name: ensure docker runs without sudo
+    command: usermod -aG docker ubuntu
+  ---
+\end{lstlisting}
+
+To run this role against all of our nodes, we use the playbook in Listing \ref{lst:dockerPlaybook}.
+
+\begin{lstlisting}[float,floatplacement=H,language=yaml,caption={install-docker-engine.yml},label={lst:dockerPlaybook},basicstyle=\small]
+  ---
+  - hosts: managers:nodes:loadbalancers
+    gather_facts: false
+    become: true
+    roles:
+      - ~/dev/docker_with_ansible/roles/install-docker-engine
+  ---
+\end{lstlisting}
+
+\newpage
+\subsection{Creating the Swarm}
+\label{subs:creating_swarm}
+
 
 \newpage
 \section{Conclusion}

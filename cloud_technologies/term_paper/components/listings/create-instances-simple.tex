@@ -1,0 +1,20 @@
+\begin{lstlisting}[float,floatplacement=!ht,language=yaml,caption={Playbook To Create Instances On EC2},label={lst:provision},basicstyle=\small]
+---
+- hosts: localhost
+  connection: local
+  gather_facts: false
+  user: root
+  tasks:
+  - name: Provision EC2 Nodes
+    local_action:
+      module: ec2
+      key_name: "key.pem"
+      group_id: "security_group_id"
+      instance_type: "t2-micro"
+      image: "some_AMI"
+      vpc_subnet_id: "some_subnet"
+      region: "some_region"
+      assign_public_ip: yes
+      count: "1"
+---
+\end{lstlisting}

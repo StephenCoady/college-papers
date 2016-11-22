@@ -1,0 +1,33 @@
+\begin{lstlisting}[float,floatplacement=!ht,language=yaml,caption={create-instances.yml},label={lst:provisionEc2},basicstyle=\small]
+  ---
+  # create manager nodes 
+  - hosts: localhost
+    connection: local
+    gather_facts: false
+    user: root
+    pre_tasks:
+      - include_vars: ~/dev/docker_with_ansible/ec2_vars/managers.yml
+    roles:
+      - ~/dev/docker_with_ansible/roles/provision-ec2-managers
+
+  # create worker nodes
+  - hosts: localhost
+    connection: local
+    gather_facts: false
+    user: root
+    pre_tasks:
+      - include_vars: ~/dev/docker_with_ansible/ec2_vars/nodes.yml
+    roles:
+      - ~/dev/docker_with_ansible/roles/provision-ec2-nodes
+      
+  # create the loadbalancer
+  - hosts: localhost
+    connection: local
+    gather_facts: false
+    user: root
+    pre_tasks:
+      - include_vars: ~/dev/docker_with_ansible/ec2_vars/loadbalancer.yml
+    roles:
+      - ~/dev/docker_with_ansible/roles/create-ec2-loadbalancer
+  ---
+\end{lstlisting}

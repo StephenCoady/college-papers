@@ -1,0 +1,12 @@
+\begin{lstlisting}[float,floatplacement=h,language=yaml,caption={A Simple Playbook To Deploy and Run Code},label={lst:deploy},basicstyle=\small]
+---
+- hosts: servers
+  gather_facts: false
+  sudo: true
+  tasks:
+  - name: Pull sources from the repository.
+    git: repo={{ project_repo }} dest={{ project_root }}/code/
+  - name: Start Application
+    command: python /code/app.py
+---
+\end{lstlisting}
