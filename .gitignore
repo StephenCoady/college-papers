@@ -23,3 +23,11 @@
 *.out
 *.synctex.gz
 *.bmpr
+*.vpp.*
+*.vpp
+*.vux
+*.fdb_latexmk
+*.fls
+*.glsdefs
+*.nlo
+.atomignore

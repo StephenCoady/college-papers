@@ -10,11 +10,19 @@
 \usepackage[explicit]{titlesec}
 \usepackage[toc,page]{appendix}
 \usepackage{hyperref}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{cleveref}
+\setcounter{tocdepth}{2}
 \usepackage[nottoc]{tocbibind}
 \usepackage[parfill]{parskip}
 
 \usepackage{listings} % to use code snippets 
 \usepackage{color}
+
+\usepackage{glossaries} % for glossary
+\makeglossaries 
+\include{components/glossary} 
+
 \definecolor{lightgray}{rgb}{.9,.9,.9}
 \definecolor{darkgray}{rgb}{.4,.4,.4}
 \definecolor{purple}{rgb}{0.65, 0.12, 0.82}
@@ -49,20 +57,36 @@
    showtabs=false,
    captionpos=b
 }
+\usepackage{hyperref}
+\newcommand\myshade{85}
+\colorlet{mylinkcolor}{NavyBlue}
+\colorlet{mycitecolor}{YellowOrange}
+\colorlet{myurlcolor}{Aquamarine}
 
 \hypersetup{
-    colorlinks,
-    citecolor=black,
-    filecolor=black,
-    linkcolor=black,
-    urlcolor=black
+  linkcolor  = mylinkcolor!\myshade!black,
+  linktocpage=true,
+  citecolor  = mycitecolor!\myshade!black,
+  urlcolor   = myurlcolor!\myshade!black,
+  colorlinks = true,
 }
+
 \bibliographystyle{agsm}
 \setcitestyle{authoryear,open={(},close={)}}
 
 \begin{document}
 \onehalfspacing
+\hypersetup{pageanchor=false}
+\include{components/college_title}
+\hypersetup{pageanchor=true}
+\newpage
 \tableofcontents
+
+\newpage
+\printglossaries
+
+\newpage
+\include{components/introduction}
 
 \newpage
 \include{components/overview}
@@ -71,8 +95,13 @@
 \include{components/investigation}
 
 \newpage
+\include{components/risk_analysis}
+
+\newpage
 \include{components/tech_feasibility}
 
+\newpage
+\include{components/design}
 
 \newpage
 \appendix
@@ -80,13 +109,14 @@
 \addcontentsline{toc}{section}{Appendices}
 \renewcommand{\thesubsection}{\Alph{subsection}}
 
-\subsection{Application Repository}
+\subsection*{Application Repository}
 \label{appendix:code}
 https://github.com/StephenCoady/docker-test-app
 
-\subsection{Dockerode}
+\subsection*{Dockerode}
 \label{appendix:dockerode}
 https://github.com/apocas/dockerode
+
 
 \newpage
 \bibliography{bibliography}
