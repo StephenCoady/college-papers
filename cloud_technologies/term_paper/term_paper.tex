@@ -6,7 +6,7 @@
 \usepackage{setspace} % allows for configuring the linespacing in the document
 \usepackage{caption}
 \usepackage{natbib}
-\usepackage{appendix}
+\usepackage[toc,page]{appendix}
 \usepackage[a4paper, total={6in, 8in}]{geometry}
 \usepackage[explicit]{titlesec}
 \usepackage{setspace} 
@@ -14,7 +14,7 @@
 \onehalfspacing
 \usepackage{hyperref}
 \usepackage{url}
-\usepackage[nottoc,numbib]{tocbibind}
+\usepackage[nottoc]{tocbibind}
 \usepackage[parfill]{parskip}
 \hypersetup{
     colorlinks,
@@ -67,6 +67,20 @@
 \makeatother
 
 \newcommand\ProcessThreeDashes{\llap{\color{cyan}\mdseries-{-}-}}
+
+
+\newcommand\myshade{85}
+\colorlet{mylinkcolor}{NavyBlue}
+\colorlet{mycitecolor}{YellowOrange}
+\colorlet{myurlcolor}{Aquamarine}
+
+\hypersetup{
+  linkcolor  = mylinkcolor!\myshade!black,
+  linktocpage=true,
+  citecolor  = mycitecolor!\myshade!black,
+  urlcolor   = myurlcolor!\myshade!black,
+  colorlinks = true,
+}
 
 %-----------------------------------------------#########--------------------------------------------------------------%
 
@@ -168,7 +182,7 @@ One of Docker's strengths is the ease with which these images can be shared on u
 While placing an application in a container makes it trivial to start an application and run it in a cloud service, it also introduces many new challenges. Two new technical challenges which this paper is interested in are:
 \begin{itemize}
   \item How many containers do we need to individually manage to run our application and across how many hosts? 
-  \item What happens when the application begins to scale? 
+  \item What happens when the application needs to scale? 
 \end{itemize}
 
 To combat these problems Docker has produced an inbuilt tool called Docker Swarm \citep{Swarm2016}. Docker swarm aims to provide a mechanism to automatically manage a group of containers running across multiple remote hosts. In other words, ``\textit{It turns a pool of Docker hosts into a single, virtual Docker host}'' \citep{Swarm2016}.
@@ -203,7 +217,7 @@ The term provisioning means the setting up of new servers with which you will la
 
 We can see a simple example of this in listing \ref{lst:provision}.
 
-\begin{lstlisting}[float,floatplacement=H,language=yaml,caption={Playbook To Create Instances On EC2},label={lst:provision}]
+\begin{lstlisting}[float,floatplacement=!htbp,language=yaml,caption={Playbook To Create Instances On EC2},label={lst:provision},basicstyle=\scriptsize]
 ---
 - hosts: localhost
   connection: local
@@ -228,9 +242,9 @@ We can see a simple example of this in listing \ref{lst:provision}.
 Configuration management is described as \textit{``...writing some kind of state description for our servers, and then using a tool to enforce that the servers are, indeed, in that state...''} \citep{Hochstein2015}. This includes ensuring the correct software packages are installed, the correct services are running and any configuration files needed are present. Ansibles allows us to do this as, as previously stated it is idempotent. This means that if for some reason a server we wish to manage is only 50\% percent set up we can safely run an Ansible playbook which performs the \textit{complete} set up process and not worry that it will cause harm, i.e. Ansible will know it does not need to perform the first 50\% of configuration again and will just inform us that no change was needed for these steps.
 
 \subsubsection{Deployment}
-Deployment can be defined as \textit{``...the process of taking software that was written ... copying the required files to the server(s), and then starting up the services.''} \citep{Hochstein2015}. In this regrard Ansible excels. Ansible uses a concept of playbooks to run tasks against remote servers, an example of which can be seen below in listing \ref{lst:deploy}.
+Deployment can be defined as \textit{``...the process of taking software that was written ... copying the required files to the server(s), and then starting up the services.''} \citep{Hochstein2015}. In this regrard Ansible excels. Ansible uses a concept of playbooks to run tasks against remote servers, an example of which can be seen in listing \ref{lst:deploy}.
 
-\begin{lstlisting}[float,floatplacement=H,language=yaml,caption={A Simple Playbook To Deploy and Run Code},label={lst:deploy},basicstyle=\small]
+\begin{lstlisting}[float,floatplacement=!htbp,language=yaml,caption={A Simple Playbook To Deploy and Run Code},label={lst:deploy},basicstyle=\scriptsize]
 ---
 - hosts: servers
   gather_facts: false
@@ -256,25 +270,21 @@ While there are many other configuration management tools available such as Chef
 We will now look at building an application using the technologies previously discussed in section \ref{sec:Background}. This will involve several distinct steps, including:
 
 \begin{itemize}
-  \item Running a custom application in a Docker container.
   \item Provision instances which will host our application.
+  \item Running a custom application in a Docker container.
   \item Configuring these instances depending on the role they are to play.
-  \item Deploying the application to these instances - this will use Docker Swarm to run the application
-  \item Creating a Docker loadbalancer which will sit in front of the application instances on a seperate instance
+  \item Deploying the application to these instances
+  \item Running an application in Docker Swarm mode
+  \item Creating a Docker loadbalancer which will sit in front of the application instances on a separate instance
 \end{itemize}
 
-All of these steps will then be automated using Ansible. The final infrastructure model can be seen in Figure \ref{fig:swarm}.
+All of these steps will then be automated using Ansible. The complete source code used to carry out all of the steps is available in Appendix \ref{appendix:code}.
 
-\begin{figure}[!h]
-\centering
-\includegraphics*[width=\textwidth]{components/images/swarm}
-\caption{\em Final Application Setup}
-\label{fig:swarm}
-\end{figure}
+
 
 \subsection{Provisioning The Infrastructure}
 \label{subs:provision}
-We will first look provisioning the servers needed for this application. The only dependency needed to run these playbooks in Ansible is the boto library \citep{Boto2016} installed locally and also python. For the purpose of this report, the EC2 instances required will be split into 3 distinct groups. These are:
+We will first look provisioning the servers needed for this application. The only dependency needed to run these playbooks in Ansible is the Boto library \citep{Boto2016} installed locally and also python. For the purpose of this report, the EC2 instances required will be split into 3 distinct groups. These are:
 
 \begin{itemize}
   \item Management
@@ -286,7 +296,7 @@ We will discuss what these terms mean further in section \ref{subs:creating_swar
 
 To create this infrastructure we can uses Ansible's built in ec2 module, which makes it easy to run commands against AWS. We can see the playbook used to create 3 sets of ec2 instances in Listing \ref{lst:provisionEc2}. This playbook is the set of steps to follow but it relies on Ansible roles and variables to run, as seen in Listing \ref{lst:provisionRole}.
 
-\begin{lstlisting}[float,floatplacement=H,language=yaml,caption={create-instances.yml},label={lst:provisionEc2},basicstyle=\small]
+\begin{lstlisting}[float,floatplacement=!htbp,language=yaml,caption={create-instances.yml},label={lst:provisionEc2},basicstyle=\scriptsize]
   ---
   # create manager nodes 
   - hosts: localhost
@@ -318,8 +328,8 @@ To create this infrastructure we can uses Ansible's built in ec2 module, which m
     roles:
       - ~/dev/docker_with_ansible/roles/create-ec2-loadbalancer
 \end{lstlisting}
-
-\begin{lstlisting}[float,floatplacement=H,language=yaml,caption={provision-ec2-managers.yml},label={lst:provisionRole},basicstyle=\small]
+ 
+\begin{lstlisting}[float,floatplacement=!htbp,language=yaml,caption={provision-ec2-managers.yml},label={lst:provisionRole},basicstyle=\scriptsize]
   ---
    - name: Provision EC2 Managers
      local_action:
@@ -330,7 +340,7 @@ To create this infrastructure we can uses Ansible's built in ec2 module, which m
        image: "{{ec2_image}}"
        vpc_subnet_id: "{{ec2_subnet_id}}"
        region: "{{ec2_region}}"
-       instance_tags: '{"Name":"{{ec2_tag_Name}}","Type":"{{ec2_tag_Type}}","Environment":"{{ec2_tag_Environment}}"}'
+       instance_tags: '{"Name":"{{ec2_tag_Name}}","Type":"{{ec2_tag_Type}}"}'
        assign_public_ip: yes
        wait: true
        count: "{{manager-count}}"
@@ -355,9 +365,9 @@ Here we use the variable flag -e to set the count of how many of each type of in
 \label{subs:config_management}
 Now that we have provisioned the number of instances we need we can proceed to make sure they are in the desired state. In other words, we can use Ansible as a configuration management tool to ensure the instances have everything they need to run the processes we will need. 
 
-The only configuration we require for this demonstration is that the correct version of Docker is installed on each instance. Since every instance in the application will use Docker to run its applications, this role will be run on all instances. This role can be seen below in Listing \ref{lst:dockerRole}.
+The only configuration we require for this demonstration is that the correct version of Docker is installed on each instance. Since every instance in the application will use Docker to run its applications, this role will be run on all instances. This role can be seen in Listing \ref{lst:dockerRole}.
 
-\begin{lstlisting}[float,floatplacement=H,language=yaml,caption={install-docker-engine.yml},label={lst:dockerRole},basicstyle=\small]
+\begin{lstlisting}[float,floatplacement=!htbp,language=yaml,caption={Role to install Docker on a Ubuntu Instance},label={lst:dockerRole},basicstyle=\scriptsize]
   ---
   # tasks file for docker-engine
   - name: Ensure the system can use the HTTPS transport for APT
@@ -395,7 +405,7 @@ The only configuration we require for this demonstration is that the correct ver
 
 To run this role against all of our nodes, we use the playbook in Listing \ref{lst:dockerPlaybook}.
 
-\begin{lstlisting}[float,floatplacement=H,language=yaml,caption={install-docker-engine.yml},label={lst:dockerPlaybook},basicstyle=\small]
+\begin{lstlisting}[float,floatplacement=!htbp,language=yaml,caption={install-docker-engine.yml},label={lst:dockerPlaybook},basicstyle=\scriptsize]
   ---
   - hosts: managers:nodes:loadbalancers
     gather_facts: false
@@ -405,14 +415,281 @@ To run this role against all of our nodes, we use the playbook in Listing \ref{l
   ---
 \end{lstlisting}
 
+This listing specifies that the role be run against managers, nodes and loadbalancers.
+
+
+\newpage
+\subsection{Running an Application in Docker}
+\label{subs:running_in_docker}
+Now that we have instances running and they are in the state we want them in we can see how easy it is to run an application on one of these instances.
+
+To do this using the command line, we can simply run 
+
+\begin{lstlisting}[language=bash]
+  docker run --name some-wordpress --link some-mysql:mysql -p 80:80 -d wordpress
+\end{lstlisting}
+
+which will start a Wordpress container, link it to a mysql container running on the host and expose port 80 of the container (the port the application is listening on from within the container) to port 80 of the host. However if we wish to automate this process and start an application we can use Ansible to do this for us.
+
+In this step we will use a tool made by Docker called `Docker Compose'. Docker compose allows us to run multi-container systems in one command line call, managing links between containers and all container dependencies and settings for us. In Listing \ref{lst:wordpress} we can see that Ansible first copies source code we require from Github, which we then tell Ansible to run using Docker Compose. 
+
+\begin{lstlisting}[float,floatplacement=!htbp,language=yaml,caption={run-wordpress.yml},label={lst:wordpress},basicstyle=\scriptsize]
+---
+- hosts: node
+  become: true
+  tasks:
+    - name: copy source code
+      shell: >
+        git clone https://github.com/nezhar/wordpress-docker-compose.git
+    
+    - name: change directory to code and run application
+      shell: >
+        cd wordpress-docker-compose && docker-compose up -d
+\end{lstlisting}
+
+The result of this simple playbook is that we now have a fully functional Wordpress installation running in AWS, complete with a MySQL database. We can see the Docker Compose file in Listing \ref{lst:compose} and the resulting application in Figure \ref{fig:wordpress}.
+
+\begin{lstlisting}[float,floatplacement=!htbp,language=yaml,caption={docker-compose.yml Credit: (Nezbeda, 2016)},label={lst:compose},basicstyle=\scriptsize]
+---
+version: '2'
+services:
+  wordpress:
+    image: wordpress:latest
+    ports:
+      - 80:80 # change ip if required
+    volumes:
+      - ./wp-app:/var/www/html
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_NAME: wordpress
+      WORDPRESS_DB_USER: root
+      WORDPRESS_DB_PASSWORD: password
+    links:
+      - db:db
+    networks:
+      - wordpress-network
+  db:
+    image: mysql:latest # or mariadb
+    ports:
+      - 3306:3306 # change ip if required
+    volumes:
+      - ./wp-data:/docker-entrypoint-initdb.d
+    environment:
+      MYSQL_DATABASE: wordpress
+      MYSQL_ROOT_PASSWORD: password
+    networks:
+      - wordpress-network
+
+networks:
+  wordpress-network:
+      driver: bridge
+\end{lstlisting}
+
+\begin{figure}[!h]
+\centering
+\includegraphics*[width=\textwidth]{components/images/wordpress}
+\caption{\em Fully Functional Wordpress within a Container}
+\label{fig:wordpress}
+\end{figure}
+
+Since this application is running on one instance in AWS it is currently not:
+
+\begin{itemize}
+  \item Scalable
+  \item Fault tolerant
+  \item Distributed
+\end{itemize}
+
+To address these issues we will next look at Docker Swarm.
+
 \newpage
 \subsection{Creating the Swarm}
 \label{subs:creating_swarm}
+To create a swarm we will use an integrated feature of Docker Engine (after version 1.12) called swarm mode \citep{SwarmEngine2016}. Swarm mode requires a minimum of 1 instance, although this would be pointless. To prove beneficial, 2 instances must be used where at least one is in `manager' mode. Any node in manager mode will act as the organiser of the swarm, receiving commands on behalf of the swarm and delegating tasks accordingly.
 
+There are some pre-requisites to running swarm mode, mainly concerning port availability. These are:
+
+\begin{itemize}
+  \item TCP port 2377 must be available on the manager instance
+  \item TCP and UDP ports must be available on all swarm instances for communication
+  \item TCP and UDP port 4789 must be available on all swarm instances for networking purposes
+\end{itemize}
+
+Once we have satisfied these conditions by creating our instances and adding them to an appropriate security group as seen in Listing \ref{lst:provisionEc2} we can then initialise swarm mode on the instances. To do this, we first enter the command shown in Figure \ref{fig:swarm_init}. This returns a token which we will use to join a node to the swarm.
+
+\begin{figure}[!h]
+\centering
+\includegraphics*[width=\textwidth]{components/images/swarm_init}
+\caption{\em Initialise Swarm Mode}
+\label{fig:swarm_init}
+\end{figure}
+
+Once the manager is added we can now add nodes to the swarm. In the next section we will see how we can add multiple nodes but for the purpose of explaining the basics of the swarm we will add just one node for now. We can see in Figure \ref{fig:swarm_join} that to join a node to swarm mode we can enter the command given previously in Figure \ref{fig:swarm_init}. This node is now part of this swarm and available on the manager node as can be seen in Figure \ref{fig:swarm_ls}.
+
+\begin{figure}[!h]
+\centering
+\includegraphics*[width=\textwidth]{components/images/swarm_join}
+\caption{\em Join a Docker Swarm}
+\label{fig:swarm_join}
+\end{figure}
+
+\begin{figure}[!h]
+\centering
+\includegraphics*[width=\textwidth]{components/images/swarm_ls}
+\caption{\em List All Nodes in a Swarm}
+\label{fig:swarm_ls}
+\end{figure}
+
+We can now start an application, called a service when in Docker swarm mode. To do this we run the command
+
+\begin{lstlisting}[language=bash]
+  docker service create --name app --replicas 2 -p 80:8080 nginx
+\end{lstlisting}
+
+which will create 2 replica containers in the swarm. We can then run docker service ps <service name> to inspect the service and see which nodes it is running on.
+
+\begin{figure}[!h]
+\centering
+\includegraphics*[width=\textwidth]{components/images/swarm_ps}
+\caption{\em Listing the Service in the Swarm}
+\label{fig:swarm_ps}
+\end{figure}
+
+We can see in Figure \ref{fig:swarm_ps} that our service is running on both instances, but we can also scale our service and watch as it is scaled as evenly as possible across our instances, as seen in Figure \ref{fig:swarm_after_scale}.
+
+\begin{figure}[!h]
+\centering
+\includegraphics*[width=\textwidth]{components/images/swarm_after_scale}
+\caption{\em Listing the Service in the Swarm After Scaling}
+\label{fig:swarm_after_scale}
+\end{figure}
+
+This process can also be automated using Ansible. To do this tasks in Listing \ref{lst:join} must be run against the appropriate hosts, the playbook is concatenated here for brevity.
+
+\newpage
+\begin{lstlisting}[float,floatplacement=!h,language=yaml,caption={create-and-join-swarm.yml},label={lst:join},basicstyle=\scriptsize]
+  ---
+- name: initialize swarm cluster
+  shell: >
+    docker swarm init
+    --advertise-addr={{ swarm_iface | default('eth0') }}:2377
+
+- name: retrieve swarm manager token
+  shell: docker swarm join-token -q manager
+  register: swarm_manager_token
+
+- name: retrieve swarm worker token
+  shell: docker swarm join-token -q worker
+  register: swarm_worker_token
+  
+- name: join worker nodes to cluster
+  shell: >
+    docker swarm join
+    --advertise-addr={{ swarm_iface | default('eth0') }}:2377
+    --token={{ swarm_worker_token }}
+\end{lstlisting}
+
+To better illustrate what is happening in the swarm an application a Docker swarm visualiser application was used \citep{Marks2016}. This application was run on a manager node and allows the user to graphically see which services are running on each node. To preview this application a swarm consisting of 5 nodes (2 managers and 3 workers) and several different services was started. This can be seen in Figure \ref{fig:visualiser}.
+
+\begin{figure}[!h]
+\centering
+\includegraphics*[width=0.9\textwidth]{components/images/visualiser}
+\caption{\em Visualising the Swarm}
+\label{fig:visualiser}
+\end{figure}
+
+\subsection{Load Balancing the Swarm}
+\label{sub:single_app}
+In the previous section we saw how Docker Swarm can provide resiliency by scaling an application across multiple nodes in a network. While this will allow the application to deal with a portion of the instances serving it to crash it does not make using the application any simpler. This is because there is no central point of contact to any container running within the swarm. To mitigate this a loadbalancer was created and placed in front of the swarm. This loadbalancer is then dynamically configured to rotate calls to different nodes in the swarm based on port assignments. An outline of this can be seen in Figure \ref{fig:swarm}. 
+
+\begin{figure}[!h]
+\centering
+\includegraphics*[width=\textwidth]{components/images/swarm}
+\caption{\em Final Application Setup}
+\label{fig:swarm}
+\end{figure}
+
+To achieve this with the swarm built in the previous section nginx was used as a loadbalancer and was also provisioned using Ansible. The same steps were followed as with the swarm manager and nodes in provisioning and configuration. This resulted in an AWS instance being deployed with Docker installed. Once this instance was ready, Ansible then dynamically created a config file which would enable an nginx instance to loadbalance between the hosts in this config file. 
+
+However since this paper is aimed at showing how Docker can improve applications and their deployment we will examine how nginx running within a container can benefit an application and its deployment. For this paper a Dockerfile to build the image was copied to the loadbalancer and was built using Ansible. In reality this could have been pulled from a Git repository using Ansible also. The steps involved in running the loadbalancer are:
+
+\begin{enumerate}
+  \item Have Ansible create a dynamic configuration file which has all instances
+  \item Ansible then copies this config file to the loadbalancer
+  \item Ansible copies a basic Dockerfile to the loadbalancer (this contains a pointer to the previously copied config file)
+  \item Ansible instructs the host to build the Docker Image and run it listening on port 80 
+\end{enumerate}
+
+An overview of the result of this can be seen in Figure \ref{fig:nginx}.
+
+\begin{figure}[!h]
+\centering
+\includegraphics*[width=0.5\textwidth]{components/images/nginx}
+\caption{\em Nginx Running in A Docker Container Acting as a Loadbalancer}
+\label{fig:nginx}
+\end{figure}
+
+\subsection{Features of Swarm}
+\label{sub:swarm_features}
+Now that we have seen how we can provision, configure and deploy an application using Ansible it is not hard to see how all of this can be tied together. The final product of applying everything from previous sections will mean that to deploy an application in swarm mode will consist of simply running an Ansible playbook. A separate Ansible playbook could then be created which will use existing inventory (saved by Ansible upon creation) to update the running application. In swarm mode, this might consist of running something similar to the command
+
+\begin{lstlisting}[language=bash]
+  docker service update --image nginx:3.0.7 nginx
+\end{lstlisting}
+
+Which will, in a rolling fashion, update each service using the nginx image to the image version 3.0.7. This ensures that the application does not need to be brought down to update.
+
+Swarm mode also enables `draining' of nodes within the swarm, which means removing all services running on a specific node and moving them to another node. This feature is useful when instances need to be updated, say with security patches. Effectively we can remove and re-add instances one-by-one to the swarm using the command
+
+\begin{lstlisting}[language=bash]
+  docker node update --availability drain <NODE ID>
+\end{lstlisting}
+
+It is also important to note that while the application built is now being load balanced by an nginx Docker container it is also being load balanced \textit{internally} by the swarm loadbalancer. This is extremely useful as it means the user does not need to worry about scaling an application and the effect doing this will have on the application running. One example of where scaling the number of containers running up can cause problems is when those containers are listening on certain ports. For example if we have an nginx container listening on port 80 on the host and we try to add a second container to provide redundancy then we will be greeted by a port conflict. In swarm mode however we do not have this worry. Instead, swarm adds a container to a \textit{service}, meaning a user publishes ports on a service basis and not on a container basis as before. This in turn means that when a node receives a request on port 80 where 2 nginx containers are running the swarm can internally route traffic to any container which is a member of the nginx service. An illustration of this can be seen in Figure \ref{fig:swarm_lb}.
+
+\begin{figure}[!h]
+\centering
+\includegraphics*[width=\textwidth]{components/images/swarm_lb}
+\caption{\em Swarm Loadbalancer}
+\label{fig:swarm_lb}
+\end{figure}
 
 \newpage
 \section{Conclusion}
 \label{sec:Conclusion}
+Since this paper dealt with two separate technologies in equal measure, Docker Swarm and Ansible, conclusions can also be drawn individually. 
+
+\subsection{Ansible}
+Ansible is an extremely powerful tool. It is designed to allow for remote management of servers but this does not accurately describe the vast array of possibilities it carries in its tool belt. With one simple playbook and some related Ansible roles (Appendix \ref{appendix:code}) we can instantly bring up a complete application environment. The aim of this report was to show how the automation of cloud infrastructure paired with application deployment can decrease the overhead in operations. I feel that this paper has proved this, as Ansible has shown to be extremely versatile, allowing the user to manage a remote system with no more difficulty than a local one.
+
+In addition to deployment of an application - Ansible could be used as an `application manager' also. Some examples of use cases of Ansible here would be, as discussed in Section \ref{sub:swarm_features}, triggering updates of instances applications are hosted on. This could mean applying security patches, adding new software components, or provisioning further infrastructure.
+
+\subsection{Docker Swarm}
+We have also seen how Docker Swarm can provide an environment in which to reliably run Docker containers. In comparison with other solutions such as Kubernetes and Amazon ECS, Docker Swarm offers a native solution with no extra configuration on top of the regular Docker installation. It provides a mechanism for developers to run a completely containerised application without concerning themselves about how these containers are managed, where \textit{exactly} they are being run from, and how they interact with each other. Effectively, swarm allows developers to interact with a collections of Docker hosts as if they were one single host.
+
+However, Swarm also has some drawbacks. Swarm itself has been part of Docker for several releases, however `Swarm mode' is only a recent development (version 1.12). This means it is in its early stages and lacks some important features. For instance it does not currently support automatic scaling based on common statistics such as CPU utilisation and network activity. 
+
+\subsection{Further Investigation}
+Some features which were not included in this report but which I would have liked to look at were autoscaling applications running in a swarm. One possible solution here would be to use AWS autoscaling to create new instances based on set rules. Once these instances are created we could (through scripting or otherwise) add them to the Docker Swarm. Once the instance is added to the swarm it will then run services as required. However this could cause service interruptions if not configured correctly since Amazon's auto scaling would have no knowledge of Docker swarm. If it scaled down too quickly and the scale of a swarm service was not high enough it could mean (if only for an instance) that no containers of a certain application were running. 
+
+
+\subsection{Closing Statement}
+Overall Docker Swarm, while a relatively new product, is certainly an excellent offering from Docker. It allows developers to use containers in their applications but treat them as regular applications.
+
+Swarm paired with a modern provisioning tool such as Ansible allows for a powerful application environment to be created with ease. Also, because of the simplicity of both the learning curve is low which means developers do not need to invest large amounts of time to use these tools. While Ansible is well established Docker Swarm still has some way to go. 
+
+
+
+\newpage
+\appendix
+\section*{Appendices}
+\addcontentsline{toc}{section}{Appendices}
+\renewcommand{\thesubsection}{\Alph{subsection}}
+
+\subsection{Complete Ansible Repository}
+\label{appendix:code}
+https://github.com/StephenCoady/Docker-Swarm-With-Ansible
+
 
 \newpage
 \bibliography{references}
