@@ -1,6 +1,6 @@
 \section{Technical Feasibility}
 \label{sec:feasibility}
-To evaluate the technological stack of the project an initial sprint was undertaken to build a prototype application. The overall goal of this application was to communicate with the Docker API and test the feasibility of using the proposed technologies together. After an initial sprint review and retrospective was carried out with the input of the product owners and the scrum master. A second sprint was then undertaken with the final product available in Appendix \ref{appendix:code}. This application consisted of the following components:
+To evaluate the technological stack to be used in the project it was felt that a prototype application should be built. This would give the best possible view as to how well the chosen technologies would go together. In this section we will look at each aspect of the application and the technologies used to create it. The complete prototype application was completed in two sprints (we will look at this further in Section \label{sec:work_done}). The prototype application consists of the following elements:
 
 \begin{itemize}
   \item Node.js Server Application
@@ -18,11 +18,12 @@ It is node's asynchronous nature which makes it so powerful. Being asynchronous 
 
 \begin{figure}[!ht]
 \centering
-\includegraphics*[width=0.6\textwidth]{images/event_loop}
+\includegraphics*[width=0.5\textwidth]{images/event_loop}
 \caption{\em Node Event Loop}
 \label{fig:event_loop}
 \end{figure}
 
+\newpage
 Node.js was deemed a good fit for this project as it has an excellent community and ecosystem which will increase development speed and allow for more complex features with less overhead. We can see in Figure \ref{fig:counts} that there are currently (as of November 2016) more node modules available through the node package manager NPM than any other of the large package managers such as the ones used by Go, PHP, Python and Ruby. 
 
 \begin{figure}[!ht]
@@ -41,9 +42,10 @@ MongoDB is an open source document-oriented database. It is a NoSQL database whi
   \item Simplicity - When a database is schema-less it removes the need for complex actions such as joins, while still providing the power of complex queries.
 \end{itemize}
 
-Since we are using a javascript runtime on the server we can see that it is trivial to use connect to Mongo using mongoose ODM in Listing \ref{lst:mongo}.
+Since we are using a javascript runtime on the server we can see that it is trivial to use connect to Mongo using mongoose ODM in Figure \ref{fig:mongo}.
 
-\begin{lstlisting}[caption={Communicating with Mongo},label={lst:mongo}]
+\begin{figure}[!ht]
+\begin{lstlisting}
 	var mongoose = require('mongoose');
 	mongoose.connect('mongodb://localhost/test');
 
@@ -58,11 +60,14 @@ Since we are using a javascript runtime on the server we can see that it is triv
 	  }
 	});
 \end{lstlisting}
+\caption{\em Communicating with Mongo}
+\label{fig:mongo}
+\end{figure}
 
 \subsection{Dockerode}
 \label{sub:dockerode}
 
-The Node JS app is the main component of the application, and serves a way to communicate with the Docker Engine. This is done using the Docker API, which is exposed by default on any system Docker is installed on. As it is bound to a non-networked Unix socket it was necessary to communicate with this socket somehow. To communicate with this API a third party module was used, Dockerode. This module is available in Appendix \ref{appendix:dockerode}. Using this module allows the application to retrieve any information needed from the Docker API quickly and without needing to make complicated API calls to it. 
+The Node JS app is the main component of the application, and serves a way to communicate with the Docker Engine. This is done using the Docker \gls{API}, which is exposed by default on any system Docker is installed on. As it is bound to a non-networked Unix socket it was necessary to communicate with this socket somehow. To communicate with this API a third party module was used, Dockerode. This module is available in Appendix \ref{appendix:dockerode_appendix}. Using this module allows the application to retrieve any information needed from the Docker API quickly and without needing to make complicated \gls{API} calls to it. 
 
 Dockerode was chosen as the primary method to communicate with the Docker API using node for the following reasons:
 
@@ -73,9 +78,10 @@ Dockerode was chosen as the primary method to communicate with the Docker API us
 	\item It has a large set of contributors (49 as of November 2016) with an active issues board, meaning a greater chance of any issues encountered being resolved
 \end{itemize}
 
-An example call to the dockerode module can be seen in Listing \ref{lst:dockerode}, which generates the JSON response shown in Listing \ref{lst:response}.
+An example call to the dockerode module can be seen in Figure \ref{fig:dockerode}, which generates the JSON response shown in Fig \ref{fig:response}.
 
-\begin{lstlisting}[caption={Listing All Containers on a Host},label={lst:dockerode}]
+\begin{figure}[!ht]
+\begin{lstlisting}
 const Docker = require('dockerode');
 const docker = new Docker({
   socketPath: '/var/run/docker.sock'
@@ -96,8 +102,12 @@ exports.listContainers = (req, res, next) => {
   });
 }
 \end{lstlisting}
+\caption{\em Listing All Containers on a Host}
+\label{fig:dockerode}
+\end{figure}
 
-\begin{lstlisting}[caption={Response From Server},label={lst:response}]
+\begin{figure}[!ht]
+\begin{lstlisting}
   {
     "response": [
       {
@@ -114,13 +124,18 @@ exports.listContainers = (req, res, next) => {
     ]
   }
 \end{lstlisting}
+\caption{\em Response From Server}
+\label{fig:response}
+\end{figure}
 
+\newpage
 \subsection{Express.js}
 \label{sub:express}
 
-To expose the Docker API externally a web API is needed. Upon investigation several strong choices were available and any of these would have made a suitable API. However Express.js was chosen for its simplicity and, as with node, its large online community. To create a router which our API will use is a relatively straight forward process, a small sample of which can be seen in Listing \ref{lst:router}. Express also supports many different types of authentication, which is a non-functional goal of this project. 
+To expose the Docker \gls{API} externally a web API is needed. Upon investigation several strong choices were available and any of these would have made a suitable API. However Express.js was chosen for its simplicity and, as with node, its large online community. To create a router which our API will use is a relatively straight forward process, a small sample of which can be seen in Figure \ref{fig:router}. Express also supports many different types of authentication, which is a non-functional goal of this project. 
 
-\begin{lstlisting}[caption={Creating an Express.js Router},label={lst:router}]
+\begin{figure}[!ht]
+\begin{lstlisting}
 	let express	= require('express');
 	let containers = controllers.containers;
 	let router = express.Router();
@@ -136,11 +151,15 @@ To expose the Docker API externally a web API is needed. Upon investigation seve
 
 	module.exports = router;
 \end{lstlisting}
+\caption{\em Creating an Express.js Router}
+\label{fig:router}
+\end{figure}
 
 \subsection{Docker}
-To evaluate whether or not it was feasible to put the final application in a container a sample Docker image was built locally and a container was run from this image. The file this container was built from can be seen in Listing \ref{lst:docker}.
+To evaluate whether or not it was feasible to put the final application in a container a sample Docker image was built locally and a container was run from this image. The file this container was built from can be seen in Figure \ref{fig:docker}.
 
-\begin{lstlisting}[caption={Creating a Docker Image},label={lst:docker}]
+\begin{figure}[!ht]
+\begin{lstlisting}
 	FROM node:6.9.1-slim
 
 	ADD . /app  
@@ -150,6 +169,9 @@ To evaluate whether or not it was feasible to put the final application in a con
 
 	CMD ["node", "app.js"]  
 \end{lstlisting}
+\caption{\em Creating a Docker Image}
+\label{fig:docker}
+\end{figure}
 
 Once this container was run the complete application could be run locally from within a container.
 

@@ -1,0 +1,36 @@
+\section{Summary}
+This section will try to give the reader a complete picture of the current state of the project. We will look at the total work completed so far and then what the project will entail going forward.
+
+\subsection{Work Completed}
+The work completed so far has been achieved in the form of 2 sprints, the first lasting 2 weeks and the second taking place over 3 weeks. A high level overview of the tasks completed in each Sprint can be seen below.
+
+Sprint 1:
+\begin{itemize}
+	\item The developer environment was set up (Vagrant + Docker installation)
+	\item A Basic Express \gls{API} was created and run on test endpoints with no functionality
+	\item A basic Dockerfile was created to run the application within a Docker container
+	\item The Dockerode third party module was added to the application some \gls{CRUD}
+\end{itemize} 
+
+Sprint 2:
+\begin{itemize}
+	\item The Dockerode application was improved to include further and more complicated \gls{CRUD} calls
+	\item A \gls{travis} account was created and linked with the public \gls{github} repository of the application. Both of these can be seen in Appendices \ref{appendix:code} and \ref{appendix:travis}.
+	\item A travis.yml file was created which details the steps to be followed when building the application. The Travis repository in Appendix \ref{appendix:travis} will now build the application and run the unit tests every time a \gls{git} commit is made.
+	\item A \gls{sonarqube} account was associated with the Github repository and incorporated in the build pipeline. This can be viewed in Appendix \ref{appendix:sonarqube}.
+\end{itemize}
+
+After these initial 2 sprints a sprint review was carried out. This sprint review highlighted the fact that some smaller tasks such as creating the developer environment and a skeleton Express API were underestimated in the initial backlog grooming session.
+
+A sprint retrospective was then carried out which highlighted some key performance issues. One such issue was time management, it was felt that too much time was spent on smaller tasks like incorporating SonarQube into the build pipeline.
+
+\subsection{Project Direction}
+At the end of the two sprints mentioned above a further backlog grooming session was carried out between the author, the product owners (Red Hat Mobile) and the scrum master (Dr. Brenda Mullally). The topic of this grooming session was to re-prioritise the backlog with the previous two sprints in mind.
+
+After this grooming session a new and better defined backlog was available. This was broken down and the next sprint was then constructed. It was decided that this would include:
+
+\begin{itemize}
+	\item A basic application front end to be created for graphical interaction with the application.
+	\item Documentation tools for the application are to be investigated fro suitability.
+	\item Multiple databases are to be created to allow for persistence of data across all environments i.e. development, CI and staging.
+\end{itemize}

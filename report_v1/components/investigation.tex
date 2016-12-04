@@ -40,13 +40,13 @@ While following the Agile methodology, this project will employ some Scrum techn
 To achieve this, a complete integration pipeline will be built. This pipeline will consist of the following:
 
 \begin{itemize}
-	\item \gls{git} repository to house the code
-	\item Travis CI build server to execute unit tests and carry out post-test tasks
+	\item \gls{git} repository to house the code (stored remotely on \gls{github})
+	\item \gls{travis} CI build server to execute unit tests and carry out post-test tasks
 	\item \gls{sonarqube} Server to analyse and advise of improvement to code, based on best-practices
 	\item Docker Repository to build a container with latest application
 \end{itemize}
 
-This pipeline can be seen in Figure \ref{fig:CI} and will work as follows. When a git commit is made to the remote git repository a build will be automatically triggered on the associated Travis CI server which will then carry out all unit tests in an isolated environment. Travis will then inform of the results, and if all unit tests have passed will carry out a push to a remote SonarQube server which will analyse code. Once this is complete Travis will then build a Docker image of the application and push it to a public repository.
+This pipeline can be seen in Figure \ref{fig:CI} and will work as follows. When a git commit is made to the remote git repository a build will be automatically triggered on the associated \gls{travis} CI server which will then carry out all unit tests in an isolated environment. Travis will then inform of the results, and if all unit tests have passed will carry out a push to a remote SonarQube server which will analyse code. Once this is complete Travis will then build a Docker image of the application and push it to a public repository.
 
 \begin{figure}[!ht]
 \centering

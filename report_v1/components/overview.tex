@@ -2,7 +2,7 @@
 \subsection{Problem}
 \label{sub:problem}
 
-\gls{docker} is a tool to package a piece of software in a completely isolated runtime which contains everything the software needs to run \citep{WhatDocker}. This isolated environment is called a \gls{container}. This project will deal with the management of these containers from their beginnings as images, starting and stopping the containers, and managing the interactions they have with each other. This whole process is known as the lifecycle management of containers.
+\gls{docker} is an \gls{open source} software solution to package any piece of software in a completely isolated runtime which contains everything the packaged software needs to run \citep{WhatDocker}. This isolated environment is called a \gls{container}. This project will deal with the management of these containers from their inception as images, to starting and stopping the containers, and managing the interactions they have with each other. This whole process is known as the \gls{lifecycle management} of containers.
 
 Currently, container \gls{lifecycle management} is predominantly achieved through the \gls{command line}. This is due to the fact that the people currently working with Docker are developers who are comfortable using the command line. This means that managing images, running containers and managing their interactions with each other can all be time-consuming tasks. One way in which this is aided is by the use of scripts. While this is useful, it does also mean that the user must be comfortable with the command line to manage the containers. However as the industry moves towards using containers \citep{Datadog2016} it will mean the need to cater for users who are not comfortable with the command line.
 
@@ -29,7 +29,7 @@ The core or primary goals can be broken up into functional and non-functional as
 \begin{itemize}
   \item Image Manipulation/Control
   \item Container Manipulation/Control
-  \item Remote Control of the application through an API
+  \item Remote Control of the application through an \gls{API}
   \item View Running statistics of containers
   \item Search Docker Hub/Private Registry 
 \end{itemize}
@@ -62,7 +62,7 @@ When the application can run on a server and allow the containers on that server
 The deliverables of this project are as follows:
 
 \paragraph{Server-side Application}\mbox{}\\
-This is the main part of the application and will act as the controller of the Docker API.
+This is the main part of the application and will act as the controller of the Docker \gls{API}.
 
 \paragraph{Front-end Application}\mbox{}\\
 This will be the interface through which the user will communicate with the server application. It will be exposed through an API to allow for remote calls.

@@ -11,7 +11,7 @@ To show conceptually how the application may look a wireframe of the user-facing
 \end{figure}
 
 \subsection{Class Diagram}
-We can also see the conceptual class diagram for the system in Figure \ref{fig:class_diagram}. It should be noted that while all aspects of the Docker ecosystem are modelled in Figure \ref{fig:class_diagram} they are not all local objects. This is highlighted by distinguishing between the local and remote systems. It is still important to show the remote system's relationship with the local system as many local actions will be affected by the remote system.
+We can also see the conceptual class diagram for the system in Figure \ref{fig:class_diagram}. It should be noted that while all aspects of the Docker ecosystem are modelled in Figure \ref{fig:class_diagram} they are not all local objects. This is highlighted by distinguishing between the local and remote systems. It is still important to show the remote system's relationship with the local system as many local actions will be affected by the remote system. In Docker, and indeed for this project, the local system can be thought of as the host on which the Docker engine is running, i.e. the host which will run containers and house images to be used to run containers. A remote system is any non-local Docker engine which the application will communicate with. For example a remote Docker registry which stores various types of Docker images is still a Docker engine and communicates with a local Docker installation as such.
 
 \begin{figure}[!ht]
 \centering
@@ -33,6 +33,7 @@ To obtain a clearer understanding of how basic create, read, update and delete f
 \label{fig:sequence_diagram}
 \end{figure}
 
+\newpage
 We can also use sequence diagrams to show the flow of the user login and registration aspect of the application since this is quite different to the Docker side. This aims to show the sequence of events when a user tries to register with the application and then when they try to log in. This can be seen in Figure \ref{fig:user_sequence_diagram}.
 
 \begin{figure}[!ht]
