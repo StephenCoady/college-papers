@@ -2,7 +2,7 @@
 
 \subsection{Front End Application}
 
-To show conceptually how the application may look a wireframe of the user-facing application was built. It will give the reader some indication of what the final application will look like. While it is only at conceptual level it does encapsulate the primary goals and how they will be implemented. It shows how images and containers can be listed and interacted with, allowing with performing advanced actions on them. This wireframe can be seen in Figure \ref{fig:wireframe}.
+To conceptually show how the application may look a wireframe of the user-facing application was built. It will give the reader some indication of what the final application will look like. While it is only at conceptual level it does encapsulate the primary goals and how they will be implemented. It shows how images and containers can be listed and interacted with, allowing advanced actions to be performed on them. This wireframe can be seen in Figure \ref{fig:wireframe}.
 \begin{figure}[!ht]
 \centering
 \makebox[\textwidth]{\includegraphics*[width=0.7\paperwidth]{images/wireframe}}
@@ -11,7 +11,7 @@ To show conceptually how the application may look a wireframe of the user-facing
 \end{figure}
 
 \subsection{Class Diagram}
-We can also see the conceptual class diagram for the system in Figure \ref{fig:class_diagram}. It should be noted that while all aspects of the Docker ecosystem are modelled in Figure \ref{fig:class_diagram} they are not all local objects. This is highlighted by distinguishing between the local and remote systems. It is still important to show the remote system's relationship with the local system as many local actions will be affected by the remote system. In Docker, and indeed for this project, the local system can be thought of as the host on which the Docker engine is running, i.e. the host which will run containers and house images to be used to run containers. A remote system is any non-local Docker engine which the application will communicate with. For example a remote Docker registry which stores various types of Docker images is still a Docker engine and communicates with a local Docker installation as such.
+The conceptual class diagram for the system can be seen in Figure \ref{fig:class_diagram}. It should be noted that while all aspects of the Docker ecosystem are modelled in Figure \ref{fig:class_diagram} they are not all local objects. This is highlighted by distinguishing between the local and remote systems. It is still important to show the remote system's relationship with the local system as many local actions will be affected by the remote system. In Docker, and indeed for this project, the local system can be thought of as the host on which the Docker engine is running, i.e. the host which will run containers and house images to be used to run containers. A remote system is any non-local Docker engine which the application will communicate with. For example a remote Docker registry which stores various types of Docker images is still a Docker engine and communicates with a local Docker installation as such.
 
 \begin{figure}[!ht]
 \centering
@@ -20,11 +20,11 @@ We can also see the conceptual class diagram for the system in Figure \ref{fig:c
 \label{fig:class_diagram}
 \end{figure}
 
-We can see in Figure \ref{fig:class_diagram} that from a data-modelling perspective the system is quite small, this is due to the nature of Docker and how most data will be stored and managed by Docker itself. Since the database being used will be NoSQL the concept of relationships does not strictly apply, however they are modelled for clarity.
+Figure \ref{fig:class_diagram} shows that from a data-modelling perspective the system is quite small, this is due to the nature of Docker and how most data will be stored and managed by Docker itself. Since the database being used will be NoSQL the concept of relationships does not strictly apply, however they are modelled for clarity.
 
 \subsection{Sequence Diagram}
 
-To obtain a clearer understanding of how basic create, read, update and delete functions will operate throughout the various levels of the application - we can use sequence diagrams. Figure \ref{fig:sequence_diagram} aims to show the sequence of events contained in these basic functions. Note that not all functions are modelled using sequence diagrams as they are too numerous to do, however the sequence of events for each are quite similar to that shown in Figure \ref{fig:sequence_diagram}.
+To obtain a clearer understanding of how basic create, read, update and delete functions will operate throughout the various levels of the application sequence diagrams can be used. Figure \ref{fig:sequence_diagram} aims to show the sequence of events contained in these basic functions. Since there are a multitude of functions not all will be modelled using sequence diagrams, however the sequence of events for each are quite similar to that shown in Figure \ref{fig:sequence_diagram}.
 
 \begin{figure}[!ht]
 \centering
@@ -34,7 +34,7 @@ To obtain a clearer understanding of how basic create, read, update and delete f
 \end{figure}
 
 \newpage
-We can also use sequence diagrams to show the flow of the user login and registration aspect of the application since this is quite different to the Docker side. This aims to show the sequence of events when a user tries to register with the application and then when they try to log in. This can be seen in Figure \ref{fig:user_sequence_diagram}.
+Sequence diagrams can also be used to show the flow of the user login and registration aspect of the application since this is quite different to the Docker side. This aims to show the sequence of events when a user tries to register with the application and then when they try to log in. This can be seen in Figure \ref{fig:user_sequence_diagram}.
 
 \begin{figure}[!ht]
 \centering
@@ -45,7 +45,7 @@ We can also use sequence diagrams to show the flow of the user login and registr
 
 \subsection{Use Case Diagram}
 
-Now that we have an understanding of the components of the system and how they interact with each other to perform specific functions we can now look at a use case diagram which aims to tie together the basic use cases of the system. We can see this in Figure \ref{fig:use_case_diagram}. As before, a subset of use cases which accurately encompass other uses of the system have been chosen here, as a larger use case diagram would not be beneficial to understanding the system better. 
+Now that we have an understanding of the components of the system and how they interact with each other to perform specific functions we can now look at a use case diagram which aims to tie together the basic use cases of the system. This can be seen in Figure \ref{fig:use_case_diagram}. As before, a subset of use cases which accurately encompass other uses of the system have been chosen here, as a larger use case diagram would not be beneficial to understanding the system better. 
 
 \begin{figure}[!ht]
 \centering
@@ -56,7 +56,7 @@ Now that we have an understanding of the components of the system and how they i
 
 \newpage
 \subsection{Implementation}
-As previously mentioned, the project management tool which will be used in this project is provided by the product owners, Red Hat Mobile. Jira is a tool to organise projects and their associated tasks \citep{JBoss2016}. It allows the developer to view all current tasks on the project and also gives useful reporting options such as burndown and gantt charts. It comes bundled with a sprint management, an example of which can be seen in Figure \ref{fig:jira}.
+As previously mentioned, the project management tool which will be used in this project is provided by the product owners, Red Hat Mobile. Jira is a tool to organise projects and their associated tasks \citep{JBoss2016}. It allows the developer to view all current tasks on the project and also gives useful reporting options such as burndown and gantt charts. It comes bundled with a sprint management tool, an example of which can be seen in Figure \ref{fig:jira}.
 
 \begin{figure}[!ht]
 \centering
@@ -80,10 +80,10 @@ To implement the system outlined in this section, some initial tickets were deta
 \begin{itemize}
 	\item Epics - which describe a large feature set of the system.
 	\item Tickets - the sub group under which the tasks to get an epic completed can be placed
-	\item Sub Tasks - which are the smallest units of work. When all sub tasks for a ticket is completed then that ticket is said to be completed.
+	\item Sub Tasks - which are the smallest units of work. When all sub tasks for a ticket are completed then that ticket is said to be completed.
 \end{itemize}
 
-To prioritise the tasks within this project each ticket was given two scores. The first was a priority score which gives an indication as to how vital this ticket is to the overall project. An indication of this can be seen in Section \ref{sub:goals}. The second score is an estimate of the complexity of completing said task. Together, these two scores are combined to give an overall weighting to each ticket, thereby making it easier to decide which tasks should be taken first. Tasks with a higher overall score are more likely to be worked on sooner. We will know look at the first draft of project epics and their respective tickets.
+To prioritise the tasks within this project each ticket was given two scores. The first was a priority score which gives an indication as to how vital this ticket is to the overall project. An indication of this can be seen in Section \ref{sub:goals}. The second score is an estimate of the complexity of completing said task. Together, these two scores are combined to give an overall weighting to each ticket, thereby making it easier to decide which tasks should be taken first. Tasks with a higher overall score are more likely to be worked on sooner. We will now look at the first draft of project epics and their respective tickets.
 
 \newpage
 \paragraph{Docker Image CRUD}\mbox{}\\
@@ -104,7 +104,7 @@ This section will deal with container management. When completed, a user should 
 
 \newpage
 \paragraph{Security Epic}\mbox{}\\
-Security of the system is also an epic. This will mean both how the system is accessed by a user, as certain users may be accessing the system remotely. It will also include how the access occurs, i.e. will the application use SSL certificates to encrypt data flow to and from the application.
+Security of the system is also an epic. This will mean how the system is accessed by a user, as certain users may be accessing the system remotely. It will also include how the access occurs, i.e. will the application use SSL certificates to encrypt data flow to and from the application.
 
 \begin{figure}[!htbp]
 \centering

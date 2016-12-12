@@ -1,6 +1,6 @@
 \section{Technical Feasibility}
 \label{sec:feasibility}
-To evaluate the technological stack to be used in the project it was felt that a prototype application should be built. This would give the best possible view as to how well the chosen technologies would go together. In this section we will look at each aspect of the application and the technologies used to create it. The complete prototype application was completed in two sprints (we will look at this further in Section \label{sec:work_done}). The prototype application consists of the following elements:
+To evaluate the technological stack to be used in the project it was felt that a prototype application should be built. This would give the best possible view as to how well the chosen technologies would go together. In this section we will look at each aspect of the application and the technologies used to create it. The complete prototype application was completed in two sprints (we will look at this further in Section \ref{sub:work_done}). The prototype application consists of the following elements:
 
 \begin{itemize}
   \item Node.js Server Application
@@ -42,7 +42,7 @@ MongoDB is an open source document-oriented database. It is a NoSQL database whi
   \item Simplicity - When a database is schema-less it removes the need for complex actions such as joins, while still providing the power of complex queries.
 \end{itemize}
 
-Since we are using a javascript runtime on the server we can see that it is trivial to use connect to Mongo using mongoose ODM in Figure \ref{fig:mongo}.
+Since we are using a javascript runtime on the server we can see that it is trivial to use connect to Mongo using Mongoose ODM in Figure \ref{fig:mongo}.
 
 \begin{figure}[!ht]
 \begin{lstlisting}
@@ -132,7 +132,7 @@ exports.listContainers = (req, res, next) => {
 \subsection{Express.js}
 \label{sub:express}
 
-To expose the Docker \gls{API} externally a web API is needed. Upon investigation several strong choices were available and any of these would have made a suitable API. However Express.js was chosen for its simplicity and, as with node, its large online community. To create a router which our API will use is a relatively straight forward process, a small sample of which can be seen in Figure \ref{fig:router}. Express also supports many different types of authentication, which is a non-functional goal of this project. 
+To expose the Docker \gls{API} externally a web API is needed. Upon investigation several strong choices were available and any of these would have made a suitable API. However Express.js was chosen for its simplicity and as with node, its large online community. To create a router which our API will use is a relatively straight forward process, a small sample of which can be seen in Figure \ref{fig:router}. Express also supports many different types of authentication, which is a non-functional goal of this project. 
 
 \begin{figure}[!ht]
 \begin{lstlisting}
