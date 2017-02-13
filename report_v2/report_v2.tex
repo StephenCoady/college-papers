@@ -20,6 +20,7 @@
 \usepackage{color}
 
 \usepackage{glossaries} % for glossary
+\usepackage[final]{pdfpages}
 \makeglossaries 
 \include{components/glossary} 
 
@@ -96,6 +97,8 @@
 \newpage
 \printglossaries
 
+\newpage
+\include{components/introduction}
 
 
 
@@ -120,6 +123,11 @@ https://travis-ci.org/StephenCoady/lifecycle-management-for-docker
 \subsection{SonarQube Repository} 
 \label{appendix:sonarqube}
 https://sonarqube.com/dashboard/index?id=lifecyle-management-for-docker
+
+\subsection{Sprint Retrospectives}
+\label{appendix:retros}
+\includepdf[pages=-,pagecommand={}]{components/retrospectives/sprint_1_retrospective.pdf}
+
 
 \newpage
 \bibliography{bibliography}
