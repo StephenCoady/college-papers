@@ -1,0 +1,53 @@
+\section{Introduction}
+\label{sec:intro}
+This report will aim to guide the reader through the planning and development of the Lifecycle Management for Docker \gls{UI} application. After reading this report the reader should have a clear idea of why the application was built, what was used to build it and how the process was carried out.
+
+This application will be built using open source principles and best practices, enabling it to be maintained and improved by any developer who wishes to contribute. For this reason many of the decisions made and processes employed were done so with an open source final product in mind.
+
+\subsection{Problem Statement}
+Currently the \gls{Docker} application does not ship with any bundled \gls{UI}. When installed, it is comprised of a client and a server side component \citep{Docker2017}. The server side exposes itself through an \gls{API} and is ultimately responsible for controlling all aspects of Docker on the host such as containers, images, networks and volumes etc. The API exposed by the server-side application of the Docker Engine is consumed by the Docker \gls{CLI} which is the client side application. A graphical representation of the complete Docker engine can be seen in Figure \ref{fig:docker_engine}.
+
+\begin{figure}[!ht]
+\centering
+\includegraphics*[width=0.7\textwidth]{images/docker_engine}
+\caption{\em Docker Engine Components. Credit: \citep{Docker2017}}
+\label{fig:docker_engine}
+\end{figure}
+
+This model is extremely versatile as it allows the developer to control any \gls{Docker daemon} (the server-side component of a Docker installation) once they have access to the command line of the host Docker is running on. In fact, if the API exposed by the Docker daemon is exposed remotely then the developer does not need access to the host's command line, instead they can directly access the API remotely.
+
+While the \gls{CLI} gives developers full control over the server-side component of a \gls{Docker host} it also has its drawbacks.
+
+\begin{itemize}
+	\item Learning curve - the person using the command line must be familiar with typical commands used to achieve certain tasks. This precludes anybody without these skills from using Docker.
+	\item Vast set of Docker commands - there are a vast number of commands available to use from the Docker CLI. This is also a learning curve as even a developer who is familiar with a CLI must first learn the Docker commands to be able to use the client-side application. 
+	\item User friendliness - The command line does not produce content that is easily readable and can often format the data it is trying to present in an odd fashion depending on things like screen size etc.
+\end{itemize}
+
+\subsection{Aims and Objectives}
+\label{sub:aims}
+The aim of this project is to address all of these problems while also trying to increase the functionality available to anybody who wishes to use Docker.
+
+At a high level the primary objectives of this project are:
+
+\begin{itemize}
+	\item Fully functional server-side application
+	\item Expose this application through a \gls{REST}ful API.
+	\item A fully functional front-end application
+	\item A \gls{Docker image} built to allow easy distribution of the application
+\end{itemize}
+
+These objectives will then provide the following functionality:
+
+\begin{itemize}
+	\item A UI which will 
+	\begin{itemize}
+		\item allow users to manipulate images, containers etc on the host with the same capabilities as the command line
+		\item allow them to do this remotely
+	\end{itemize}
+	\item A runnable container which has no other dependencies so that it can be run without installing the application
+	\item An independent API which can be consumed by any front end application
+	\begin{itemize}
+		\item This will provide flexibility if the front end framework needs to be changed further down the line
+	\end{itemize}
+\end{itemize}
