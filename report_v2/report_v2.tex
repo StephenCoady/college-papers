@@ -84,9 +84,9 @@
 \begin{center}
 \begin{minipage}{\textwidth}
   
-  {\scshape\large \textbf{Plagiarism Declaration}\par}
-  \vspace{1cm}
-  Unless otherwise stated all the work contained in this report is my own.  I also state that I have not submitted this work for any other course of study leading to an academic award.
+{\scshape\large \textbf{Plagiarism Declaration}\par}
+\vspace{1cm}
+Unless otherwise stated all the work contained in this report is my own.  I also state that I have not submitted this work for any other course of study leading to an academic award.
 \end{minipage}
 \end{center}
 \vfill % equivalent to \vspace{\fill}
@@ -110,35 +110,9 @@
 \include{components/methodology}
 
 \newpage
-\appendix
-\section*{Appendices}
-\addcontentsline{toc}{section}{Appendices}
-\renewcommand{\thesubsection}{\Alph{subsection}}
+\include{components/appendix}
 
-\subsection{Application Repository}
-\label{appendix:code}
-https://github.com/StephenCoady/lifecycle-management-for-docker
-
-\subsection{Dockerode} 
-\label{appendix:dockerode_appendix}
-https://github.com/apocas/dockerode
-
-\subsection{Travis Repository} 
-\label{appendix:travis}
-https://travis-ci.org/StephenCoady/lifecycle-management-for-docker
-
-\subsection{SonarQube Repository} 
-\label{appendix:sonarqube}
-https://sonarqube.com/dashboard/index?id=lifecyle-management-for-docker
-
-\subsection{Sprint Retrospectives}
-\label{appendix:retros}
-\includepdf[pages=-,pagecommand={}]{components/retrospectives/sprint_1_retrospective.pdf}
-\includepdf[pages=-,pagecommand={}]{components/retrospectives/sprint_2_retrospective.pdf}
-\includepdf[pages=-,pagecommand={}]{components/retrospectives/sprint_3_retrospective.pdf}
-
-
-\newpage
+\clearpage
 \bibliography{bibliography}
 
 \end{document}
