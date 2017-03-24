@@ -109,15 +109,15 @@ It will compare these tools with ``legacy'' processes, evaluating the strengths 
 Not only is application deployment a problem, but provisioning the servers which the application is hosted on is also something which needs to be considered. This paper will look at the automation of this process.
 
 \section{Problem Domain}
-\label{sec:Problem}
+\label{sec:Problem} 
 
-One fitting definition of DevOps is ``\textit{DevOps is the practice of operations and development engineers participating together in the entire service lifecycle, from design through the development process to production support}'' \citep{devops}.
+One fitting definition of DevOps is ``\textit{...the practice of operations and development engineers participating together in the entire service lifecycle, from design through the development process to production support}'' \citep{devops}.
 
 Here the ``service lifecycle'' is the key term, as it means everything involved in creating a service and making it available for use in production. In older legacy systems the process would have involved separate teams performing each task along this timeline separately and without much overlap of personnel. In a simplified version of this model, the developers would write the code, the testers would test it, and the operations personnel would then deploy it along with provisioning the servers it would be deployed on.
 
 This model however has shifted. In a survey conducted by \citep{survey}, it is shown that, in general, DevOps orientated teams spend slightly more time on \textit{all} tasks, whereas traditional IT roles will focus more on their primary tasks. This puts emphasis on the fact that developers now need to be more competent at multiple disciplines within IT. This, paired with the fact that the survey also shows DevOps orientated teams tend to automate more, shows that the importance of automated deployments has increased in recent times. 
 
-Also, with the rise in popularity of containers as a deployment vehicle, as can be seen for Docker specifically in Figure \ref{fig:datadog} it is more and more important to make the deployment of complicated applications more streamlined and reproducible.
+Also, with the rise in popularity of containers as a deployment vehicle, as can be seen for Docker in Figure \ref{fig:datadog} it is more and more important to make the deployment of complicated applications more streamlined and reproducible.
 
 To this end, this paper will aim to propose a solution to the problem of provisioning a production server and then deploying a fault-tolerant, scalable application to the server. It will try to show how the process of building infrastructure and deploying an application to that infrastructure can be automated, increasing productivity and also allowing for an easily reproducible environment.
 
@@ -175,7 +175,7 @@ Docker allows for easily building, packaging and sharing of its ``Docker images'
 
 A Docker image is basically a set of instructions to create a template from which a container is run. The advantage of this is that multiple containers can be run from the same base image, meaning a reduction in storage size and making everything reusable. 
 
-One of Docker's strengths is the ease with which these images can be shared on used by anybody who wishes. To achieve this, Docker uses a shared repository model. Which means multiple users can `push' images they want to use later to a remote server which can then be pulled later on multiple servers and run at will. To make this even more accessible Docker has its own storage solution, Docker Hub \citep{Hub2016}. This website makes it easy for anybody to push and pull their own images or find new community-built ones to use themselves.
+One of Docker's strengths is the ease with which these images can be shared and used by anybody who wishes. To achieve this, Docker uses a shared repository model. Which means multiple users can `push' images they want to use later to a remote server which can then be pulled later on multiple servers and run at will. To make this even more accessible Docker has its own storage solution, Docker Hub \citep{Hub2016}. This website makes it easy for anybody to push and pull their own images or find new community-built ones to use themselves.
 
 \subsubsection{Swarm}
 \label{subs:Swarm}
@@ -187,11 +187,11 @@ While placing an application in a container makes it trivial to start an applica
 
 To combat these problems Docker has produced an inbuilt tool called Docker Swarm \citep{Swarm2016}. Docker swarm aims to provide a mechanism to automatically manage a group of containers running across multiple remote hosts. In other words, ``\textit{It turns a pool of Docker hosts into a single, virtual Docker host}'' \citep{Swarm2016}.
 
-Docker swarm's aim is to allow the user to run an application within a fault-tolerant, scalable and easily reproducible system. We will look further at how swarm works in section \ref{sec:Build}.
+Docker swarm's aim is to allow the user to run an application within a fault-tolerant, scalable and easily reproducible system. We will look further at how swarm works in Section \ref{sec:Build}.
 
 \subsubsection{Alternatives}
 \label{subs:Docker-alt}
-There are many alternatives to Docker. When Docker first started, instead of using libcontainer as discussed in section \ref{sub:Docker} Docker actually relied completely on a project called Linux Containers (LXC). LXC can be seen in Figure \ref{fig:docker-driver} also. However LXC is also a standalone project, enabling users to use container technologies. LXC is currently transitioning to LXD, which is a command line tool and API to interact with the program \citep{LXC2016}. 
+There are many alternatives to Docker. When Docker first started, instead of using libcontainer as discussed in Section \ref{sub:Docker} Docker actually relied completely on a project called Linux Containers (LXC). LXC can be seen in Figure \ref{fig:docker-driver} also. However LXC is also a standalone project, enabling users to use container technologies. LXC is currently transitioning to LXD, which is a command line tool and API to interact with the program \citep{LXC2016}. 
 
 Another competing product, which happens to focus on containers at scale is an open source tool to allow for orchestration of large container-based applications \citep{Kubernetes2016}. This is a direct competitor with Docker swarm, offering portable, extensible and self-healing container pools.
 
@@ -208,7 +208,7 @@ Ansible is a tool to manage a server using ssh \citep{Ansible2016}. The server c
   \item Powerful - it can be used to manage a single server or one thousand. 
 \end{itemize}
 
-Ansible also uses a file known as an inventory to manage the servers it can connect to. This is useful as it means servers can be grouped by name, location, application etc and Ansible can be instructed to only carry out certain tasks on certain groups of servers depending on our needs. We will look at this further in section \ref{sec:Build}. 
+Ansible also uses a file known as an inventory to manage the servers it can connect to. This is useful as it means servers can be grouped by name, location, application etc and Ansible can be instructed to only carry out certain tasks on certain groups of servers depending on our needs. We will look at this further in Section \ref{sec:Build}. 
 
 To name just a small subset of Ansible's use cases:
 
@@ -241,10 +241,12 @@ We can see a simple example of this in listing \ref{lst:provision}.
 \subsubsection{Configuration Management}
 Configuration management is described as \textit{``...writing some kind of state description for our servers, and then using a tool to enforce that the servers are, indeed, in that state...''} \citep{Hochstein2015}. This includes ensuring the correct software packages are installed, the correct services are running and any configuration files needed are present. Ansibles allows us to do this as, as previously stated it is idempotent. This means that if for some reason a server we wish to manage is only 50\% percent set up we can safely run an Ansible playbook which performs the \textit{complete} set up process and not worry that it will cause harm, i.e. Ansible will know it does not need to perform the first 50\% of configuration again and will just inform us that no change was needed for these steps.
 
+
 \subsubsection{Deployment}
 Deployment can be defined as \textit{``...the process of taking software that was written ... copying the required files to the server(s), and then starting up the services.''} \citep{Hochstein2015}. In this regrard Ansible excels. Ansible uses a concept of playbooks to run tasks against remote servers, an example of which can be seen in listing \ref{lst:deploy}.
 
-\begin{lstlisting}[float,floatplacement=!htbp,language=yaml,caption={A Simple Playbook To Deploy and Run Code},label={lst:deploy},basicstyle=\scriptsize]
+\newpage
+\begin{lstlisting}[float,floatplacement=!h,language=yaml,caption={A Simple Playbook To Deploy and Run Code},label={lst:deploy},basicstyle=\scriptsize]
 ---
 - hosts: servers
   gather_facts: false
@@ -267,7 +269,7 @@ While there are many other configuration management tools available such as Chef
 \newpage
 \section{Building an Application}
 \label{sec:Build}
-We will now look at building an application using the technologies previously discussed in section \ref{sec:Background}. This will involve several distinct steps, including:
+We will now look at building an application using the technologies previously discussed in Section \ref{sec:Background}. This will involve several distinct steps, including:
 
 \begin{itemize}
   \item Provision instances which will host our application.
@@ -280,11 +282,9 @@ We will now look at building an application using the technologies previously di
 
 All of these steps will then be automated using Ansible. The complete source code used to carry out all of the steps is available in Appendix \ref{appendix:code}.
 
-
-
 \subsection{Provisioning The Infrastructure}
 \label{subs:provision}
-We will first look provisioning the servers needed for this application. The only dependency needed to run these playbooks in Ansible is the Boto library \citep{Boto2016} installed locally and also python. For the purpose of this report, the EC2 instances required will be split into 3 distinct groups. These are:
+We will first look provisioning the servers needed for this application. The only dependency needed to run these playbooks in Ansible is the Boto library \citep{Boto2016} installed locally and also Python. For the purpose of this report, the EC2 instances required will be split into 3 distinct groups. These are:
 
 \begin{itemize}
   \item Management
@@ -292,7 +292,7 @@ We will first look provisioning the servers needed for this application. The onl
   \item Loadbalancer
 \end{itemize}
 
-We will discuss what these terms mean further in section \ref{subs:creating_swarm}, but for now we do not need to know the difference, just that all instances created have an intended role as our application orchestration continues.
+We will discuss what these terms mean further in Section \ref{subs:creating_swarm}, but for now we do not need to know the difference, just that all instances created have an intended role as our application orchestration continues.
 
 To create this infrastructure we can uses Ansible's built in ec2 module, which makes it easy to run commands against AWS. We can see the playbook used to create 3 sets of ec2 instances in Listing \ref{lst:provisionEc2}. This playbook is the set of steps to follow but it relies on Ansible roles and variables to run, as seen in Listing \ref{lst:provisionRole}.
 
@@ -431,21 +431,14 @@ To do this using the command line, we can simply run
 
 which will start a Wordpress container, link it to a mysql container running on the host and expose port 80 of the container (the port the application is listening on from within the container) to port 80 of the host. However if we wish to automate this process and start an application we can use Ansible to do this for us.
 
-In this step we will use a tool made by Docker called `Docker Compose'. Docker compose allows us to run multi-container systems in one command line call, managing links between containers and all container dependencies and settings for us. In Listing \ref{lst:wordpress} we can see that Ansible first copies source code we require from Github, which we then tell Ansible to run using Docker Compose. 
+In this step we will use a tool made by Docker called `Docker Compose'. Docker compose allows us to run multi-container systems in one command line call, managing links between containers and all container dependencies and settings for us. In Figure \ref{fig:run_app} we can see that Ansible first copies source code we require from Github, which we then tell Ansible to run using Docker Compose. 
 
-\begin{lstlisting}[float,floatplacement=!htbp,language=yaml,caption={run-wordpress.yml},label={lst:wordpress},basicstyle=\scriptsize]
----
-- hosts: node
-  become: true
-  tasks:
-    - name: copy source code
-      shell: >
-        git clone https://github.com/nezhar/wordpress-docker-compose.git
-    
-    - name: change directory to code and run application
-      shell: >
-        cd wordpress-docker-compose && docker-compose up -d
-\end{lstlisting}
+\begin{figure}[!h]
+\centering
+\includegraphics*[width=\textwidth]{components/images/run_app}
+\caption{\em Running a Wordpress Application in Docker Containers}
+\label{fig:run_app}
+\end{figure}
 
 The result of this simple playbook is that we now have a fully functional Wordpress installation running in AWS, complete with a MySQL database. We can see the Docker Compose file in Listing \ref{lst:compose} and the resulting application in Figure \ref{fig:wordpress}.
 
@@ -499,8 +492,6 @@ Since this application is running on one instance in AWS it is currently not:
   \item Fault tolerant
   \item Distributed
 \end{itemize}
-
-To address these issues we will next look at Docker Swarm.
 
 \newpage
 \subsection{Creating the Swarm}
@@ -589,7 +580,7 @@ This process can also be automated using Ansible. To do this tasks in Listing \r
     --token={{ swarm_worker_token }}
 \end{lstlisting}
 
-To better illustrate what is happening in the swarm an application a Docker swarm visualiser application was used \citep{Marks2016}. This application was run on a manager node and allows the user to graphically see which services are running on each node. To preview this application a swarm consisting of 5 nodes (2 managers and 3 workers) and several different services was started. This can be seen in Figure \ref{fig:visualiser}.
+To better illustrate what is happening in the swarm an application named Docker swarm visualiser was used \citep{Marks2016}. This application was run on a manager node and allows the user to graphically see which services are running on each node. To preview this application a swarm consisting of 5 nodes (2 managers and 3 workers) and several different services was started. This can be seen in Figure \ref{fig:visualiser}.
 
 \begin{figure}[!h]
 \centering
@@ -620,6 +611,15 @@ However since this paper is aimed at showing how Docker can improve applications
   \item Ansible instructs the host to build the Docker Image and run it listening on port 80 
 \end{enumerate}
 
+This process can be seen in Figure \ref{fig:nginx_conf}.
+
+\begin{figure}[!h]
+\centering
+\includegraphics*[width=\textwidth]{components/images/nginx_conf}
+\caption{\em Ansible Being used to Create Nginx Configuration}
+\label{fig:nginx_conf}
+\end{figure}
+
 An overview of the result of this can be seen in Figure \ref{fig:nginx}.
 
 \begin{figure}[!h]
@@ -629,6 +629,7 @@ An overview of the result of this can be seen in Figure \ref{fig:nginx}.
 \label{fig:nginx}
 \end{figure}
 
+\newpage
 \subsection{Features of Swarm}
 \label{sub:swarm_features}
 Now that we have seen how we can provision, configure and deploy an application using Ansible it is not hard to see how all of this can be tied together. The final product of applying everything from previous sections will mean that to deploy an application in swarm mode will consist of simply running an Ansible playbook. A separate Ansible playbook could then be created which will use existing inventory (saved by Ansible upon creation) to update the running application. In swarm mode, this might consist of running something similar to the command
@@ -670,7 +671,7 @@ We have also seen how Docker Swarm can provide an environment in which to reliab
 However, Swarm also has some drawbacks. Swarm itself has been part of Docker for several releases, however `Swarm mode' is only a recent development (version 1.12). This means it is in its early stages and lacks some important features. For instance it does not currently support automatic scaling based on common statistics such as CPU utilisation and network activity. 
 
 \subsection{Further Investigation}
-Some features which were not included in this report but which I would have liked to look at were autoscaling applications running in a swarm. One possible solution here would be to use AWS autoscaling to create new instances based on set rules. Once these instances are created we could (through scripting or otherwise) add them to the Docker Swarm. Once the instance is added to the swarm it will then run services as required. However this could cause service interruptions if not configured correctly since Amazon's auto scaling would have no knowledge of Docker swarm. If it scaled down too quickly and the scale of a swarm service was not high enough it could mean (if only for an instance) that no containers of a certain application were running. 
+Some features which were not included in this report but which I would have liked to look at were autoscaling applications running in a swarm. One possible solution here would be to use AWS autoscaling to create new instances based on set rules. Once these instances are created we could (through scripting or otherwise) add them to the Docker Swarm. Once the instance is added to the swarm it will then run services as required. However this could cause service interruptions if not configured correctly since Amazon's auto scaling would have no knowledge of Docker swarm. If it scaled down too quickly and the scale of a swarm service was not high enough it could mean (if only for an instant) that no containers of a certain application were running. 
 
 
 \subsection{Closing Statement}

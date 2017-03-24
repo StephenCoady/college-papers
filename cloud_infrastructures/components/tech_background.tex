@@ -1,0 +1,54 @@
+% !TEX root = ../paper.tex
+\section{Technology Background}
+Since the aim of this paper is to implement a monitoring system which is not tied to any one vendor such as Amazon Web Services or Microsoft Azure it will aim to use only open source and community driven software to deliver this solution. This will mean that all findings should be easily reproducible and applicable to any cloud provider.
+
+\subsection{Containers}
+A container uses Linux abstraction techniques such as namespaces and cgroups to isolate and `contain' a software process from those running on the same host. It does this limit resources available to that process while also making it much more manageable for the user. The container itself does not know that it is a container but instead is presented with a local resource and made to believe it has access to a global resource \citep{Kerrisk2013}. Containers and their workings are outside the scope of this paper, however it is important to understand that they are simply a process running on a host.
+
+\subsection{Docker}
+Docker is a piece of software which manages the orchestration of containers. It allows the user to tell Docker what they would like Docker to do and it leaves the underlying Linux translations to the Docker engine \citep{docker2016}. There are many alternatives such as Kubernetes and Amazon's Container Service, both of which can also manage Docker containers if the user wishes.
+
+Docker receives its instructions from the user in the form of a `Dockerfile' which is essentially a set of instructions specifying details such as the base image to use and what commands should be run on the container once it starts. This image is then built and can be used as a template for many containers to run from. It is this property which results in a single Docker host having multiple containers all based on the same image - much in the same way a Docker swarm host may contain many containers running a single service as previously discussed in Section \ref{sec:problem}.
+
+\subsection{Docker Swarm}
+Docker Swarm is a mode of Docker whereby a master/slave relationship is enforced across multiple internet-connected hosts with the express intent that the applications started on these hosts would be spread across all hosts in the \textit{swarm} \citep{Swarm2016}. For example, in a swarm of say 5 hosts, the user could issue a command on the manager node to start a service which is made up of 10 containers. These 10 containers would then (more than likely) be spread across all 5 hosts with each running 2 containers. This means that the application now has 5 different routes by which it can be reached with a fault tolerance of an extra container on each host. While this example is trivial and not very practical it is intended to give a basic understanding of Docker swarm mode.
+
+\subsection{Grafana}
+Grafana is a graphical dashboard which can be used to display information from many different types of database. It allows very fine-grained control over the metrics displayed and also how they are displayed. It is a fully-functional web application which supports user login and different views depending on the logged in user \citep{grafana2017}. It is not core to this project and there are many alternatives, however it was decided that Grafana was the best option as it has a large online community and support for a large number of third party software packages.
+
+\subsection{Prometheus}
+Prometheus is an open source and community driven monitoring solution which provides a multi-dimensional data model under which any metric can be stored efficiently. It also provides its own query language which can be used to extract information from these metrics \citep{prometheus2017}.
+
+Some of the major benefits of Prometheus over other metric storage solutions are:
+
+\begin{itemize}
+	\item A package called `Node Exporter' which is built by the same community has native compatibility with Prometheus and can be used to collect metrics from the host it is running on. This is extremely useful when monitoring a multi-host system such as a Docker Swarm.
+	\item It has native support for Grafana.
+	\item It also has native support for tools such as cAdvisor, which we will discuss further in Section \ref{subs:cAdvisor}.
+	\item It has an active and large community.
+\end{itemize}
+
+\subsection{cAdvisor}
+\label{subs:cAdvisor}
+Container Advisor (cAdvisor) is a standalone application which provides detailed feedback about all containers running on a host. The metrics it provides include performance characteristics such as CPU usage, memory usage and network activity \citep{cAdvisor2017}. 
+
+cAdvisor has native support for many different types of containers, including Docker, so it is the ideal choice for this paper.
+
+While it does provide a web app which can graphically display the information its real power lies in the fact that it also exposes a remote API which can be scraped for the metrics. We will take advantage of this fact in Section \ref{sec:practical}.
+
+\subsection{Infrastructure Overview}
+Now that we have seen each technology individually it is not difficult to see how each will fit together to provide a cohesive and modular application which will monitor both our Docker host and the containers which it is running. We can see a diagram giving a visual guide in Figure \ref{fig:infrastructure} below.
+
+\begin{figure}[!h]
+\centering
+\includegraphics*[width=0.8\textwidth]{components/images/overview}
+\caption{\em Infrastructure Overview}
+\label{fig:infrastructure}
+\end{figure}
+
+\begin{itemize}
+	\item The node exporter will read metrics based on the Docker Swarm host
+	\item The cAdvisor component will read metrics based on the containers running on the host
+	\item Both cAdvisor and the node exporter will be scraped by Prometheus which will in turn store these metrics for later usage
+	\item Grafana will then be configured to periodically poll Prometheus and display the metrics visually.
+\end{itemize}

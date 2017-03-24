@@ -1,0 +1,10 @@
+% !TEX root = ../paper.tex
+\section{Problem Statement}
+\label{sec:problem}
+As of July 2016 Docker usage had exploded in popularity, with some sources stating the container based technology's usage had risen by over 3000 percent in the two years since it left beta release \citep{DockerUsage2016}. With this in mind, it is natural to conclude that the amount of `Dockerised' applications running in production has also grown at a fast rate.
+
+Since an application running in production is assumed to be serving real customers or users down-time should be minimised and the performance of the application should be maximised (i.e. response time, latency, caching). The first part of this is taken care of by Docker Swarm, which provides scaling of applications across multiple hosts. The second, however, is not an easy problem to solve. Since Docker containers are supposed to be ephemeral it is difficult to monitor them as their short lifespan is not conducive to gathering longterm meaningful statistics \citep{DataDog2017}. This problem is only exacerbated by the fact that Docker Swarm may create multiple versions of the same container running across several different hosts. 
+
+While the Docker remote API does provide some metrics from containers natively it is less than ideal to need to keep track of each individual host and then to poll these hosts for metrics relating to each container on the host - especially since we may not know which service or indeed even how many services are running on each of our hosts. If we are then running our application in an elastic computing fashion such as Amazon's EC2 then these hosts may also be ephemeral and so the monitoring problem quickly becomes unmanageable.
+
+We will now look at some of the technologies involved in the problem and the technologies we are proposing to use to solve the problem.

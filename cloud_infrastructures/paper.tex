@@ -1,0 +1,118 @@
+\documentclass{article}
+
+%-----------------------------------------------PACKAGES-------------------------------------------------------------%
+\usepackage{graphicx} %images
+\DeclareGraphicsExtensions{.pdf,.png,.jpg} % configures latex to look for the following image extensions
+\usepackage{setspace} % allows for configuring the linespacing in the document
+\usepackage{caption}
+\usepackage{natbib}
+\usepackage[toc,page]{appendix}
+\usepackage[a4paper, total={6in, 8in}]{geometry}
+\usepackage[explicit]{titlesec}
+\usepackage{setspace} 
+\usepackage[T1]{fontenc}
+\onehalfspacing
+\usepackage{hyperref}
+\usepackage{url}
+\usepackage[nottoc]{tocbibind}
+\usepackage[parfill]{parskip}
+\hypersetup{
+    colorlinks,
+    citecolor=black,
+    filecolor=black,
+    linkcolor=black,
+    urlcolor=black
+}
+\bibliographystyle{agsm}
+\setcitestyle{authoryear,open={(},close={)}}
+
+\usepackage[dvipsnames]{xcolor}
+\usepackage{listings}
+
+\newcommand\YAMLcolonstyle{\color{red}\mdseries}
+\newcommand\YAMLkeystyle{\color{black}\bfseries}
+\newcommand\YAMLvaluestyle{\color{blue}\mdseries}
+
+\makeatletter
+
+
+% here is a macro expanding to the name of the language
+% (handy if you decide to change it further down the road)
+\newcommand\language@yaml{yaml}
+
+\expandafter\expandafter\expandafter\lstdefinelanguage
+\expandafter{\language@yaml}
+{
+  keywords={true,false,null,y,n},
+  keywordstyle=\color{darkgray}\bfseries,
+  basicstyle=\YAMLkeystyle,                                 % assuming a key comes first
+  sensitive=false,
+  comment=[l]{\#},
+  morecomment=[s]{/*}{*/},
+  commentstyle=\color{purple}\ttfamily,
+  stringstyle=\YAMLvaluestyle\ttfamily,
+  moredelim=[l][\color{orange}]{\&},
+  moredelim=[l][\color{magenta}]{*},
+  moredelim=**[il][\YAMLcolonstyle{:}\YAMLvaluestyle]{:},   % switch to value style at :
+  morestring=[b]',
+  morestring=[b]",
+  literate =    {---}{{\ProcessThreeDashes}}3
+                {>}{{\textcolor{red}\textgreater}}1     
+                {|}{{\textcolor{red}\textbar}}1 
+                {\ -\ }{{\mdseries\ -\ }}3,
+}
+
+% switch to key style at EOL
+\lst@AddToHook{EveryLine}{\ifx\lst@language\language@yaml\YAMLkeystyle\fi}
+\makeatother
+
+\newcommand\ProcessThreeDashes{\llap{\color{cyan}\mdseries-{-}-}}
+
+
+\newcommand\myshade{85}
+\colorlet{mylinkcolor}{NavyBlue}
+\colorlet{mycitecolor}{YellowOrange}
+\colorlet{myurlcolor}{Aquamarine}
+
+\hypersetup{
+  linkcolor  = mylinkcolor!\myshade!black,
+  linktocpage=true,
+  citecolor  = mycitecolor!\myshade!black,
+  urlcolor   = myurlcolor!\myshade!black,
+  colorlinks = true,
+}
+
+%-----------------------------------------------#########--------------------------------------------------------------%
+
+
+%PREAMBLE
+\author{Stephen Coady}
+\onehalfspacing
+
+%CONTENT
+\begin{document}
+\hypersetup{pageanchor=false}
+\include{components/title}
+\thispagestyle{empty}
+\hypersetup{pageanchor=true}
+\newpage
+\tableofcontents
+
+\newpage
+\include{components/intro}
+\include{components/problem_statement}
+
+\newpage
+\include{components/tech_background}
+
+\newpage
+\include{components/practical}
+
+\newpage
+\include{components/discussion}
+
+\newpage
+\bibliography{components/references}
+
+
+\end{document}
