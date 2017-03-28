@@ -3,9 +3,14 @@
 \label{sec:intro}
 This report will aim to guide the reader through the planning and development of the Lifecycle Management for Docker \gls{UI} application. After reading this report the reader should have a clear idea of why the application was built, what was used to build it and how the process was carried out.
 
+This project is being undertaken with a local company, Red Hat Mobile, acting as product owners. Red Hat have a vested interest in solving the problem discussed in Section \ref{sub:problem} and so will act as product owners in the development of this product. This will ensure that the initial requirements will accurately shape the project and the delivered solution passes a product review by Red Hat Mobile.
+
 This application will be built using open source principles and best practices, enabling it to be maintained and improved by any developer who wishes to contribute. For this reason many of the decisions made and processes employed were done so with an open source final product in mind.
 
+
+
 \subsection{Problem Statement}
+\label{sub:problem}
 Currently the \gls{Docker} application does not ship with any bundled \gls{UI}. When installed, it is comprised of a client and a server side component \citep{Docker2017}. The server side exposes itself through an \gls{API} and is ultimately responsible for controlling all aspects of Docker on the host such as containers, images, networks and volumes etc. The API exposed by the server-side application of the Docker Engine is consumed by the Docker \gls{CLI} which is the client side application. A graphical representation of the complete Docker engine can be seen in Figure \ref{fig:docker_engine}.
 
 \begin{figure}[!ht]
@@ -46,9 +51,43 @@ These objectives will then provide the following functionality:
 		\item allow users to manipulate images, containers etc on the host with the same capabilities as the command line
 		\item allow them to do this remotely
 	\end{itemize}
-	\item A runnable container which has no other dependencies so that it can be run without installing the application
+	\item A \gls{Docker container} which has no external dependencies. The benefit of this is that the user does not need to install the application in the traditional sense. This will be discussed further in Section \ref{sec:technologies}.
 	\item An independent API which can be consumed by any front end application
 	\begin{itemize}
 		\item This will provide flexibility if the front end framework needs to be changed further down the line
 	\end{itemize}
+\end{itemize}
+
+\subsection{Semester One Summary}
+As this is the second of 2 reports detailing the progress of this project it is important to provide a summary of report one. The work completed in semester one was achieved in the form of 2 sprints, the first lasting 2 weeks and the second taking place over 3 weeks.
+
+\subsubsection{Sprints}
+Sprint 1:
+\begin{itemize}
+	\item The developer environment was set up (Vagrant + Docker installation)
+	\item A basic Express \gls{API} was created and run on test endpoints with no functionality
+	\item A basic Dockerfile was created to run the application within a Docker container
+	\item The Dockerode third party module was added to the application to provide \gls{CRUD} functionality to the container and image endpoints
+\end{itemize} 
+	
+Sprint 2:
+\begin{itemize}
+	\item The prototype application was improved to include further and more complicated \gls{CRUD} calls
+	\item A \gls{Travis} account was created and linked with the public \gls{github} repository of the application. Both of these can be seen in Appendices \ref{appendix:code} and \ref{appendix:travis}.
+	\item A travis.yml file was created which details the steps to be followed when building the application. The Travis repository in Appendix \ref{appendix:travis} will now build the application and run the unit tests every time a \gls{git} commit is made.
+	\item A \gls{sonarqube} account was associated with the Github repository and incorporated in the build pipeline. This can be viewed in Appendix \ref{appendix:sonarqube}.
+\end{itemize}
+	
+To gain a complete understanding of the process and what was achieved semester one report is available in Appendix \ref{appendix:reports}.
+	
+The final product of these 2 sprints was a prototype application which provided a proof of concept. It also validated the technology decisions which were discussed in detail in report 1 and which we will discuss further in Section \ref{sec:technologies}. While it was not a functionally complete application it did prove useful when reflecting on semester one.
+	
+\subsubsection{Reflection}
+Once the prototype application had been built it offered valuable insight which could be used when moving forward into semester two.
+
+\begin{itemize}
+	\item More time should be spent making the test suite robust. While complex tests cases require initial investment that outlay can save time in the long run.
+	\item Creating a large section of the CI/CD pipeline was a good investment also as it meant a better development process was in place for semester two.
+	\item Running the application at all times within a container is good practice as it means testing the application in the environment it will ultimately run in.
+	\item The decision to use Agile methodologies was a good one as it allowed for a flexible and fast development cycle. This is ideal when the project span is short at 12 weeks.
 \end{itemize}

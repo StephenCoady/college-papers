@@ -17,6 +17,12 @@
     text={CSS},
     description={Cascading Style Sheet. Used for applying styles to markup text primarily displayed on web pages}
 }
+\newglossaryentry{code coverage}
+{
+    name={Code Coverage},
+    text={code coverage},
+    description={Refers to the percentage of code which has been executed by tests. Not an indication of test quality but instead can be used to identify pieces of code which has been missed by test cases}
+}
 \newglossaryentry{VM}
 {
     name={Virtual Machine},
@@ -100,6 +106,11 @@
 		name={Docker image},
 		description={A template from which many containers can be started. Can be pushed an pulled to/from a remote Docker registry}
 }
+\newglossaryentry{staging server}
+{
+		name={staging server},
+		description={A computing unit exposed on the network which typically runs an incomplete or demo version of a piece of software. Generally used to show the in progress development to any product stakeholders}
+}
 \newglossaryentry{Docker daemon}
 {
 		name={Docker daemon},
@@ -122,12 +133,6 @@
 		name={continuos deployment},
 		description={The act of continuously deploying software which has passed acceptance tests to a live system}
 }
-\newglossaryentry{command line}
-{
-    name={Command Line},
-    text={command line},
-    description={The program through which the operating system can be interacted with. The user enters a command they wish to execute on a text line}
-}
 \newglossaryentry{open source}
 {
     name={Open Source},
@@ -146,6 +151,12 @@
     text={SonarQube},
     description={A tool to scan source code. It can inform developers of coding best-practices and highlight ``code smells'', which are essentially when best practices are not adhered to. Also highlights technical debt. Code is deemed either `passing' or `failing', meaning the code has been deemed either sufficient or insufficient in the following categories: Code Test Coverage, Bugs, Vulnerabilities and Technical Debt Ratio}
 }
+\newglossaryentry{code smell}
+{
+    name={Code smell},
+    text={code smell},
+    description={A piece of code which may perform as expected in some or all cases but that introduce a possibility of an unexpected result. Should be avoided. They are normally decided upon by the community}
+}
 \newglossaryentry{Travis}
 {
     name={Travis},
@@ -162,6 +173,12 @@
     name={Github},
     text={Github},
     description={An online platform to store git repositories. Allows for multi-developer collaboration on projects}
+}
+\newglossaryentry{dockerhub}
+{
+    name={DockerHub},
+    text={DockerHub},
+    description={An online platform to store Docker images. Can be pulled from by anyone once the repository is public. Essentially a way to share any built Docker images}
 }
 \newglossaryentry{Docker Compose}
 {

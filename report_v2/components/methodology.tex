@@ -1,8 +1,244 @@
 % !TEX root = ../report_v2.tex
 \section{Methodology}
 \label{sec:methodology}
+This section aims to give the reader an insight into the process used to build the application. After reading this section the reader should have a clear understanding of all methodologies used and how they benefited the project.
+
 \subsection{Agile}
+\label{sub:agile}
+The Agile movement helps teams develop in unpredictable circumstances by using incremental, iterative units of work. It provides a mechanism by which feedback is not only facilitated but actively encouraged, promoting greater transparency along the development cycle \citep{Agile2016}.
+
+Agile was chosen as the development methodology for this project for the following reasons:
+
+\paragraph{Quality Testing} Testing is integrated into the development cycle, enabling the developer to continuously monitor the functionality and performance of the application. In Waterfall testing is not carried out until the very end when development is finished. This can lead to problems for a single developer as testing coverage and quality may not be as high. 
+
+\paragraph{Visibility} Agile provides a great environment to see how expectations are managed effectively. It provides a clear view into the project scope and the current track it is on. With Waterfall all expectations and deliverables need to be forecast before any development has begun. This can be difficult to do and can mean increased overhead of work.
+
+\paragraph{Risk Management} Incremental development cycles allow the developer to accurately assess any challenges early on and make it easier to respond and adapt. In Waterfall there is very little room for adapting to unforeseen challenges.
+
+\paragraph{Flexibility} Agile allows for change natively. Instead of setting a rigid time plan up front the timescale is set and each sprint allows for the requirements to change and even for more to emerge as development continues.
+
+Agile uses time-boxed units called sprints throughout the development cycle \citep{Agile2016}. These are short development cycles designed to give the developer achievable goals while also allowing for change at short intervals.
+
+While following the Agile methodology, this project will employ some Scrum techniques to better manage development. The complete process can be seen in Figure \ref{fig:agile}.
+
+\begin{figure}[!ht]
+\centering
+\includegraphics*[width=\textwidth]{images/scrum_process}
+\caption{\em Agile/Scrum Process}
+\label{fig:agile}
+\end{figure}
+
+\begin{itemize}
+	\item Backlog Grooming - Each sprint has a sprint planning session to initially scope the product backlog and to inform the total scope of the project. This typically involves the product owners who will help to shape the overall project direction by providing their priorities for the project.
+	\item Backlog Refinement - Refining the backlog to break large development tasks into smaller tasks which will fit better in a sprint. This also helps to identify similar tasks which can be grouped together and reduce duplication.
+	\item Sprint Review - After a sprint is completed a sprint review is then performed which will evaluate goals achieved versus goals planned and the backlog is then re-prioritised accordingly.
+	\item Sprint Retrospective - A retrospective will then analyse sprint performance and help to highlight areas where improvement can be made. This will also enhance the accuracy of the following sprint.
+\end{itemize}
+
 \subsection{Jira}
+\label{sub:jira}
+The project management tool Jira was used to aid with Agile implementation and to track all project activity \citep{JBoss2016}. Jira is a professional grade project management software which is currently used by Red Hat Mobile. It provides functionality to graphically manage the product backlog and each sprint. The developer is presented with a dashboard which allows them to create and edit tasks by assigning descriptions, estimation of work and subtasks.
+
+Granular control over backlog items is important in an Agile environment as change is expected and so being able to have fine-grain control over everything makes this process much easier.
 \subsection{Gitflow}
+\label{sub:gitflow}
+As this project will be developed in an open source environment there will also be well defined procedures followed when using \gls{git} as a version control tool. This ensures that should any other developers wish to contribute to the project in the future then a set of guidelines will ensure all code is merged in a clean way which will in turn ensure complete transparency. This set of guidelines is referred to as a `Gitflow'. The Gitflow used for this project can be seen below in Figure \ref{fig:gitflow}.
+
+\begin{figure}[!ht]
+\centering
+\includegraphics*[width=0.8\textwidth]{images/gitflow}
+\caption{\em Gitflow \citep{Driessen2010}}
+\label{fig:gitflow}
+\end{figure}
+
+Using a well-defined Gitflow provides many benefits. Namely:
+
+\subparagraph{Tagged Versions}\mbox{}\\
+Tagging versions at release intervals means it is easy to see a desired version if the developer wishes to do so. For example if someone wishes to download a version 0.6.0 of software then they can navigate to the versions pane in \gls{github} and easily download that specific version. An example of this for this project can be seen in Figure \ref{fig:git_tags}. Here we can see how a developer can easily download a specific version.
+
+\begin{figure}[!ht]
+\centering
+\includegraphics*[width=0.7\textwidth]{images/git_tags}
+\caption{\em Git Tagged Versions}
+\label{fig:git_tags}
+\end{figure}
+
+\subparagraph{Safe Merges}\mbox{}\\
+When using multiple branches it can become difficult to safely merge code from two branches. Having a well-defined process to do this minimises this risk while also creating a clearer picture in the developer's mind about what code is being merged and to where it is being merged.
+
+\subparagraph{Easier Troubleshooting}\mbox{}\\
+In the case where something has gone wrong if there is a reproducible set of steps which were followed then troubleshooting the Git environment becomes easier. It also makes it easier for novice developers who may be inexperienced with Git to contribute to the project if every step is documented.
+
 \subsection{Testing}
+\label{sub:testing}
+Testing is a vital aspect of software development and it is for that reason great consideration was given to the test plan for this application. Software testing in this project can be broken up into 4 distinct headings, namely:
+
+\begin{itemize}
+	\item Unit Testing
+	\item Integration Testing
+	\item System Testing
+	\item Acceptance Testing
+\end{itemize}
+
+Unit, integration and system testing in this project is all automated while acceptance testing is a manual process. We will now look at each of these and how they are implemented in this project in detail.
+
+\paragraph{Unit Testing}\mbox{}\\
+Unit tests are the most basic form of automated testing and occur when one unit of a program is tested. This unit may be a basic variable or it can also be some function belonging to a module of software. Unit tests on a function for example may call that function and compare the returned value with the expected output. It is a simple, standalone test which does not rely on any other test within the test suite \citep{UnitTesting2017}. An example of a unit test for this project can be seen in Figure \ref{fig:unit_test}.
+
+\begin{figure}[!ht]
+\begin{lstlisting}
+	it('should list specific container', (done) => {
+		request(app)
+			.get('/api/containers/' + testContainer)
+			.set('x-access-token', token)
+			.expect('Content-Type', /json/)
+			.end(function(err, res) {
+				expect(res.status).to.be.equal(200);
+				assert.equal(testContainer, res.body.container.Id);
+				done();
+			});
+	}); 
+\end{lstlisting}
+\caption{\em A Simple Unit Test}
+\label{fig:unit_test}
+\end{figure}
+
+We can see on line 8 of Figure \ref{fig:unit_test} that this unit test simply makes an \gls{API} call and compares the result to the expected result. While this is powerful it is also too simple for modern day applications. Instead, we must test how several different functions acting in sequence behave, as this gives a more realistic simulation of an application being used by a real user.
+
+\paragraph{Integration Testing}\mbox{}\\
+We therefore naturally arrive at integration tests as a means to increase testing potency. Integration tests are essentially a sequence of unit tests. This sequence is carried out with the express intent of exposing defects in software as a result of the interaction between multiple components \citep{IntegrationTesting2017}.
+
+
+\begin{figure}[!ht]
+\begin{lstlisting}
+	it('container should be stopped', (done) => {
+      request(app)
+        .get('/api/containers/' + testContainer)
+        .set('x-access-token', token)
+        .expect('Content-Type', /json/)
+        .end(function(err, res) {
+          expect(res.status).to.be.equal(200);
+          assert.equal("exited", res.body.container.State.Status);
+          done();
+        });
+    });
+
+    it('container should restart', (done) => {
+      request(app)
+        .post('/api/containers/' + testContainer + '/restart')
+        .set('x-access-token', token)
+        .expect('Content-Type', /json/)
+        .end(function(err, res) {
+          expect(res.status).to.be.equal(200);
+          expect(res.body.message).to.equal("Container restarted successfully");
+          done();
+        });
+    });
+		
+		it('container should be started', (done) => {
+			request(app)
+				.get('/api/containers/' + testContainer)
+				.set('x-access-token', token)
+				.expect('Content-Type', /json/)
+				.end(function(err, res) {
+					expect(res.status).to.be.equal(200);
+					assert.equal("running", res.body.container.State.Status);
+					done();
+					});
+		});
+\end{lstlisting}
+\caption{\em A Simple Integration Test}
+\label{fig:integration_test}
+\end{figure}
+
+We can see a trivial example of integration testing in this project in Figure \ref{fig:integration_test}. In this test case, we first stop the container and then restart it before checking that the container is actually started. This is to ensure that the act of stopping the container does not interfere with restarting.
+
+\paragraph{System Testing}\mbox{}\\
+System testing is the act of testing a system in its entirety and in the same environment on which it will run \citep{SystemTesting2017}. We will discuss this further in Section \ref{sub:ci_cd} but for the purposes of this system testing refers to the process of all tests being in sequence and those tests should cover the complete application. This is referred to as \gls{code coverage} and will again be discussed further in Section \ref{sub:code_quality}. 
+
+\paragraph{Acceptance Testing}\mbox{}\\
+Acceptance testing is the process of manually using an application to ensure it meets requirements and performance expectations \citep{AcceptanceTesting2017}. Since this project has a product owner in the shape of Red Hat Mobile they acted as the user. At the end of each sprint this involved the product owner using a staged version of the application to ensure it met all of their initial requirements for the newly developed feature(s).
+
+\subsection{Code Quality/Coverage}
+\label{sub:code_quality}
+For an open source project it is vital to keep code quality at a high standard. If the project wishes to attract other developers to contribute then a good codebase with current best practices implemented and few bugs will help. To do this the tool SonarQube will be used, as discussed in Section \ref{sub:sonarqube-technologies}. SonarQube will scan the codebase an inform the developer of any \gls{code smell}s present and will also perform calculations such as \gls{technical debt} and \gls{code coverage}. 
+
+As we will see in the next section SonarQube is embedded in the \gls{continuous integration} pipeline for this project. This will ensure that code is consistently monitored which in turn ensures code quality and test coverage is always at the forefront of the developers mind.
+
 \subsection{Continuous Integration/Deployment}
+\label{sub:ci_cd}
+\gls{continuous integration} is the act of continuously ensuring software is of a suitable standard to be integrated into the current software package. This will ensure that any changes made to the code base will receive immediate test-feedback \citep{Fowler2006}. Even though this application was not built in a production environment having a continuous build cycle ensured maximum quality code and also reduced the risk of a ``bug bottleneck''.
+
+To achieve this, a complete integration pipeline was built. This pipeline consisted of the following:
+
+\begin{itemize}
+	\item \gls{git} repository to house the code (stored remotely on \gls{github})
+	\item \gls{Travis} CI build server to execute tests and carry out post-test tasks
+	\item \gls{sonarqube} Server to analyse and advise of improvement to code, based on best-practices
+	\item \gls{dockerhub} repository which the built image is pushed to
+	\item A \gls{staging server} which the built image is deployed to in the form of a running container
+\end{itemize}
+
+This pipeline can be seen in Figure \ref{fig:CI} and will work as follows:
+
+\begin{itemize}
+	\item Git commit is made
+	\item Travis CI build is triggered which runs all tests and \gls{code coverage} reports
+	\item If successful a SonarQube push is triggered and the code is sent for evaluation
+	\item Once this is complete a Travis then builds a \gls{Docker image} from the newly passed code
+	\item This image is then pushed to the associated \gls{dockerhub} repository to be made public
+	\item Once the push is complete Travis then deploys the application (by running a container) on the \gls{staging server}.
+\end{itemize}
+
+\begin{figure}[!ht]
+\centering
+\includegraphics*[width=0.8\textwidth]{images/CI}
+\caption{\em Continuous Integration}
+\label{fig:CI}
+\end{figure}
+
+There are several advantages to this method of integration which are additional to those mentioned previously. These are:
+
+\begin{itemize}
+	\item The process is completely automated, meaning one git push is all that is required to completely build the application and make it ready for deployment.
+	\item Using SonarQube will mean that code quality does not drop at any iteration of development
+	\item Automatically releasing to DockerHub will also mean that the application is rapidly updated between software releases.
+	\item Staging the application provides immediate feedback for anybody wishing to evaluate the current iteration of the project and whether or not it has met the requirements for the sprint.
+\end{itemize} 
+
+\subsection{Documentation}
+This section will discuss the tools used to document the entire process of building this application and also the document which accompanies it.
+\subsubsection{User Documentation}
+Since the project comes in two parts, the standalone API and the user web application there are technically two separate user guides. The first user guide is relatively short and can be seen in Appendix \ref{appendix:code}. It is the form of the README file associated with the repository. In the open source community it is common practice to include everything in the README which the user requires to being using the application. 
+
+The second set of user documentation uses a standalone application called Swagger UI to document the API \citep{Swagger2017}. Swagger allows any user to interact with the API through the documentation. For example, anyone with access to the documentation can make calls to the real API by filling in data and pushing buttons. It shows the user all current API endpoints and what each accepts as parameters and returns as a result. A screenshot of this can be seen in Figure \ref{fig:swagger-overview}. We can also see how one individual API endpoint is shown in swagger in Figure \ref{fig:swagger-individual}.
+
+\begin{figure}[!ht]
+\centering
+\includegraphics*[width=0.8\textwidth]{images/swagger-overview}
+\caption{\em Swagger Overview}
+\label{fig:swagger-overview}
+\end{figure}
+
+\begin{figure}[!ht]
+\centering
+\includegraphics*[width=0.9\textwidth]{images/swagger-individual}
+\caption{\em A Single Swagger Endpoint}
+\label{fig:swagger-individual}
+\end{figure}
+
+\paragraph{Making it accessible}\mbox{}\\
+To make the documentation easily accessible to anybody who wishes to view it it has been embedded as part of the application. When the user runs the project the node application automatically serves the documentation up on the same host as the application. This can be seen by following the documentation link in Appendix \ref{appendix:staging}.
+
+\subsubsection{LaTeX}
+Latex is a software package which is used to write academic, high-quality papers. It is written using plain text with some markup which is then used to format. The plain text documents are compiled and Latex produces a pdf file \citep{Latex2017}.
+
+In this project Latex was used exclusively to write this document. This offered a number of clear benefits over traditional office-based software packages.
+
+\begin{itemize}
+	\item Plain text - since Latex only uses plain text to create its documents the writer is free to concentrate on the important aspects of writing documentation.
+	\item Source controlled - again as Latex is plain text it can be easily stored in a version control system such as \gls{git}.
+	\item Powerful compilation engine - The compilation engine behind Latex offers huge benefits such as auto-referencing all sections and figures etc. It also can auto-create sections such as glossaries and tables of contents.
+\end{itemize}
+
+The source code used to create this report can be seen in Appendix \ref{appendix:reports}.

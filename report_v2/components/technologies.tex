@@ -1,5 +1,6 @@
 % !TEX root = ../report_v2.tex
 \section{Technologies}
+\label{sec:technologies}
 In this section of the report the technologies used to create the application will be examined and explained in detail.
 \subsection{Docker}
 \gls{Docker} is a platform which allows developers to package their applications into isolated containers which contain only the software dependencies required by the application. A container is different to a \gls{VM} in that a container does not contain a full operating system \citep{WhatDocker}.
@@ -11,6 +12,7 @@ Since a primary objective of this application is to manage a \gls{Docker host} i
 	\item Ease of use - As the application will be running in a container a developer does not need to install any third party components on their system to use the application. They do not need to worry about their environment at all, once their system has Docker installed it will run the application.
 	\item Ephemeral - Docker containers are designed to be `throw-away'. This means that if this application needs to be quickly stopped and restarted then containers are the perfect vehicle to do this.
 \end{itemize}
+
 \subsection{Node JS}
 \label{sub:nodejs}
 Node JS is a server-side JavaScript runtime, it is built on the same V8 engine that powers the popular Chrome browser. It uses an event-driven, non-blocking I/O model that makes it lightweight, efficient and very fast. Node JS' package ecosystem, NPM, is the largest ecosystem of open source libraries in the world. \citep{Nodejs.org2016}. Node JS provides an excellent way to build highly scalable network application which are non-blocking and extremely performant \citep{Griffin2011}. This means that if the application was adapted in the future to deal with large numbers of servers then the technology choice will be able to deal with that.
@@ -32,7 +34,14 @@ For this application the front end requirements were relatively low. Once the fr
 \subsection{Travis CI}
 Since this project was developed as an open source project it made sense to have a transparent and fully automated build process integrated into the project. For this reason \gls{continuous integration} in this project is handled by \gls{Travis} CI. It is a feature-rich service free to use for open source projects and has a large user base. The set up used in this project for testing and continuous integration will be explored further in Section \ref{sec:methodology}.
 
+\subsection{SonarQube}
+\label{sub:sonarqube-technologies}
+All code in this project should be held to a high standard. Since this project is open source it is important to ensure all code is bug free and follows current best practices. While this is important it also ensures more educational value for the writer.
+
+To achieve this an open source tool \gls{sonarqube} will be used \citep{Sonar2016}. This tool analyses the output of tests to give detailed information about test coverage and also scans the code to find possible bugs and \gls{code smell}s. It can also give useful information such as the current amount of \gls{technical debt}. SonarQube will be discussed in further detail in Section \ref{sub:code_quality}. The SonarQube repository for this project can be seen in Appendix \ref{appendix:sonarqube}.
+
 \subsection{Vagrant}
+\label{sub:vagrant}
 Vagrant is a technology to create configurable, reproducible and portable environments by using a set of programmable steps to produce a \gls{VM} which the developer can use to develop in \citep{Vagrant2017}. While this is just one use-case of Vagrant it is the main reason it was used in this project. 
 
 Since this project is open source it is useful to have one standardised VM within which all development can take place. This virtual machine can then be shared (either as its own separate repository or included in the main application repository). This is useful as it enables any developer who wishes to contribute to the project to instantly have the required environment. For instance, a developer can contribute to this project by using the \gls{Vagrantfile} supplied without requiring them to first install Docker or Node JS.
