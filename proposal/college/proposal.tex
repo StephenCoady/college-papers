@@ -1,0 +1,76 @@
+\documentclass{article}
+\setcounter{secnumdepth}{0}
+
+%-----------------------------------------------PACKAGES-------------------------------------------------------------%
+\usepackage{graphicx} %images
+\DeclareGraphicsExtensions{.pdf,.png,.jpeg} % configures latex to look for the following image extensions
+\usepackage{setspace} % allows for configuring the linespacing in the document
+\usepackage{caption}
+\usepackage{appendix}
+\usepackage[a4paper, total={6in, 8in}]{geometry}
+\usepackage{glossaries}
+
+%-----------------------------------------------#########--------------------------------------------------------------%
+
+
+%PREAMBLE
+\author{Stephen Coady}
+\title{Final Year Project Proposal}
+\date{September 12, 2016}
+\onehalfspacing
+\makeglossaries
+
+
+%CONTENT
+\begin{document}
+
+\include{components/title}
+
+\newpage
+
+\paragraph{Title:}
+\label{par:Title}
+Lifecycle Management For Docker UI
+
+\paragraph{Introduction:}
+\label{par:Introduction}
+Docker is a tool to build modern, lightweight containers. These containers can be used to house applications or services. The advantage of docker is that it makes application development easier for a number of reasons. These are mainly:
+
+\begin{itemize}
+  \item Rapid development
+  \item Easy deployment on most architectures
+  \item Easy debugging and testing
+  \item Piece of mind knowing that containers which run once will always run the same, as they are self-contained.
+  \item Security - applications are isolated from one another.
+\end{itemize}
+
+\paragraph{Description:}
+\label{par:Description}
+Presently, Docker is command line only, meaning the user must be comfortable with the terminal before they can use Docker. This is not ideal. The aim of this project would be to allow users to run the application and have a graphical access to the containers running on a selected server.
+
+This application would give users access to the Docker API, which effectively allows them to perform any commands they can currently run but using a GUI.
+
+The end goal of the project would also be to have the application itself run inside a Docker container, allowing for extreme portability and ease-of-use.
+
+\paragraph{Technologies and Frameworks:}
+\label{par:Technologies and Frameworks}
+\begin{itemize}
+	\item Node.js server
+	\item Possibly Angular front end
+	\item Mocha testing framework
+  \item Docker for containerisation
+  \item Ansible for deployment and provisioning servers
+  \item Possibly Jenkins for CI/CD
+  \item Vagrant for creating a development environment
+\end{itemize}
+
+\newpage
+
+\paragraph{Project Method:}
+\label{par:Project Method}
+Test Driven Development using Agile methodologies.
+
+\paragraph{Sponsorship:}
+This project is sponsored by RedHat, a local software development house. As sponsors they will provide me with resources such as cloud computing, access to a professional developer willing to help with problems I am having and will also work with me as product owner to simulate a real Agile environment.
+
+\end{document}

@@ -1,0 +1,192 @@
+\section{Technical Feasibility}
+\label{sec:feasibility}
+To evaluate the technological stack to be used in the project it was felt that a prototype application should be built. This would give the best possible view as to how well the chosen technologies would go together. In this section we will look at each aspect of the application and the technologies used to create it. The complete prototype application was completed in two sprints (we will look at this further in Section \ref{sub:work_done}). The prototype application consists of the following elements:
+
+\begin{itemize}
+  \item Node.js Server Application
+  \item Express.js API
+	\item Mongo Database
+  \item Docker Image + Container
+  \item Docker Engine installed on Mac OS X \& Linux 14.04 
+\end{itemize}
+
+\subsection{Node.js Application}
+\label{sub:nodejs}
+Node JS is a server-side JavaScript runtime, it is built on the same V8 engine that powers the popular Chrome browser. It uses an event-driven, non-blocking I/O model that makes it lightweight, efficient and very fast. Node JS' package ecosystem, NPM, is the largest ecosystem of open source libraries in the world. \citep{Nodejs.org2016}.
+
+It is node's asynchronous nature which makes it so powerful. Being asynchronous essentially means that it does not create a new thread every time a request needs to be dealt with. Instead, it relies on a single event loop to handle requests which never blocks I/O. This can be seen in Figure \ref{fig:event_loop}.
+
+\begin{figure}[!ht]
+\centering
+\includegraphics*[width=0.5\textwidth]{images/event_loop}
+\caption{\em Node Event Loop}
+\label{fig:event_loop}
+\end{figure}
+
+\newpage
+Node.js was deemed a good fit for this project as it has an excellent community and ecosystem which will increase development speed and allow for more complex features with less overhead. We can see in Figure \ref{fig:counts} that there are currently (as of November 2016) more node modules available through the node package manager NPM than any other of the large package managers such as the ones used by Go, PHP, Python and Ruby. 
+
+\begin{figure}[!ht]
+\centering
+\includegraphics*[width=0.7\textwidth]{images/module_counts}
+\caption{\em Various Module Counts (Credit: modulecounts.com)}
+\label{fig:counts}
+\end{figure}
+
+\subsection{MongoDB}
+MongoDB is an open source document-oriented database. It is a NoSQL database which means Mongo does not support relationships between tables \citep{Mongo216}. Instead, MongoDB uses JSON-like ``documents'' to store information in an ordered way. This is advantageous for a number of reasons, namely:
+
+\begin{itemize}
+  \item Flexibility - Since Mongo does not have relations it is easy to change the database as development continues, without the need for migrations of the current schema.
+  \item Javascript - Since the application itself will be written in Node it will be extremely beneficial to have a database which stores its information in JSON.
+  \item Simplicity - When a database is schema-less it removes the need for complex actions such as joins, while still providing the power of complex queries.
+\end{itemize}
+
+Since we are using a javascript runtime on the server we can see that it is trivial to use connect to Mongo using Mongoose ODM in Figure \ref{fig:mongo}.
+
+\begin{figure}[!ht]
+\begin{lstlisting}
+	var mongoose = require('mongoose');
+	mongoose.connect('mongodb://localhost/test');
+
+	var Container = mongoose.model('Container', { name: String, id: String });
+
+	var built_container = new Container({ name: 'NGNIX', id: '4f5t5e3'});
+	built_container.save(function (err) {
+	  if (err) {
+	    console.log(err);
+	  } else {
+	    console.log('Saved!');
+	  }
+	});
+\end{lstlisting}
+\caption{\em Communicating with Mongo}
+\label{fig:mongo}
+\end{figure}
+
+\subsection{Dockerode}
+\label{sub:dockerode}
+
+The Node JS app is the main component of the application, and serves a way to communicate with the Docker Engine. This is done using the Docker \gls{API}, which is exposed by default on any system Docker is installed on. As it is bound to a non-networked Unix socket it was necessary to communicate with this socket somehow. To communicate with this API a third party module was used, Dockerode. This module is available in Appendix \ref{appendix:dockerode_appendix}. Using this module allows the application to retrieve any information needed from the Docker API quickly and without needing to make complicated \gls{API} calls to it. 
+
+Dockerode was chosen as the primary method to communicate with the Docker API using node for the following reasons:
+
+\begin{itemize}
+	\item Active developers - new major release on average once a month
+	\item Full test suite
+	\item Feature rich - aims to keep all Docker API features implemented and tested
+	\item It has a large set of contributors (49 as of November 2016) with an active issues board, meaning a greater chance of any issues encountered being resolved
+\end{itemize}
+
+An example call to the dockerode module can be seen in Figure \ref{fig:dockerode}, which generates the JSON response shown in Fig \ref{fig:response}.
+
+\begin{figure}[!ht]
+\begin{lstlisting}
+const Docker = require('dockerode');
+const docker = new Docker({
+  socketPath: '/var/run/docker.sock'
+});
+
+exports.listContainers = (req, res, next) => {
+  docker.listContainers({'all': 1}, (err, data) => {
+    if (data === null) {
+      res.status(404).json({
+        response: "No containers found",
+        error: err
+      })
+    } else {
+      res.status(200).json({
+        response: data
+      })
+    }
+  });
+}
+\end{lstlisting}
+\caption{\em Listing All Containers on a Host}
+\label{fig:dockerode}
+\end{figure}
+
+\begin{figure}[!ht]
+\begin{lstlisting}
+  {
+    "response": [
+      {
+        "Id": "f8ea3a2c0...",
+        "Names": [
+          "/my_nginx_container"
+        ],
+        "Image": "nginx",
+        "ImageID": "sha256:e43d838...",
+                .
+                .
+                .
+      }
+    ]
+  }
+\end{lstlisting}
+\caption{\em Response From Server}
+\label{fig:response}
+\end{figure}
+
+\newpage
+\subsection{Express.js}
+\label{sub:express}
+
+To expose the Docker \gls{API} externally a web API is needed. Upon investigation several strong choices were available and any of these would have made a suitable API. However Express.js was chosen for its simplicity and as with node, its large online community. To create a router which our API will use is a relatively straight forward process, a small sample of which can be seen in Figure \ref{fig:router}. Express also supports many different types of authentication, which is a non-functional goal of this project. 
+
+\begin{figure}[!ht]
+\begin{lstlisting}
+	let express	= require('express');
+	let containers = controllers.containers;
+	let router = express.Router();
+
+	router.get('/', function(req, res, next) {
+	    res.send('Welcome to the Docker Lifecycle Management v1 API');
+	});
+
+	/* Container Routes */
+	router.get('/containers', containers.listRunningContainers);
+	router.get('/containers/all', containers.listContainers);
+	router.get('/containers/:id/', containers.listSpecificContainer);
+
+	module.exports = router;
+\end{lstlisting}
+\caption{\em Creating an Express.js Router}
+\label{fig:router}
+\end{figure}
+
+\subsection{Docker}
+To evaluate whether or not it was feasible to put the final application in a container a sample Docker image was built locally and a container was run from this image. The file this container was built from can be seen in Figure \ref{fig:docker}.
+
+\begin{figure}[!ht]
+\begin{lstlisting}
+	FROM node:6.9.1-slim
+
+	ADD . /app  
+	WORKDIR /app  
+	RUN npm install  
+	EXPOSE 3000
+
+	CMD ["node", "app.js"]  
+\end{lstlisting}
+\caption{\em Creating a Docker Image}
+\label{fig:docker}
+\end{figure}
+
+Once this container was run the complete application could be run locally from within a container.
+
+\subsection{Supporting Technologies/Processes}
+\label{subs:support}
+\paragraph{Vagrant}\mbox{}\\
+Vagrant is a development tool to provision and `sandbox' the complete development environment from the host machine it is running on. This is very beneficial, as it means all necessary dependencies can be bundled into one virtual machine and updated or changed when needed. 
+
+Vagrant also allows the developer to standardised all of the different environments the application will run on. This means that if the code will be deployed to a specific version of a specific operating system then the developer can easily replicate this on the local development environment. It allows the developer to build the application on one (local) environment and deploy to the \textit{exact same} remote environment. This is extremely beneficial in terms of code reliability and stability - as the runtime can be reproduced easily.
+\paragraph{Ansible}\mbox{}\\
+Ansible is a tool to provision virtual machines running locally or remotely. A formal process of all deployment and provisioning will be employed in this project. Meaning that the same route from running code locally to it running on a remote server will always be followed.
+
+Ansible paired with Vagrant in this project will mean any discrepancies or bugs in the code will not be introduced by the environment or the deployment/provisioning process. This is very important as it can reduce the development workload. 
+
+\paragraph{Testing}\mbox{}\\
+This project will use third party node modules to perform its unit tests. These unit tests will be behavioural-driven, meaning the components will be tested individually with the end-goal of the passing test being validating a certain behaviour of the application, as opposed to validating the functionality of each individual component.
+
+In this way, the project will follow the behavioural driven development (BDD) model. The advantage of this model over pure unit testing in test-driven development (TDD) is that BDD keeps the end result in mind at all times, instead of just the conditions for an individual unit test to pass. This allows the developer to constantly keep in mind the goal of the module being tested.

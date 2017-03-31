@@ -1,0 +1,50 @@
+\section{Risk Analysis}
+This section will aim to look at the various types of risks involved in the development of this product. It will also show how these risks will be minimised and in some cases completely mitigated.
+
+\subsection{Requirements Risks}
+When building the requirements for the project it is important to accurately and definitively scope all necessary requirements. This ensures the project is not over-scoped effectively meaning an undeliverable end product.
+
+However some risks here are:
+
+\begin{itemize}
+	\item System requirements initially missing key components
+	\item Over/under estimating the complexity of requirements
+	\item Changes to requirements
+\end{itemize}
+
+To mitigate these risks, a full Agile/Scrum process will be followed as discussed in Section \ref{subs:agile}. This will ensure that:
+
+\begin{itemize}
+	\item All requirements are recorded and accurately rated based on complexity and priority. This will ensure that the most important requirements are dealt with first. To achieve this a backlog grooming and refinement session was carried out with the input of both product owner and scrum master.
+	\item Agile also facilitates changes to product requirements. If, for instance, during a sprint new requirements emerge - they can be added to the product backlog and in the next sprint planning session they can be taken in as new tasks in that sprint. 
+\end{itemize}
+
+\subsection{Skills Risks/Technological Risks}
+In software development there is always the risk that the technologies used will not allow for a feasible product to be built. To test this and avoid any risk once development has started, a prototype application was built to show complete technical feasibility. This application is available in Appendix \ref{appendix:code} and is discussed in detail in Section \ref{sec:feasibility}.
+
+The result of this prototype build was successful, and showed that all proposed components can be used together to create the complete application. 
+
+\subsection{Project Management Risks}
+Project management is a vital aspect of any project, having a significant impact productivity and therefore the overall level of ``completeness'' of the project. 
+
+To ensure that the project is managed correctly, a formal process will be followed. Using Agile and also using the issue tracking system Jira will ensure that the project is managed correctly \citep{JBoss2016}. 
+
+Also, having a formal definition of when a piece of software is done is key to project management, as it ensures any development undertaken will be complete by a common standard. This ensures consistency within the project. In this project there will be two definitions of done, the definition for each feature and also the definition for each release.
+
+The definition of done for each feature is:
+\begin{itemize}
+	\item The new code passes unit tests.
+	\item All code is commented.
+	\item When the new code is integrated with the current software package and all previous unit tests pass.
+	\item Documentation comments are added to code.
+\end{itemize}
+
+The definition of done for each release is:
+\begin{itemize}
+	\item The new release is passing all unit tests.
+	\item The release branch is pushed and built successfully by the integration server as discussed in Section \ref{subs:CI}.
+	\item SonarQube analysis carried out and code quality deemed ``passing''.
+	\item Documentation comments added to each feature is built.
+	\item A complete Docker Image is built and pushed to DockerHub.
+	\item A working release is pushed to a staging server which can be used for demonstration purposes.
+\end{itemize}

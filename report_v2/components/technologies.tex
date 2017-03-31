@@ -1,0 +1,47 @@
+% !TEX root = ../report_v2.tex
+\section{Technologies}
+\label{sec:technologies}
+In this section of the report the technologies used to create the application will be examined and explained in detail.
+\subsection{Docker}
+\gls{Docker} is a platform which allows developers to package their applications into isolated containers which contain only the software dependencies required by the application. A container is different to a \gls{VM} in that a container does not contain a full operating system \citep{WhatDocker}.
+
+Since a primary objective of this application is to manage a \gls{Docker host} it makes sense to leverage the capabilities of Docker and run this application within a \gls{Docker container}. This provides several benefits over distributing source code, such as:
+
+\begin{itemize}
+	\item Portability - If a \gls{Docker image} can be built and uploaded to a public repository then it makes it easier for other developers to pull and run the application.
+	\item Ease of use - As the application will be running in a container a developer does not need to install any third party components on their system to use the application. They do not need to worry about their environment at all, once their system has Docker installed it will run the application.
+	\item Ephemeral - Docker containers are designed to be `throw-away'. This means that if this application needs to be quickly stopped and restarted then containers are the perfect vehicle to do this.
+\end{itemize}
+
+\subsection{Node JS}
+\label{sub:nodejs}
+Node JS is a server-side JavaScript runtime, it is built on the same V8 engine that powers the popular Chrome browser. It uses an event-driven, non-blocking I/O model that makes it lightweight, efficient and very fast. Node JS' package ecosystem, NPM, is the largest ecosystem of open source libraries in the world. \citep{Nodejs.org2016}. Node JS provides an excellent way to build highly scalable network application which are non-blocking and extremely performant \citep{Griffin2011}. This means that if the application was adapted in the future to deal with large numbers of servers then the technology choice will be able to deal with that.
+
+Node JS was also deemed a good fit for this project as it has a large and extremely active online community. Since this is an open source project this will increase the likelihood of other developers taking part in the project and contributing. We can see in Figure \ref{fig:counts} that there are currently (as of November 2016) more node modules available through the node package manager (NPM) than any other of the large package managers such as the ones used by Go, PHP, Python and Ruby. 
+
+\begin{figure}[!ht]
+\centering
+\includegraphics*[width=0.7\textwidth]{images/module_counts}
+\caption{\em Various Module Counts (Credit: modulecounts.com)}
+\label{fig:counts}
+\end{figure}
+
+\subsection{Angular JS}
+Angular JS is a web framework for building dynamic web applications using Javascript as a controller. It uses HTML as its template language to display the information passed to it from the application controller \citep{Angular2017}. 
+
+For this application the front end requirements were relatively low. Once the framework provided a mechanism to show dynamic content then it was a candidate. For this reason several were evaluated and Angular was chosen as it had the lowest barrier to entry. The front-end application will be discussed further in Section \ref{sec:design}.
+
+\subsection{Travis CI}
+Since this project was developed as an open source project it made sense to have a transparent and fully automated build process integrated into the project. For this reason \gls{continuous integration} in this project is handled by \gls{Travis} CI. It is a feature-rich service free to use for open source projects and has a large user base. The set up used in this project for testing and continuous integration will be explored further in Section \ref{sec:methodology}.
+
+\subsection{SonarQube}
+\label{sub:sonarqube-technologies}
+All code in this project should be held to a high standard. Since this project is open source it is important to ensure all code is bug free and follows current best practices. While this is important it also ensures more educational value for the writer.
+
+To achieve this an open source tool \gls{sonarqube} will be used \citep{Sonar2016}. This tool analyses the output of tests to give detailed information about test coverage and also scans the code to find possible bugs and \gls{code smell}s. It can also give useful information such as the current amount of \gls{technical debt}. SonarQube will be discussed in further detail in Section \ref{sub:code_quality}. The SonarQube repository for this project can be seen in Appendix \ref{appendix:sonarqube}.
+
+\subsection{Vagrant}
+\label{sub:vagrant}
+Vagrant is a technology to create configurable, reproducible and portable environments by using a set of programmable steps to produce a \gls{VM} which the developer can use to develop in \citep{Vagrant2017}. While this is just one use-case of Vagrant it is the main reason it was used in this project. 
+
+Since this project is open source it is useful to have one standardised VM within which all development can take place. This virtual machine can then be shared (either as its own separate repository or included in the main application repository). This is useful as it enables any developer who wishes to contribute to the project to instantly have the required environment. For instance, a developer can contribute to this project by using the \gls{Vagrantfile} supplied without requiring them to first install Docker or Node JS.

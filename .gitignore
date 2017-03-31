@@ -21,7 +21,14 @@
 *.mtc
 *.mtc1
 *.out
-*.bmpr
-*.synctex.gz
 .vagrant
+*.synctex.gz
+*.bmpr
+*.vpp.*
+*.vpp
+*.vux
+*.fdb_latexmk
+*.fls
+*.glsdefs
+*.nlo
 .atomignore

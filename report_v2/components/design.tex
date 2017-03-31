@@ -1,0 +1,142 @@
+% !TEX root = ../report_v2.tex
+\section{Design}
+\label{sec:design}
+The formal information modelling of the system remains unchanged from Report 1 and is available in Appendix \ref{appendix:models}. However in this section we will examine the system overview and all aspects of design will be discussed.
+
+\subsection{System Architecture Overview}
+To gain a better understanding of the system we will now look at it from a high-level architectural view. This will give the reader an idea of how all major components fit together.
+
+A diagram showing each major component of the application can be seen in Figure \ref{fig:architecture} below.
+
+\begin{figure}[!ht]
+\centering
+\includegraphics*[width=0.9\textwidth]{images/architecture}
+\caption{\em System Architecture}
+\label{fig:architecture}
+\end{figure}
+
+The whole application is bundled in a \gls{Docker container}. This is represented in Figure \ref{fig:architecture} and means the architecture will never vary across different systems.
+
+Most of the application's logic is in the Node JS server. It is the most important component as all others are built around it. It provides a mechanism to access the application through an Express API while also communicating with the Docker API using Dockerode as an external library. It also performs all communication with the database and front end application.
+
+It is important to note that the design of this application is deliberately modular. This means a low cohesion between each component of the application which in turn means that any one component can be swapped for any another which provides the same functionality. For instance, if in the future it was decided that a different front end framework was required then Angular could easily be replaced. Everything in Figure \ref{fig:architecture} outside of the dashed rectangle can be easily swapped for a different technology in this same fashion.
+
+The Node JS application `listens' on port 3000 within the \gls{Docker container} which in turn maps to port 3000 on the host it is running on. It also maps the Docker unix socket `/var/run/docker.socket' as a volume on the Docker container.  
+
+\subsection{Front End Design}
+As previously discussed the requirements for the front-end application are relatively low. They are:
+
+\begin{itemize}
+	\item The application should allow for dynamic content.
+	\item It should allow for re-use of code to keep the codebase small and manageable, i.e. `templating'.
+	\item As this project is open source it should be a relatively well known framework, meaning low barrier to entry for potential contributors.
+	\item The application would have a clean, minimalistic interface using a sidebar to navigate all available pages. 
+	\item It would be responsive - meaning it would scale well on smaller devices such as mobile phones and tablets.
+\end{itemize}
+
+Therefore it was decided Angular was the best choice as it satisfied all of these conditions.
+
+\subsubsection{Wireframes}
+With these design decisions in mind an initial batch of wireframes were created which would be used when writing the front end code. One of these, the containers view, can be seen below in Figure \ref{fig:containers_wireframe} while the rest are available in Appendix \ref{appendix:wireframes}.
+
+\begin{figure}[!ht]
+\centering
+\includegraphics*[width=0.9\textwidth]{wireframes/containers}
+\caption{\em Containers Mockup}
+\label{fig:containers_wireframe}
+\end{figure}
+
+\subsubsection{Mobile Web Application}
+Instead of creating a dedicated mobile application on a proprietary platform it was decided that a web application would be better. This is mainly because:
+
+\begin{itemize}
+	\item Since the application would also need to be installed it would not make sense to require the user to install another application just to manage the first one.
+	\item Not restricting users to certain devices was a major factor in deciding to create a web application as any user with a web browser can manage their \gls{Docker host}.
+\end{itemize} 
+
+\gls{Bootstrap} was therefore decided as the best method of delivering a fully functional mobile web application. Bootstrap gives the developer full flexibility in terms of choosing the arrangement of content on different sized devices. For example, on a large device the developer can decide to have a 2 column 2 row grid of items. If the size of the screen then shrinks to mobile-size it can rescale to a 1 column 4 row grid. To do this simply means adding \gls{CSS} classes to the \gls{HTML} code and then Bootstrap will handle the layout.
+
+\subsection{Enterprise Level Considerations}
+When developing any application that will potentially be used in a production environment it is important to consider this in the design phase. There are several headings under which careful consideration must be given to ensure the application performs as it should while also being usable.
+
+\paragraph{Scalability}
+On a system which will potentially be used my many different users at the same time, how it scales and adapts to an increase in usage is important. To ensure that any user has complete flexibility in this regard this application is distributed using a \gls{Docker image}, and therfore it can easily be used in a system which natively supports scaling such as Docker swarm or Kubernetes \citep{Kubernetes2017,DockerSwarm2017}.
+
+\paragraph{Performance}
+A number of previously mentioned technology choices significantly increase the performance of the application. 
+
+\begin{itemize}
+	\item Node JS - Node JS has been shown to have significant performance benefits due to its asynchronous non-blocking event-driven model \citep{NodePerformance2010}.
+	\item Docker - Since this application will run in a container it is designed to be lightweight. It will only contain the third party modules it absolutely needs and it should minimise the risk of memory issues on the host it is running on.
+\end{itemize}
+
+\paragraph{Security}
+To secure an application the Express endpoints will be secured using JSON web tokens (\gls{JWT}). The front end application will authenticate itself with the Node JS server and will then use the returned JWT token to access all Express endpoints. 
+
+\paragraph{Distribution}
+To make distribution a simple process it has already been described how \gls{Docker} will be the vehicle of choice. It makes downloading and running the application extremely easy for any developer who wishes to do so. Once the developer has Docker installed on their system all they need to do is run one command to download and begin using the application.
+
+\subsubsection{12 Factor Application}
+A recent methodology has emerged regarding to web applications and the development best practices associated with creating and deploying them. This methodology is known as `The Twelve-Factor App' and dictates the guidelines to follow for an application to be easily setup, portable and suitable for deployment on various architectures \citep{Wiggins2017}. We will now examine how each of these twelve factors influenced the design of this application.
+
+\paragraph{1. Codebase}\mbox{}\\
+\textit{`One codebase tracked in revision control, many deploys'}
+
+This application is tracked in a single \gls{git} repository. It is not a deployable application in the traditional sense as each developer must deploy their own version of this application.
+
+\paragraph{2. Dependencies}\mbox{}\\
+\textit{`Explicitly declare and isolate dependencies'}
+
+All external dependencies in this project such as NPM modules, \gls{CSS} files and external libraries are bundled within the application. The application can even be run without an internet connection and only external API calls will fail.
+
+\paragraph{3. Config}\mbox{}\\
+\textit{`Store config in the environment'}
+
+While there is very little config in this application it is isolated to a config file and is not hard-coded within the application.
+
+\paragraph{4. Backing Services}\mbox{}\\
+\textit{`Treat backing services as attached resources'}
+
+The only backing service within this application is the Nedb database and it is treated as a modular service which satisfies this factor.
+
+\paragraph{5. Build, Release, Run}\mbox{}\\
+\textit{`Strictly separate build and run stages'}
+
+As this application uses Docker as both a build and deployment vehicle there is a clear separation by default here. The image is built and the container is deployed and they are both separate entities.
+
+\paragraph{6. Processes}\mbox{}\\
+\textit{`Execute the app as one or more stateless processes'}
+
+Again Docker solves this problem as it completely isolates the environment and therefore the process.
+
+\paragraph{7. Port Binding}\mbox{}\\
+\textit{`Export services via port binding'}
+
+This whole application is exposed via a single port listening on the host.
+
+\paragraph{8. Concurrency}\mbox{}\\
+\textit{`Scale out via the process model'}
+
+This factor is not applicable to this application as the process to run this application is already a single unit and cannot be broken down any further. This factor deals with applications which may have multiple instances of themselves running across several hosts.
+
+\paragraph{9. Disposability}\mbox{}\\
+\textit{`Maximize robustness with fast startup and graceful shutdown'}
+
+Due to the ephemeral nature of \gls{Docker container}s this constraint is also satisfied. Containers can be stopped and removed and quickly started again without affecting the next instance's startup and shutdown procedures.
+
+\paragraph{10. Dev/Prod Parity}\mbox{}\\
+\textit{`Keep development, staging, and production as similar as possible'}
+
+This factor is implemented by using Vagrant as discussed in Section \ref{sub:vagrant} for the development environment to replicate the Docker engine environment. The \gls{continuous integration} server Travis is then used with the same Docker engine. As any user running the application will also be using the Docker engine it ensures the application will always have the same environment available to it.
+
+\paragraph{11. Logs}\mbox{}\\
+\textit{`Treat logs as event streams'}
+
+This application exports all application logs directly to the web application. This ensures they are always available to the user if required.
+
+\paragraph{12. Admin Processes}\mbox{}\\
+\textit{`Run admin/management tasks as one-off processes'}
+
+This application does not provide the facility to run any administrative tasks.
+
+We can see that by choosing to use Docker as a build and deployment vehicle many of these twelve factors have been automatically satisfied with minimal input from the developer.

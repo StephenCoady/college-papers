@@ -1,0 +1,74 @@
+\section{Project Overview}
+\subsection{Problem}
+\label{sub:problem}
+
+\gls{docker} is an \gls{open source} software solution to package any piece of software in a completely isolated runtime which contains everything the packaged software needs to run \citep{WhatDocker}. This isolated environment is called a \gls{container}. This project will deal with the management of these containers from their inception as images, to starting and stopping the containers, and managing the interactions they have with each other. This whole process is known as the \gls{lifecycle management} of containers.
+
+Currently, container \gls{lifecycle management} is predominantly achieved through the \gls{command line}. This is due to the fact that the people currently working with Docker are developers who are comfortable using the command line. This means that managing images, running containers and managing their interactions with each other can all be time-consuming tasks. One way in which this is aided is by the use of scripts. While this is useful, it does also mean that the user must be comfortable with the command line to manage the containers. However as the industry moves towards using containers \citep{Datadog2016} it will mean the need to cater for users who are not comfortable with the command line.
+
+Managing containers can quickly become a tedious and error-prone task when the number of containers starts to grow. In a production system it can mean provisioning and managing dozens of containers and their dependencies. This, coupled with the fact that the container must be managed not just at start up but over its complete lifecycle, means that the advantage of using containers can quickly be negated by their lifecycle management.
+
+\subsection{Industry Example}
+\label{sub:industry}
+As a real-life example, the Red Hat Mobile Application platform \citep{RedHat2016} is made up of between 20-25 \gls{docker image}s. In a development environment this translates to the same number of running containers to manage. While this is no small feat, it can be mitigated by things like scripts, \gls{Docker Compose} etc. However in a production environment the number of containers can quickly grow, depending on resiliency and load requirements. At this point it is now a much larger task to manage all of these containers. 
+
+Red Hat Mobile also employ a \gls{continuous integration}/\gls{continuos deployment} (CI/CD) model when it comes to their software. Whenever a pull request is opened for a component of their application, it triggers a CI build, which in turn (depending on whether it passes or not) can trigger a build of a \gls{docker image} related to this component. So essentially for each Docker image there may be many tagged versions of that image built and ready to be used. This process could be aided by a visual component to view and inspect these images.
+
+
+\subsection{Solution}
+With the aim of solving the problem described in Sections \ref{sub:problem} and \ref{sub:industry}, the overall goal is to provide a tool to aid with the management of a \gls{container}'s lifecycle. In other words, the end product of this project will aim to tie together the basic container and image controls to build one cohesive management unit. This unit will allow for a graphical information panel and console to carry out any tasks needed.
+
+It will aim to provide a means to remotely manage a server and orchestrate the containers and container images on that instance, therefore greatly reducing the overhead in management of that server.
+
+\subsection{Goals}
+\label{sub:goals}
+The core or primary goals can be broken up into functional and non-functional as follows:
+
+\subsubsection{Functional}
+
+\begin{itemize}
+  \item Image Manipulation/Control
+  \item Container Manipulation/Control
+  \item Remote Control of the application through an \gls{API}
+  \item View Running statistics of containers
+  \item Search Docker Hub/Private Registry 
+\end{itemize}
+\mbox{}\\
+These are the minimum goals which will solve the problem discussed in Section \ref{sub:problem}. Some stretch goals, which may prove too large to fit into the project are:
+\mbox{}\\
+\begin{itemize}
+  \item Mobile Application
+  \item Having the final application itself run within a container
+  \item Connecting to multiple servers running the application at once
+  \item CI/CD Integration
+\end{itemize}
+\mbox{}\\
+Although these goals are not deemed immediately important and potentially undeliverable it is still important to keep them on the backlog. This is due to the methodology the project will follow, which we will look at further in Section \ref{subs:agile}.
+
+\subsubsection{Non-Functional}
+
+\paragraph{Testing}\mbox{}\\
+As the time span of this project is relatively short it is important to keep the \gls{technical debt} at a minimum. To achieve this a third party tool called SonarQube will be used \citep{Sonar2016}. This tool will be used to constantly monitor the quality of the code in the project to ensure that it is of the highest possible quality. This is important for a number of reasons, mainly to reduce the previously mentioned technical debt but also essentially meaning the codebase can be easily understood and maintained by the community after the project has finished. 
+
+This project will also aim to deliver a product with extensive unit tests. It will follow the behavioural driven development (BDD) method which will ensure code is hardened and minimise the amount of bugs. This will also mean greater development speed as code will be re-usable with greater efficiency. This is discussed further in Section \ref{subs:support}.
+
+\paragraph{Security}\mbox{}\\
+The end product will also be secure. The \gls{docker daemon} needs to run on a host with root privileges, which can have disastrous effects for the host if not managed correctly. Since this application will effectively allow remote control of this daemon it is important that only a trusted user be allowed to use the application. 
+
+\paragraph{Scalability}\mbox{}\\
+When the application can run on a server and allow the containers on that server be controlled it is a very useful application. However, in industry it is rarely just one server housing the application. For this reason the end product of this project will need to scale \textit{with} the server it is managing. To achieve this the application will need to be able to communicate with several servers at once.
+
+\subsubsection{Deliverables}
+The deliverables of this project are as follows:
+
+\paragraph{Server-side Application}\mbox{}\\
+This is the main part of the application and will act as the controller of the Docker \gls{API}.
+
+\paragraph{Front-end Application}\mbox{}\\
+This will be the interface through which the user will communicate with the server application. It will be exposed through an API to allow for remote calls.
+
+\paragraph{Open Source Node Module}\mbox{}\\
+This project will produce a fully \gls{open source} node module, available for the wider-developer community to maintain and build upon if they so wish.
+
+\paragraph{Containerised Application}\mbox{}\\
+Although a stretch goal, a possible deliverable from this project would be to have the whole application running within a container. This would allow for rapid deployment of the application and would also be a huge learning outcome.

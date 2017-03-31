@@ -1,0 +1,73 @@
+\section{Investigation}
+
+\subsection{Methodology}
+\label{subs:agile}
+
+The methodology which this project will be carried out under is an important decision. It will have a significant impact on timelines, deliverables and overall product quality. Therefore which methodology to use should be given careful consideration. The guide by \citep{Manifesto2016} was used as reference when making this decision.
+
+The two to be considered are Agile and a more traditional approach named Waterfall. While both have strengths and weaknesses Agile was chosen for this project as it was deemed a better fit for the following reasons:
+
+\paragraph{Quality Testing} Testing is integrated into the development cycle, enabling the developer to continuously monitor the functionality and performance of the application. In Waterfall testing is not carried out until the very end when development is finished. This can lead to problems for a lone-developer as testing coverage and quality may not be as high. 
+
+\paragraph{Visibility} Agile provides a great environment to see how expectations are managed effectively. It provides a clear view into the project scope and the current track it is on. With Waterfall all expectations and deliverables need to be forecast before any development has begun. This can be difficult to do and can mean increased overhead of work.
+
+\paragraph{Risk Management} Incremental development cycles allow the developer to accurately assess any challenges early on and make it easier to respond and adapt. In Waterfall there is very little room for adapting to unforeseen challenges.
+
+\paragraph{Flexibility} Agile allows for change natively. Instead of setting a rigid time plan up front the timescale is set and each sprint allows for the requirements to change and even for more to emerge as development continues.
+
+Agile uses time-boxed units called sprints throughout the development cycle \citep{Agile2016}. These are short development cycles designed to give the developer achievable goals while also allowing for change at short intervals.
+
+While following the Agile methodology, this project will employ some Scrum techniques to better manage development. The complete process can be seen in Figure \ref{fig:agile}.
+
+\begin{figure}[!ht]
+\centering
+\includegraphics*[width=\textwidth]{images/scrum_process}
+\caption{\em Agile/Scrum Process}
+\label{fig:agile}
+\end{figure}
+
+\begin{itemize}
+	\item Backlog Grooming - There will be a planning session to initially scope the product backlog and to inform the total scope of the project. This will involve the product owner who will help shape the overall project direction by giving their priorities.
+	\item Backlog Refinement - Refining the backlog to break large development tasks into smaller tasks which will fit better in a sprint. This will also help to identify similar tasks which can be grouped together and reduce duplication.
+	\item Sprint Review - After a sprint is completed a sprint review will then be performed which will evaluate goals achieved versus goals planned and the backlog will then be re-prioritised accordingly.
+	\item Sprint Retrospective - A retrospective will then analyse sprint performance and help to highlight areas where improvement can be made. This will also enhance the accuracy of the following sprint.
+\end{itemize}
+
+\subsection{Continuous Integration}
+\label{subs:CI}
+\gls{continuous integration} is the act of continuously ensuring software is of a suitable standard to be integrated into the current software package. This will ensure that any changes made to the code base will receive immediate test-feedback \citep{Fowler2006}. Even though this application will not be built in a production environment having a continuous build cycle will ensure maximum quality code and also reduce the risk of a ``bug bottleneck'' further down the line.
+
+To achieve this, a complete integration pipeline will be built. This pipeline will consist of the following:
+
+\begin{itemize}
+	\item \gls{git} repository to house the code (stored remotely on \gls{github})
+	\item \gls{travis} CI build server to execute unit tests and carry out post-test tasks
+	\item \gls{sonarqube} Server to analyse and advise of improvement to code, based on best-practices
+	\item Docker Repository to build a container with the latest application bundled
+\end{itemize}
+
+This pipeline can be seen in Figure \ref{fig:CI} and will work as follows. When a git commit is made to the remote git repository a build will be automatically triggered on the associated \gls{travis} CI server which will then carry out all unit tests in an isolated environment. Travis will then inform of the results, and if all unit tests have passed will carry out a push to a remote SonarQube server which will analyse code. Once this is complete Travis will then build a Docker image of the application and push it to a public repository.
+
+\begin{figure}[!ht]
+\centering
+\includegraphics*[width=0.8\textwidth]{images/CI}
+\caption{\em Continuous Integration}
+\label{fig:CI}
+\end{figure}
+
+There are several advantages to this method of integration which are additional to those mentioned previously. These are:
+
+\begin{itemize}
+	\item The process is completely automated, meaning one git push is all that is required to completely build the application and make it ready for deployment.
+	\item Using SonarQube will mean that code quality does not drop at any iteration of development
+	\item Automatically releasing to DockerHub will also mean that the application is rapidly updated between software releases.
+\end{itemize} 
+
+\subsection{Existing Solutions}
+Currently several other projects exist which aim to provide the same solution as this one does. However there are subtle differences in either the feature set or implementation of these solutions which validates this project as a worthwhile undertaking. 
+
+\paragraph{Lack of Features}\mbox{}\\
+``UI For Docker'', is an open source project written in Golang \citep{UIRepo2016}. It shares the same basic feature set as this project however it does not allow for advanced controls such as starting a container from a Dockerfile or searching for new images to start containers from. Also, upon experimentation with UI For Docker the programs error handling and user feedback was not found to be satisfactory. As an example if renaming a container was attempted while it was still running the container would simply crash instead of telling the user it must be stopped first. While it is an excellent project this combined with the lack of the previously mentioned features means it is not powerful enough to solve the domain problem discussed in Section \ref{sub:problem}. 
+
+\paragraph{Cost}\mbox{}\\
+Docker themselves provide a \gls{lifecycle management} solution, however it comes as a monthly subscription \citep{Docker2016}. It is not currently available to run privately which makes the product rather restricted. While the subscription fee is relatively small it is still a barrier for smaller teams or single developers. Since this project aims to produce an open-source application it is catering for an opening in the market.
