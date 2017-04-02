@@ -77,7 +77,7 @@ To secure an application the Express endpoints will be secured using JSON web to
 To make distribution a simple process it has already been described how \gls{Docker} will be the vehicle of choice. It makes downloading and running the application extremely easy for any developer who wishes to do so. Once the developer has Docker installed on their system all they need to do is run one command to download and begin using the application.
 
 \subsubsection{12 Factor Application}
-A recent methodology has emerged regarding to web applications and the development best practices associated with creating and deploying them. This methodology is known as `The Twelve-Factor App' and dictates the guidelines to follow for an application to be easily setup, portable and suitable for deployment on various architectures \citep{Wiggins2017}. We will now examine how each of these twelve factors influenced the design of this application.
+A recent methodology has emerged regarding web applications and the development best practices associated with creating and deploying them. This methodology is known as `The Twelve-Factor App' and dictates the guidelines to follow for an application to be easily setup, portable and suitable for deployment on various architectures \citep{Wiggins2017}. We will now examine how each of these twelve factors influenced the design of this application.
 
 \paragraph{1. Codebase}\mbox{}\\
 \textit{`One codebase tracked in revision control, many deploys'}
@@ -127,7 +127,7 @@ Due to the ephemeral nature of \gls{Docker container}s this constraint is also s
 \paragraph{10. Dev/Prod Parity}\mbox{}\\
 \textit{`Keep development, staging, and production as similar as possible'}
 
-This factor is implemented by using Vagrant as discussed in Section \ref{sub:vagrant} for the development environment to replicate the Docker engine environment. The \gls{continuous integration} server Travis is then used with the same Docker engine. As any user running the application will also be using the Docker engine it ensures the application will always have the same environment available to it.
+This factor is implemented by using Vagrant as discussed in Section \ref{sub:vagrant} for the development environment to replicate the Docker engine environment. The \gls{ci} server Travis is then used with the same Docker engine. As any user running the application will also be using the Docker engine it ensures the application will always have the same environment available to it.
 
 \paragraph{11. Logs}\mbox{}\\
 \textit{`Treat logs as event streams'}

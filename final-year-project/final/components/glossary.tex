@@ -1,4 +1,11 @@
 % !TEX root = ../final_report.tex
+\newglossaryentry{sprint}
+{
+    name={Sprint},
+    text={sprint},
+    plural={sprints},
+    description={A short cycle of development - normally one or two weeks long. Allows for rapid change of development direction if project requirements change}
+}
 \newglossaryentry{HTML}
 {
     name={HTML},
@@ -52,6 +59,11 @@
     name={Docker container},
     text={Docker container},
     description={An isolated package which bundles everything required to run an application within a container. The application can then be run within this container without regard to the underlying architecture}
+}
+\newglossaryentry{Dockerfile}
+{
+    name={Dockerfile},
+    description={A template from which a Docker image can be built. Defined in plaintext and interpreted by the Docker Engine. Can define which commands should be run etc}
 }
 \newglossaryentry{REST}
 {
@@ -108,7 +120,8 @@
 }
 \newglossaryentry{staging server}
 {
-		name={staging server},
+		name={Staging Server},
+		text={staging server},
 		description={A computing unit exposed on the network which typically runs an incomplete or demo version of a piece of software. Generally used to show the in progress development to any product stakeholders}
 }
 \newglossaryentry{Docker daemon}
@@ -122,15 +135,16 @@
     text={lifecycle management},
 		description={The management of a container over its complete lifecycle, from its beginnings as an image to starting, stopping and restarting the container and managing the interactions it has with other containers on the system}
 }
-\newglossaryentry{continuous integration}
+\newglossaryentry{ci}
 {
-		name={Continuos Integration},
-    text={continuos integration},
+		name={Continuous Integration},
+    text={continuous integration},
 		description={The act of continuously merging newly created software with the current working version, validated by automatic build and testing tools allowing for early detection of faults}
 }
-\newglossaryentry{continuos deployment}
+\newglossaryentry{continuous deployment}
 {
-		name={continuos deployment},
+		name={Continuous Deployment},
+		text={continuous deployment},
 		description={The act of continuously deploying software which has passed acceptance tests to a live system}
 }
 \newglossaryentry{open source}

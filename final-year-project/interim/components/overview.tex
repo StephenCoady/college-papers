@@ -12,7 +12,7 @@ Managing containers can quickly become a tedious and error-prone task when the n
 \label{sub:industry}
 As a real-life example, the Red Hat Mobile Application platform \citep{RedHat2016} is made up of between 20-25 \gls{docker image}s. In a development environment this translates to the same number of running containers to manage. While this is no small feat, it can be mitigated by things like scripts, \gls{Docker Compose} etc. However in a production environment the number of containers can quickly grow, depending on resiliency and load requirements. At this point it is now a much larger task to manage all of these containers. 
 
-Red Hat Mobile also employ a \gls{continuous integration}/\gls{continuos deployment} (CI/CD) model when it comes to their software. Whenever a pull request is opened for a component of their application, it triggers a CI build, which in turn (depending on whether it passes or not) can trigger a build of a \gls{docker image} related to this component. So essentially for each Docker image there may be many tagged versions of that image built and ready to be used. This process could be aided by a visual component to view and inspect these images.
+Red Hat Mobile also employ a \gls{ci}/\gls{continuos deployment} (CI/CD) model when it comes to their software. Whenever a pull request is opened for a component of their application, it triggers a CI build, which in turn (depending on whether it passes or not) can trigger a build of a \gls{docker image} related to this component. So essentially for each Docker image there may be many tagged versions of that image built and ready to be used. This process could be aided by a visual component to view and inspect these images.
 
 
 \subsection{Solution}
