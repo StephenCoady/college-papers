@@ -1,9 +1,71 @@
 % !TEX root = ../final_report.tex
 \section{Summary}
 \label{sec:summary}
-
-\subsection{Reflection}
-
-\subsection{Project Direction}
+In this Section we will aim to dissect the project and examine its proposed deliverables and compare them to the components it actually delivered. This will determine the overall success of the project. We will also look at the direction of the project going forward in terms of the product backlog and the work which is still outstanding.
 
 \subsection{Review}
+At the beginning of the project all stakeholders decided on the core and stretch goals of the system - these would then form the initial requirements. This list was then broken down further and was the basis for the initial product backlog. This high-level list can be seen below in Figure \ref{fig:requirements}.
+
+\begin{figure}[!ht]
+\centering
+\includegraphics*[width=0.6\textwidth]{images/requirements}
+\caption{\em Initial Project Requirements}
+\label{fig:requirements}
+\end{figure}
+
+We can see that all core requirements were delivered and only one stretch goal was not delivered. However as this is now an open source project the tasks associated with this feature have been created and added to the product backlog.
+
+We will now look at the main three components this project has delivered. As the system is loosely coupled each component can be completely recycled in any other project or indeed be replaced within this project by a comparable component.
+
+\paragraph{Server Side Application}\mbox{}\\
+The server side of this application is a node module which communicates with the Docker API by using the third party module, Dockerode, previously mentioned in Section \ref{sec:design}.
+
+\paragraph{Independent API}\mbox{}\\
+The Express JS API has been designed to be independent of any server side or front end code. While it is run by the node module it is not constrained by it. An API written in any other language could easily be placed in front of the node module also. 
+
+\paragraph{Front End Application}\mbox{}\\
+The front end application written using Angular is probably the most weakly coupled component delivered. It is a web application which consumes API endpoints and could just as easily be written using another front end framework.
+
+\subsection{Learning Outcomes}
+The learning outcomes of this project can be categorised under technical and non-technical.
+
+\subsubsection{Technical}
+As a result of developing this application many technical skills were gained. These include:
+
+\begin{itemize}
+	\item Gained a deep understanding of container technologies, both on the command line and by using the APIs exposed by services such as Docker.
+	\item Learned how to use open source software effectively. i.e while using a package it may be necessary to git clone the software and run it locally. Once software has been run locally it makes it much easier to interact with the community by asking questions.
+	\item Developing an application which has some elements of all modern applications - i.e a server side component, a database, an API and a front end - has resulted in valuable experience of developing the `full-stack'.
+	\item Using current best practices by creating a fully-functional continuous integration and deployment pipeline has enforced strict coding practices which is invaluable when working as part of a multi-developer team.
+	\item Using code quality tools such as SonarQube has meant code quality is no longer an afterthought when developing applications. This ultimately means a better and more reliable software developer. 
+\end{itemize}
+
+\subsubsection{Non-Technical}
+\begin{itemize}
+	\item Working as part of an agile team, even as a lone developer, has meant increased awareness of the overall goal within a project and therefore a more focused method of development.
+	\item Working with a scrum master has also enforced the ideology of performance and code reviews, again contributing to a better overall development experience and therefore a higher quality end product.
+	\item Having input throughout the project from product owners Red Hat mobile has been instrumental to professional development. It has lead to a more focused and organised process. Therefore the quality of the end product has also increased exponentially as a result.
+	\item Communication skills have been greatly improved as a result of constant contact with both the product owner and scrum master.
+\end{itemize}
+
+\newpage
+\subsection{Project Direction}
+As this product was developed from the very beginning under the open source software ethos it is currently still being developed. The current direction can be categorised under the following headings.
+
+\subsubsection{Continued Development}
+Currently the product backlog is as follows:
+
+\begin{figure}[!ht]
+	\centering
+	\includegraphics*[width=0.8\textwidth]{images/final_backlog}
+	\caption{\em Current Backlog}
+	\label{fig:final_backlog}
+\end{figure}
+
+This backlog contains approximately two sprints. It will implement several features which will improve the overall usability of the application.
+
+\subsubsection{Encourage Developer Contributions}
+As Docker grows in popularity so too will the interest in peripheral tools and so this project may gain interest due to this. However, to raise its profile further things like posting on developer community message boards or using social media to attract developers may be viable.
+
+\subsubsection{Increase the Feature Set}
+While the current feature set is large it could be increased further to provide users with more power from the UI. The Docker remote API is extremely large, therefore the amount of possible actions is only limited by the functionality provided by this remote API.
