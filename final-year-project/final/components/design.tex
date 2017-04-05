@@ -17,7 +17,7 @@ A diagram showing each major component of the application can be seen in Figure 
 
 The whole application is bundled in a \gls{Docker container}. This is represented in Figure \ref{fig:architecture} and means the architecture will never vary across different systems.
 
-Most of the application's logic is in the Node JS server. It is the most important component as all others are built around it. It provides a mechanism to access the application through an Express API while also communicating with the Docker API using Dockerode as an external library. It also performs all communication with the database and front end application.
+Most of the application's logic is in the Node JS server. It is the most important component as all others are built around it. It provides a mechanism to access the application through an Express API while also communicating with the Docker API using Dockerode as an external library. It also performs all communication with the database and serves the front end application.
 
 It is important to note that the design of this application is deliberately modular. This means a low cohesion between each component of the application which in turn means that any one component can be swapped for any another which provides the same functionality. For instance, if in the future it was decided that a different front end framework was required then Angular could easily be replaced. Everything in Figure \ref{fig:architecture} outside of the dashed rectangle can be easily swapped for a different technology in this same fashion.
 
@@ -41,7 +41,7 @@ With these design decisions in mind an initial batch of wireframes were created 
 
 \begin{figure}[!ht]
 \centering
-\includegraphics*[width=0.9\textwidth]{wireframes/containers}
+\includegraphics*[width=0.8\textwidth]{wireframes/containers}
 \caption{\em Containers Mockup}
 \label{fig:containers_wireframe}
 \end{figure}
@@ -54,13 +54,13 @@ Instead of creating a dedicated mobile application on a proprietary platform it 
 	\item Not restricting users to certain devices was a major factor in deciding to create a web application as any user with a web browser can manage their \gls{Docker host}.
 \end{itemize} 
 
-\gls{Bootstrap} was therefore decided as the best method of delivering a fully functional mobile web application. Bootstrap gives the developer full flexibility in terms of choosing the arrangement of content on different sized devices. For example, on a large device the developer can decide to have a 2 column 2 row grid of items. If the size of the screen then shrinks to mobile-size it can rescale to a 1 column 4 row grid. To do this simply means adding \gls{CSS} classes to the \gls{HTML} code and then Bootstrap will handle the layout.
+\gls{Bootstrap} was therefore decided as the best method of delivering a fully functional mobile web application. Bootstrap gives the developer full flexibility in terms of choosing the arrangement of content on different sized devices. For example, on a large device the developer can decide to have a 2 column 2 row grid of items. If the size of the screen then shrinks to mobile-size it can rescale to a 1 column 4 row grid. To do this simply means adding \gls{CSS} classes to the \gls{HTML} code and then Bootstrap will reactively change the layout.
 
 \subsection{Enterprise Level Considerations}
-When developing any application that will potentially be used in a production environment it is important to consider this in the design phase. There are several headings under which careful consideration must be given to ensure the application performs as it should while also being usable.
+When developing any application that will potentially be used in a production environment it is important to consider the implications of this in the design phase. There are several headings under which careful consideration must be given to ensure the application performs as it should while also being usable.
 
 \paragraph{Scalability}
-On a system which will potentially be used my many different users at the same time, how it scales and adapts to an increase in usage is important. To ensure that any user has complete flexibility in this regard this application is distributed using a \gls{Docker image}, and therfore it can easily be used in a system which natively supports scaling such as Docker swarm or Kubernetes \citep{Kubernetes2017,DockerSwarm2017}.
+On a system which will potentially be used my many different users at the same time, how it scales and adapts to an increase in usage is important. To ensure that any user has complete flexibility in this regard this application is distributed using a \gls{Docker image}, and therfore it can easily be used in a system which natively supports scaling such as Docker swarm or Kubernetes \citep{DockerSwarm2017,Kubernetes2017}.
 
 \paragraph{Performance}
 A number of previously mentioned technology choices significantly increase the performance of the application. 

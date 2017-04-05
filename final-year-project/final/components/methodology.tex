@@ -17,7 +17,7 @@ Agile was chosen as the development methodology for this project for the followi
 
 \paragraph{Flexibility} Agile allows for change natively. Instead of setting a rigid time plan up front the timescale is set and each \gls{sprint} allows for the requirements to change and even for more to emerge as development continues.
 
-Agile uses time-boxed units called \gls{sprint}s throughout the development cycle \citep{Agile2016}. These are short development cycles designed to give the developer achievable goals while also allowing for change at short intervals.
+Agile uses time-boxed units called \glspl{sprint} throughout the development cycle \citep{Agile2016}. These are short development cycles designed to give the developer achievable goals while also allowing for change at short intervals.
 
 The Agile implementation used in this project will be discussed further in Section \ref{sec:implementation}.
 
@@ -153,7 +153,7 @@ As we will see in the next section SonarQube is embedded in the \gls{ci} pipelin
 
 \subsection{Continuous Integration/Deployment}
 \label{sub:ci_cd}
-In software development, \gls{ci} is the act of continuously ensuring software is of a suitable standard to be integrated into the current software package. This will ensure that any changes made to the code base will receive immediate test-feedback \citep{Fowler2006}. Even though this application was not built in a production environment having a continuous build cycle ensured maximum quality code and also reduced the risk of a ``bug bottleneck''. \Gls{continuous deployment} is the act of making an application available for use as soon as it has passed all tests contained in the integration section of the build pipeline.
+In software development, \gls{ci} is the act of continuously ensuring software is of a suitable standard to be integrated into the current software package. This will ensure that any changes made to the code base will receive immediate test-feedback \citep{Fowler2006}. Even though this application was not built in a production environment having a continuous build cycle ensured maximum quality code and also reduced the risk of a ``bug bottleneck''. \Gls{cd} is the act of making an application available for use as soon as it has passed all tests contained in the integration section of the build pipeline.
 
 For this project, a complete pipeline was built to facilitate a full continuous integration \& deployment environment build and release process. This pipeline consists of the following:
 
@@ -171,7 +171,7 @@ This pipeline can be seen in Figure \ref{fig:CICD} and will work as follows:
 	\item Git commit is made
 	\item Travis CI build is triggered which runs all tests and \gls{code coverage} reports
 	\item If successful a SonarQube push is triggered and the code is sent for evaluation
-	\item Once this is complete a Travis then builds a \gls{Docker image} from the newly passed code
+	\item Once this is complete Travis then builds a \gls{Docker image} from the newly passed code
 	\item This image is then pushed to the associated \gls{dockerhub} repository to be made public
 	\item Once the push is complete Travis then deploys the application (by running a container) on the \gls{staging server}.
 \end{itemize}
@@ -187,7 +187,7 @@ There are several advantages to this method of integration and deployment which 
 
 \begin{itemize}
 	\item The process is completely automated, meaning one git push is all that is required to completely build the application and make it ready for deployment.
-	\item Using SonarQube will mean that code quality does not drop at any iteration of development
+	\item Using SonarQube as part of the integration pipeline means that code quality does not drop at any iteration of development
 	\item Automatically releasing to DockerHub will also mean that the application is rapidly updated between software releases.
 	\item Staging the application provides immediate feedback for anybody wishing to evaluate the current iteration of the project and whether or not it has met the requirements for the sprint.
 \end{itemize} 
