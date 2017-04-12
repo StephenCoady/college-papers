@@ -7,7 +7,7 @@
 \usepackage{caption}
 \usepackage{natbib}
 \usepackage[toc,page]{appendix}
-\usepackage[a4paper, total={6in, 8in}]{geometry}
+\usepackage[a4paper, total={6in, 8in}, top=2.54cm, bottom=2.54cm]{geometry}
 \usepackage[explicit]{titlesec}
 \usepackage{setspace} 
 \usepackage[T1]{fontenc}
@@ -112,7 +112,14 @@
 \include{components/discussion}
 
 \newpage
+\include{components/conclusion}
+
+\newpage
 \bibliography{components/references}
+
+\newpage
+\include{components/appendix}
+
 
 
 \end{document}

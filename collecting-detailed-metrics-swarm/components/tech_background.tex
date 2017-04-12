@@ -1,5 +1,6 @@
 % !TEX root = ../paper.tex
 \section{Technology Background}
+\label{sec:tech}
 Since the aim of this paper is to implement a monitoring system which is not tied to any one vendor such as Amazon Web Services or Microsoft Azure it will aim to use only open source and community driven software to deliver this solution. This will mean that all findings should be easily reproducible and applicable to any cloud provider.
 
 \subsection{Containers}
@@ -36,6 +37,9 @@ cAdvisor has native support for many different types of containers, including Do
 
 While it does provide a web app which can graphically display the information its real power lies in the fact that it also exposes a remote API which can be scraped for the metrics. We will take advantage of this fact in Section \ref{sec:practical}.
 
+\subsection{Alert Manager}
+Alert manager is a tool developed by Prometheus to monitor and create alerts based on metrics collected by Prometheus database \citep{prometheus2017}. It can be used in a Docker container to push alerts via email, slack, hipchat and most other popular forms of instant communication. It aims to provide an industry grade alert mechanism as open source.
+
 \subsection{Infrastructure Overview}
 Now that we have seen each technology individually it is not difficult to see how each will fit together to provide a cohesive and modular application which will monitor both our Docker host and the containers which it is running. We can see a diagram giving a visual guide in Figure \ref{fig:infrastructure} below.
 
@@ -52,3 +56,6 @@ Now that we have seen each technology individually it is not difficult to see ho
 	\item Both cAdvisor and the node exporter will be scraped by Prometheus which will in turn store these metrics for later usage
 	\item Grafana will then be configured to periodically poll Prometheus and display the metrics visually.
 \end{itemize}
+
+\subsection{Ansible}
+Ansible is a tool which can be used to provision and manipulate infrastructure such as AWS. By using modular roles to carry out a single task and then using these roles in a pre-defined order we can easily carry out what would typically be large and difficult tasks \citep{Ansible2017}. All infrastructure in this paper will be set up using Ansible and any configuration or modification will also be performed using Ansible.

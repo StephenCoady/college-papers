@@ -59,6 +59,13 @@
    captionpos=b
 }
 \usepackage{hyperref}
+\newcommand{\titledate}[2][6in]{%
+  \noindent%
+  \begin{tabular}{@{}p{#1}@{}}
+    \begin{flushright}ID: 20064122\end{flushright}\\ \hline \\[-.75\normalbaselineskip]
+    Date: April 2017
+  \end{tabular} \hspace{1in}
+}
 \newcommand\myshade{85}
 \colorlet{mylinkcolor}{NavyBlue}
 \colorlet{mycitecolor}{YellowOrange}
@@ -84,13 +91,10 @@
 \begin{center}
 \begin{minipage}{\textwidth}
   
-{\scshape\large \textbf{Plagiarism Declaration}\par}
-\vspace{1cm}
-Unless otherwise stated all the work contained in this report is my own.  I also state that I have not submitted this work for any other course of study leading to an academic award.
-\end{minipage}
-\end{center}
-\vfill % equivalent to \vspace{\fill}
-\clearpage
+
+\include{components/declaration}
+
+\include{components/acknowledgements}
 
 \tableofcontents
 

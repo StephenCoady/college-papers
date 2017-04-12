@@ -192,6 +192,71 @@ There are several advantages to this method of integration and deployment which 
 	\item Staging the application provides immediate feedback for anybody wishing to evaluate the current iteration of the project and whether or not it has met the requirements for the sprint.
 \end{itemize} 
 
+\subsection{12 Factor Application}
+A recent methodology has emerged regarding web applications and the development best practices associated with creating and deploying them. This methodology is known as `The Twelve-Factor App' and dictates the guidelines to follow for an application to be easily setup, portable and suitable for deployment on various architectures \citep{Wiggins2017}. We will now examine each of these twelve factors and how they were included in the development of this application.
+
+\paragraph{1. Codebase}\mbox{}\\
+\textit{`One codebase tracked in revision control, many deploys'}
+
+This application is tracked in a single \gls{git} repository. It is not a deployable application in the traditional sense as each developer must deploy their own version of this application.
+
+\paragraph{2. Dependencies}\mbox{}\\
+\textit{`Explicitly declare and isolate dependencies'}
+
+All external dependencies in this project such as NPM modules, \gls{CSS} files and external libraries are bundled within the application. The application can even be run without an internet connection and only external API calls will fail.
+
+\paragraph{3. Config}\mbox{}\\
+\textit{`Store config in the environment'}
+
+While there is very little config in this application it is isolated to a config file and is not hard-coded within the application.
+
+\paragraph{4. Backing Services}\mbox{}\\
+\textit{`Treat backing services as attached resources'}
+
+The only backing service within this application is the Nedb database and it is treated as a modular service which satisfies this factor.
+
+\paragraph{5. Build, Release, Run}\mbox{}\\
+\textit{`Strictly separate build and run stages'}
+
+As this application uses Docker as both a build and deployment vehicle there is a clear separation by default here. The image is built and the container is deployed and they are both separate entities.
+
+\paragraph{6. Processes}\mbox{}\\
+\textit{`Execute the app as one or more stateless processes'}
+
+Again Docker solves this problem as it completely isolates the environment and therefore the process.
+
+\paragraph{7. Port Binding}\mbox{}\\
+\textit{`Export services via port binding'}
+
+This whole application is exposed via a single port listening on the host.
+
+\paragraph{8. Concurrency}\mbox{}\\
+\textit{`Scale out via the process model'}
+
+This factor is not applicable to this application as the process to run this application is already a single unit and cannot be broken down any further. This factor deals with applications which may have multiple instances of themselves running across several hosts.
+
+\paragraph{9. Disposability}\mbox{}\\
+\textit{`Maximize robustness with fast startup and graceful shutdown'}
+
+Due to the ephemeral nature of \gls{Docker container}s this constraint is also satisfied. Containers can be stopped and removed and quickly started again without affecting the next instance's startup and shutdown procedures.
+
+\paragraph{10. Dev/Prod Parity}\mbox{}\\
+\textit{`Keep development, staging, and production as similar as possible'}
+
+This factor is implemented by using Vagrant as discussed in Section \ref{sub:vagrant} for the development environment to replicate the Docker engine environment. The \gls{ci} server Travis is then used with the same Docker engine. As any user running the application will also be using the Docker engine it ensures the application will always have the same environment available to it.
+
+\paragraph{11. Logs}\mbox{}\\
+\textit{`Treat logs as event streams'}
+
+This application exports all application logs directly to the web application. This ensures they are always available to the user if required.
+
+\paragraph{12. Admin Processes}\mbox{}\\
+\textit{`Run admin/management tasks as one-off processes'}
+
+This application does not provide the facility to run any administrative tasks.
+
+We can see that by choosing to use Docker as a build and deployment vehicle many of these twelve factors have been automatically satisfied with minimal input from the developer.
+
 \subsection{Documentation}
 This section will discuss the tools used to document the entire process of building this application and also the document which accompanies it.
 \subsubsection{User Documentation}

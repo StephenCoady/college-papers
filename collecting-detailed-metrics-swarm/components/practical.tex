@@ -1,3 +1,204 @@
 % !TEX root = ../paper.tex
 \section{Practical}
 \label{sec:practical}
+
+\subsection{Creating the Infrastructure}
+Since all infrastructure in this project will be created using Ansible we must first create the Docker Swarm which will be monitoring. While this is not the core objective of this research paper it is important to highlight how it is done as all tasks are automated. To do this a playbook which carries out the following tasks is required: 
+
+\begin{itemize}
+	\item Provision all necessary EC2 infrastructure.
+	\item Install Docker.
+	\item Create a Swarm and assign all necessary roles within the Swarm.
+	\item Start our applications on the Swarm. These are purely for testing and perform no real logic.
+\end{itemize}
+
+By running this playbook we can easily have a large Docker Swarm running ready to be monitored. We will now explore in detail the process of starting the monitoring applications we require.
+
+\subsection{Starting the Monitoring Applications}
+
+The playbook discussed in the previous section is also responsible for starting the monitoring applications on each Swarm host. As discussed in Section \ref{sec:tech} the Prometheus exporter and cAdvisor Docker containers will be started on each host. An overview of what each Swarm host will resemble once this playbook has been run can be seen in Figure \ref{fig:swarm-hosts}.
+
+\begin{figure}[!h]
+\centering
+\includegraphics*[width=0.6\textwidth]{components/images/swarm-hosts}
+\caption{\em Swarm Host Overview}
+\label{fig:swarm-hosts}
+\end{figure}
+
+To start both of these applications on each Swarm host the playbook performs the following steps:
+
+\paragraph{Git Clone}\mbox{}\\
+The playbook first clones the git repository available in Appendix \ref{appendix:ansible-repo} to each host. Storing the required code on Github is an easy way to share the code to each instance as required instead of using Ansible to push the code. This Ansible task can be seen below in Figure \ref{fig:git-clone}.
+
+\begin{figure}[!h]
+\centering
+\includegraphics*[width=0.7\textwidth]{components/images/git-clone}
+\caption{\em Using Ansible to Git Clone}
+\label{fig:git-clone}
+\end{figure}
+
+\paragraph{Starting the Applications}\mbox{}\\
+Using Docker compose we can easily start multiple Docker containers at once. To do this, we use the docker-compose.yml file found in the repository previously mentioned. This Docker compose file can be seen below in Figure \ref{fig:exporters-compose}.
+
+\begin{figure}[!h]
+\centering
+\includegraphics*[width=0.7\textwidth]{components/images/exporters-compose}
+\caption{\em Creating Exporters using Docker Compose}
+\label{fig:exporters-compose}
+\end{figure}
+
+We can see in Figure \ref{fig:exporters-compose} above that both containers will then be started on each host and will expose their services over their respective default ports.
+
+Now that each host has been provisioned and has the monitoring applications running we can now use these applications and display their metrics in a central location.
+
+\subsection{Creating the Monitoring Hub}
+\label{sub:hub}
+We can now use another Ansible playbook which will create our monitoring hub and automatically configure it. To do this the playbook first follows the same steps as the previous playbook, by provisioning the instance which will be used. 
+
+It should be noted that in a production system this monitoring hub would be distributed and not hosted on one AWS instance. This could be easily achieved by using different AWS availability zones.
+
+This playbook first creates the instance and then installs Docker. Docker will again be used here to run the various containers needed for the monitoring hub. It then also clones the git repository from Appendix \ref{appendix:ansible-repo}.
+
+\paragraph{Dynamically Scraping the Swarm Hosts}\mbox{}\\
+Once the instance has been created we can begin to put configuration in place for the containers which will eventually be run on it. The first of these is the prometheus config file. We will use a feature of Ansible called templates to dynamically populate this file with the endpoints which will need to be scraped for data.
+
+We can see in Figure \ref{fig:prometheus-config} below what this template file looks like before the dynamic hosts have been added.
+
+\begin{figure}[!h]
+\centering
+\includegraphics*[width=0.7\textwidth]{components/images/prometheus-config}
+\caption{\em Example Prometheus Configuration}
+\label{fig:prometheus-config}
+\end{figure}
+
+Once all hosts have been added the file then resembles Figure \ref{fig:prometheus-after}. Each of these target endpoints refers to one single Swarm Host.
+
+\begin{figure}[!h]
+\centering
+\includegraphics*[width=0.7\textwidth]{components/images/prometheus-after}
+\caption{\em Final Prometheus Configuration}
+\label{fig:prometheus-after}
+\end{figure}
+
+A similar process is followed for the cAdvisor scraping which will need to be performed - the only difference is that the port scraped will be 8080. 
+
+\paragraph{Updating the Hub's Config}\mbox{}\\
+
+Once all templates have been dynamically populated with hosts they are then copied to the monitoring hub instance by Ansible. This task can be seen below in Figure \ref{fig:copy-prometheus}.
+
+\begin{figure}[!h]
+\centering
+\includegraphics*[width=0.8\textwidth]{components/images/copy-prometheus}
+\caption{\em Ansible Copying Prometheus Config to the Hub}
+\label{fig:copy-prometheus}
+\end{figure}
+
+\paragraph{Starting the Monitoring Hub}\mbox{}\\
+
+Now that Prometheus has been given the endpoints to scrape we can start the 3 necessary containers which will combine to provide a full monitoring solution. To recap, these containers are:
+
+\paragraph{Grafana} This will be used to display the information in a web application. Contains full user login functionality and multiple plugins. Natively compatible with Prometheus.
+
+\paragraph{Prometheus} The database which will store all collected metrics. As soon as the Prometheus container is started it starts collecting metrics from the endpoints discussed in the previous section.
+
+\paragraph{AlertManager} Will be used to push alerts upon certain events triggering. Has native support for Prometheus and so can be used to monitor any metrics collected by Prometheus.
+
+All of these containers are started by Ansible on the Monitoring Hub using the Docker compose file shown below in Figure \ref{fig:combined}.
+
+\begin{figure}[!ht]
+\centering
+\makebox[\textwidth]{\includegraphics*[width=1.3\textwidth]{components/images/combined}}
+\caption{\em Docker Compose File}
+\label{fig:combined}
+\end{figure}
+
+\subsection{Configuring the Monitoring Hub}
+Now that we have started all monitoring applications on the monitoring hub we can log into Grafana and begin setting up the dashboards. This is a one time process where we are essentially telling Grafana about the local Prometheus Docker container and where it can be accessed.
+
+Once the Grafana container is running we can browse to the instance's address as seen below in Figure \ref{fig:grafana}.
+
+\begin{figure}[!h]
+\centering
+\includegraphics*[width=0.6\textwidth]{components/images/grafana}
+\caption{\em Grafana Login Page}
+\label{fig:grafana}
+\end{figure}
+
+The next step is informing Grafana where it can find a datasource. This is easily done by using Grafana's quick start menu. This can be seen below in Figure \ref{fig:add-source}.
+
+\begin{figure}[!h]
+\centering
+\includegraphics*[width=0.6\textwidth]{components/images/add-source}
+\caption{\em Pointing Grafana at Prometheus}
+\label{fig:add-source}
+\end{figure}
+
+Notice how we use the Docker networking name for the prometheus container here. This could easily be localhost or the instance address but using the Docker network enforces uniformity.
+
+After completing this step Grafana now has access to all metrics stored by Prometheus. Since Prometheus was started with a config which pointed to all instances in the Docker Swarm it is collecting metrics in the background, even if we are not currently displaying them. To display the metrics we must now create Grafana dashboards. This is a JSON file which defines all metric expressions to be displayed and also the format in which they will be displayed. A snippet of one of these files can be seen below in Figure \ref{fig:json-template}. This particular snippet creates a machine cpu cores box on the dashboard which is created from the sum of all machine cores stored in Prometheus.
+
+\begin{figure}[!h]
+\centering
+\includegraphics*[width=0.6\textwidth]{components/images/json-template}
+\caption{\em JSON Template for a Dashboard}
+\label{fig:json-template}
+\end{figure}
+
+Once all relevant dashboards have been created using separate JSON templates we can browse to Grafana's dashboards and view the metrics we have decided to display. In Figure \ref{fig:docker-host} we can see metrics which relate to all hosts in the Docker Swarm.
+
+\begin{figure}[!h]
+\centering
+\includegraphics*[width=\textwidth]{components/images/docker-host}
+\caption{\em Docker Swarm Host Monitoring}
+\label{fig:docker-host}
+\end{figure}
+
+We can also view metrics collected on each Docker container running in our Swarm. This can be seen in Figure \ref{fig:docker-containers}.
+
+\begin{figure}[!h]
+\centering
+\includegraphics*[width=\textwidth]{components/images/docker-containers}
+\caption{\em Docker Swarm Container Monitoring}
+\label{fig:docker-containers}
+\end{figure}
+
+If it was required we could also create metrics on each host in the swarm individually. However for the purposes of this report it is sufficient to monitor the Swarm as a whole.
+
+\subsection{Creating Alerts}
+Now that we are monitoring metrics from each host in the Swarm we can use Alert Manager to create alerts based on these metrics. Some sample alerts created for this report are:
+
+\paragraph{Container Down}\mbox{}\\
+In Figure \ref{fig:visualiser-down} we can see that if the container with the `visualiser' is down for more than ten seconds then an alert will be triggered. 
+\begin{figure}[!h]
+	\centering
+	\includegraphics*[width=0.8\textwidth]{components/images/visualiser-down}
+	\caption{\em Creating Container Alerts}
+	\label{fig:visualiser-down}
+\end{figure}
+
+\paragraph{Host High Cpu Usage}\mbox{}\\
+We can see in Figure \ref{fig:host-alert} that if the combined CPU rate of all hosts is above 30 then an alert is triggered. 
+\begin{figure}[!h]
+	\centering
+	\includegraphics*[width=\textwidth]{components/images/host-alert}
+	\caption{\em Creating Alerts Related to Swarm Hosts}
+	\label{fig:host-alert}
+\end{figure}
+
+Alert Manager can then be configured to use many different communication channels to send these alerts. For the purposes of this report Slack was chosen. To set this up the following config file is loaded in Alert Manager.
+
+\begin{figure}[!h]
+	\centering
+	\includegraphics*[width=0.7\textwidth]{components/images/slack-config}
+	\caption{\em Configuring Alert Manager to use Slack}
+	\label{fig:slack-config}
+\end{figure}
+
+Which can then be used to trigger alerts in Slack like those seen in Figure \ref{fig:slack}.
+
+\begin{figure}[!h]
+	\centering
+	\includegraphics*[width=0.7\textwidth]{components/images/slack}
+	\caption{\em Slack Alerts}
+	\label{fig:slack}
+\end{figure}

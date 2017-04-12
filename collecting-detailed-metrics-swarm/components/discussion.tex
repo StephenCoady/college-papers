@@ -1,2 +1,35 @@
 % !TEX root = ../paper.tex
 \section{Discussion}
+\label{sec:discussion}
+
+\subsection{Problems Encountered}
+Although the monitoring hub was set up successfully and provided a complete view of the Docker Swarm there are several problems with the technology stack. Some of the technologies discussed did not work as one would reasonably expect. While this was not a huge problem for this paper it might make them unsuitable for large enterprise applications. Some examples are:
+
+\subsubsection{Authentication}
+While Grafana supports authentication the same cannot be said for Prometheus or Alert Manager. This means that the services expose themselves by default to the outside world. While this might be a problem easily solved by using reverse proxies or private networks it is not ideal to have a service with no native support for security. This alone may be enough to stop some businesses using these services.
+
+cAdvisor and the Prometheus exporter modules do not support authentication meaning their endpoints are also open to the public network. Again this could be mitigated but it may be enough to mean the applications are not yet suitable for production.
+
+\subsubsection{Complexity}
+While Grafana is an extremely powerful tool it also has a steep learning curve. The interface is designed to be accessible by using JSON to configure dashboards but this can be off putting when paired with large data sets. For example, while running this project cAdvisor and the Prometheus exporter modules both created over 150 different metrics in the Prometheus database. While this was a non-trivial amount it is still small compared to what a large enterprise-level application would produce. 
+
+\subsubsection{Alerts Reliability}
+While testing the Alert Manager container it was found that alerts did not always fire as expected. After some investigation some possible causes were identified:
+
+\paragraph{Instance Size}\mbox{}\\
+Since this project used Amazon's t2.micro instances the memory available on each instance was relatively low. This was necessary as the ansible playbook was often tested by creating upwards of twelve instances at a time. After some investigation of processes running on each instance it was found that running any applications which required high CPU usage alongside the monitoring stack caused unexpected peaks and troughs in usage in general. It is still unclear as to whether this was caused by using low-powered instances or not.
+
+\paragraph{Alert Manager Configuration}\mbox{}\\
+During the course of this project it was found that Alert manager can be temperamental during configuration. Any small mistake in the file would result in absolutely no alerts at all being fired. This would make monitoring large systems with huge configuration files extremely difficult. 
+
+\subsection{Alternatives}
+While there are several alternative solutions to those proposed in this report there are some differences.
+
+\paragraph{Price}\mbox{}\\
+Options like using AWS ECS to orchestrate Docker containers and CloudWatch to create alerts can be costly. If a large application needs to be dispersed across a large infrastructure the cost can quickly add up. 
+
+\paragraph{Flexibility}\mbox{}\\
+Using proprietary software such as AWS means that the developer/system admin does not have the same level of control over the services they run. For example by creating our own infrastructure we have made it easy to swap any component for an equivalent one. If for instance we needed to remove Prometheus and use a different Database we can do so easily. If we used a large provider like AWS we would have to use whatever metric collection solution they provide with CloudWatch.
+
+\paragraph{Open Source}\mbox{}\\
+One of the biggest advantages of using the proposed stack is that everything is open source. If this solution was being used in a large company which needed to change any of the products to suit their own needs then they could do this.

@@ -1,0 +1,19 @@
+% !TEX root = ../paper.tex
+\section{Conclusion}
+
+\subsection{Further Improvements}
+While we have shown a high level monitoring solution created from scratch using open source software there are several improvements which would bring great value to the project as a whole.
+
+\subsubsection{Authentication}
+As mentioned in section \ref{sec:discussion} the introduction of authentication at all endpoints increase the value of the project. 
+
+\subsubsection{Network Monitoring}
+Perhaps by using another third party tool such as Conntrack to monitor all network interactions of the system \citep{Conntrack2017}. This would provide an even more detailed overview of the infrastructure and the applications running on it.
+
+\subsubsection{Granular Monitoring}
+Currently the monitoring hub displays metrics for the infrastructure as a whole and also high level metrics for each container running on this infrastructure. To improve this further the dashboard templates could be manipulated further to include the ability to monitor a specific host, container or group of containers. This would allow the system administrator to manage containers based on the application they are running. For instance if a Swarm is running several different applications across dozens of different services then it would make sense to be able to monitor each application and its respective services individually.
+
+\subsection{Closing Statement}
+In summary we have seen how multiple open source tools can be used together to monitor a large application running in a Docker Swarm. We have seen how these tools can also be created and deployed using automation tools such as Ansible. With the current shift in developer responsibilities this automation places more power in the developer's hands while also decreasing the work required to achieve results.
+
+We have shown how these tools can be used to provide alternatives to paid options. This means that monitoring no longer needs a large financial outlay.
