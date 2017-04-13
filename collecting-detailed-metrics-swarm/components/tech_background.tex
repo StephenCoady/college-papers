@@ -1,10 +1,10 @@
 % !TEX root = ../paper.tex
 \section{Technology Background}
 \label{sec:tech}
-Since the aim of this paper is to implement a monitoring system which is not tied to any one vendor such as Amazon Web Services or Microsoft Azure it will aim to use only open source and community driven software to deliver this solution. This will mean that all findings should be easily reproducible and applicable to any cloud provider.
+Since the aim of this paper is to implement a monitoring system which is not tied to any one vendor such as Amazon Web Services or Microsoft Azure it will aim to use only open source and community driven software to deliver this solution. This will mean that all findings should be easily reproducible on and applicable to any cloud provider.
 
 \subsection{Containers}
-A container uses Linux abstraction techniques such as namespaces and cgroups to isolate and `contain' a software process from those running on the same host. It does this limit resources available to that process while also making it much more manageable for the user. The container itself does not know that it is a container but instead is presented with a local resource and made to believe it has access to a global resource \citep{Kerrisk2013}. Containers and their workings are outside the scope of this paper, however it is important to understand that they are simply a process running on a host.
+A container uses Linux abstraction techniques such as namespaces and cgroups to isolate and `contain' a software process from those running on the same host. It does this by limiting resources available to that process while also making it much more manageable for the user. The container itself does not know that it is a container but instead is presented with a local resource and made to believe it has access to a global resource \citep{Kerrisk2013}. Containers and their workings are outside the scope of this paper, however it is important to understand that they are simply a process running on a host.
 
 \subsection{Docker}
 Docker is a piece of software which manages the orchestration of containers. It allows the user to tell Docker what they would like Docker to do and it leaves the underlying Linux translations to the Docker engine \citep{docker2016}. There are many alternatives such as Kubernetes and Amazon's Container Service, both of which can also manage Docker containers if the user wishes.
