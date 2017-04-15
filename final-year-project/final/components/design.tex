@@ -21,23 +21,25 @@ Most of the application's logic is in the Node JS server. It is the most importa
 
 It is important to note that the design of this application is deliberately modular. This means a low cohesion between each component of the application which in turn means that any one component can be swapped for any another which provides the same functionality. For instance, if in the future it was decided that a different front end framework was required then Angular could easily be replaced. Everything in Figure \ref{fig:architecture} outside of the dashed rectangle can be easily swapped for a different technology in this same fashion.
 
-The Node JS application `listens' on port 3000 within the \gls{Docker container} which in turn maps to port 3000 on the host it is running on. It also maps the Docker unix socket `/var/run/docker.socket' as a volume on the Docker container.  
+The Node JS application `listens' on port 3000 within the \gls{Docker container} which in turn maps to port 3000 on the host it is running on. This is completely configurable by the user and any available port can instead be chosen. It also maps the Docker unix socket `/var/run/docker.socket' as a volume on the Docker container.  
 
 \subsection{Front End Design}
+\label{sub:front-end}
 As previously discussed the requirements for the front-end application are relatively low. They are:
 
 \begin{itemize}
 	\item The application should allow for dynamic content.
 	\item It should allow for re-use of code to keep the codebase small and manageable, i.e. `templating'.
 	\item As this project is open source it should be a relatively well known framework, meaning low barrier to entry for potential contributors.
-	\item The application would have a clean, minimalistic interface using a sidebar to navigate all available pages. 
+	\item The application should have a clean, minimalistic interface using a sidebar to navigate all available pages. 
+	\item It should be intuitive to use, with minimal need for documentation.
 	\item It would be responsive - meaning it would scale well on smaller devices such as mobile phones and tablets.
 \end{itemize}
 
 Therefore it was decided Angular was the best choice as it satisfied all of these conditions.
 
 \subsubsection{Wireframes}
-With these design decisions in mind an initial batch of wireframes were created which would be used when writing the front end code. One of these, the containers view, can be seen below in Figure \ref{fig:containers_wireframe} while the rest are available in Appendix \ref{appendix:wireframes}.
+With these design decisions in mind an initial batch of wireframes were created which would be used when writing the front end code. These wireframes were used to elicit feedback from Red Hat and from my supervisor. That feedback focused on usability as well as good user interface practices which helped focus the development of the front end ensuring it stayed simple and intuitive. Several iterations of wireframe development was conducted and the final version included. One of these, the containers view, can be seen below in Figure \ref{fig:containers_wireframe} while the rest are available in Appendix \ref{appendix:wireframes}.
 
 \begin{figure}[!ht]
 \centering
@@ -47,7 +49,7 @@ With these design decisions in mind an initial batch of wireframes were created 
 \end{figure}
 
 \subsubsection{Mobile Web Application}
-Instead of creating a dedicated mobile application on a proprietary platform it was decided that a web application would be better. This is mainly because:
+The idea of creating a standalone dedicated mobile application was de-scoped early in semester one as it was decided that a web application would be a better fit for the following reasons:
 
 \begin{itemize}
 	\item Since the application would also need to be installed it would not make sense to require the user to install another application just to manage the first one.
@@ -66,12 +68,14 @@ On a system which will potentially be used my many different users at the same t
 A number of previously mentioned technology choices significantly increase the performance of the application. 
 
 \begin{itemize}
-	\item Node JS - Node JS has been shown to have significant performance benefits due to its asynchronous non-blocking event-driven model \citep{NodePerformance2010}.
+	\item Node JS - Node JS has been shown to have significant performance benefits due to its asynchronous non-blocking event-driven model \citep{NodePerformance2010}. It also has excellent scalability and so is a good fit for this project \citep{Griffin2011}.
 	\item Docker - Since this application will run in a container it is designed to be lightweight. It will only contain the third party modules it absolutely needs and it should minimise the risk of memory issues on the host it is running on.
 \end{itemize}
 
 \paragraph{Security}
 To secure an application the Express endpoints will be secured using JSON web tokens (\gls{JWT}). The front end application will authenticate itself with the Node JS server and will then use the returned JWT token to access all Express endpoints. 
+
+It was also identified that a security method such as single sign on, where users gain access to multiple services using a single username/password combination, might be beneficial to this project. This was captured in the product backlog but it was decided that it was out of scope for this project.
 
 \paragraph{Distribution}
 To make distribution a simple process it has already been described how \gls{Docker} will be the vehicle of choice. It makes downloading and running the application extremely easy for any developer who wishes to do so. Once the developer has Docker installed on their system all they need to do is run one command to download and begin using the application.

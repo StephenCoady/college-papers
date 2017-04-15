@@ -3,21 +3,7 @@
 \label{sec:implementation}
 This section will detail all technical work carried out in this project. It will use the project \glspl{sprint} to build a timeline for the reader. 
 
-While following the Agile methodology, this project also employs some Scrum techniques to better manage development. The complete process can be seen in Figure \ref{fig:agile}. We will use these planning, review and retrospective sessions to guide the implementation.
-
-\begin{figure}[!ht]
-\centering
-\includegraphics*[width=\textwidth]{images/scrum_process}
-\caption{\em Agile/Scrum Process}
-\label{fig:agile}
-\end{figure}
-
-\begin{itemize}
-	\item Backlog Grooming - Each \gls{sprint} has a sprint planning session to initially scope the product backlog and to inform the total scope of the project. This typically involves the product owners who will help to shape the overall project direction by providing their priorities for the project.
-	\item Backlog Refinement - Refining the backlog to break large development tasks into smaller tasks which will fit better in a sprint. This also helps to identify similar tasks which can be grouped together and reduce duplication.
-	\item Sprint Review - After a sprint is completed a sprint review is then performed which will evaluate goals achieved versus goals planned and the backlog is then re-prioritised accordingly.
-	\item Sprint Retrospective - A retrospective will then analyse sprint performance and help to highlight areas where improvement can be made. This will also enhance the accuracy of the following sprint.
-\end{itemize}
+The scrum development cycle can be seen in the previous Section \ref{sub:agile}.
 
 \subsection{Sprint 1}
 \underline{\textbf{Sprint Planning}}\newline
@@ -32,7 +18,7 @@ The planning session for this sprint identified that it would be best to have a 
 	\item Full test suite for all current API endpoints implemented
 \end{itemize}
 
-This sprint delivered on all initial goals and with the experience gained the product backlog was re-prioritised accordingly.
+This sprint delivered on all initial goals and with the experience gained the product \gls{backlog} was re-prioritised accordingly.
 
 \underline{\textbf{Sprint Retrospective}}\newline
 Date: 01 Feb 2017\newline
@@ -57,7 +43,19 @@ Participants: Leigh Griffin, Stephen Coady
 	\item Stephen Coady review backlog for story point accuracy based off of current domain knowledge
 	\item Stephen Coady add a ticket to review / spike testing strategies, feel free to consult David Martin and Leigh Griffin on specifics
 	\item Stephen Coady add a ticket for UI frameworks investigations and spikes, end result should be an Epic that we can triage and prioritise
-	\end{itemize}
+\end{itemize}
+
+\underline{\textbf{Sprint Burndown}}\newline
+\begin{figure}[!ht]
+\centering
+\includegraphics*[width=\textwidth]{images/sprint1}
+\caption{\em Sprint 1 Burndown}
+\label{fig:sprint1}
+\end{figure}
+
+\underline{\textbf{Personal Reflection}}\newline
+This sprint highlighted the need for code quality and a continuous integration pipeline. It allowed the developer to gain a deep understanding of testing a modern application and also highlighted some improvements which could be made in following sprints with regard to the test plan.
+
 
 \subsection{Sprint 2}
 \underline{\textbf{Sprint Planning}}\newline
@@ -99,6 +97,17 @@ Participants: Leigh Griffin, Stephen Coady, David Martin
 	\item Stephen Coady to share wireframes as a mid sprint review asynchronously. Would recommend emailing that to us both.
 	\item Stephen Coady metrics spike insight when you get to it (this sprint possibly)
 \end{itemize}
+
+\underline{\textbf{Sprint Burndown}}\newline
+\begin{figure}[!ht]
+\centering
+\includegraphics*[width=\textwidth]{images/sprint2}
+\caption{\em Sprint 2 Burndown}
+\label{fig:sprint2}
+\end{figure}
+
+\underline{\textbf{Personal Reflection}}\newline
+This sprint helped the developer to improve story pointing skills and also the level of detail included in each development ticket. This meant less time at the beginning of each sprint deciding what needed to be done as the ticket was clear and concise before work commenced.
 
 \subsection{Sprint 3}
 Since the application was now well-formed from a server-side perspective it was decided that the front-end application should be started. This would mean a more visual component for the project stakeholders to view which would provide more useful feedback moving forward. To start this process tickets were created relating to the system wireframes. Also, since it was intended that the application would have a front-end component by the end of this sprint then it would be practical to build this into the \gls{ci} pipeline ensuring it was automatically deployed upon each build. As a result of the Sprint 2 retrospective it was decided that tests should be implemented on the staging server within a \gls{Docker container}.
@@ -145,6 +154,17 @@ Participants: Leigh Griffin, Stephen Coady
 	\item Stephen Coady to define the critical path through the project, ~80 story points left with a ~60 story point burn predicted
 	\item Stephen Coady to add some investigative tasks around KeyCloak SSO for future work i.e. out of scope of this project
 \end{itemize}
+
+\underline{\textbf{Sprint Burndown}}\newline
+\begin{figure}[!ht]
+\centering
+\includegraphics*[width=\textwidth]{images/sprint3}
+\caption{\em Sprint 3 Burndown}
+\label{fig:sprint3}
+\end{figure}
+
+\underline{\textbf{Personal Reflection}}\newline
+This sprint highlighted the fact that some tasks, such as front end related tasks, were underestimated and needed to be revised. It also proved valuable as it produced wireframes which improved my ability to create a front end application from scratch.
 
 \subsection{Sprint 4}
 Front end application
@@ -197,6 +217,17 @@ Participants: Stephen Coady, Leigh Griffin
 	\item Stephen Coady to send naming conventions is it LifeCycle Management for Docker, or UI or LCMS or something random!
 \end{itemize}
 
+\underline{\textbf{Sprint Burndown}}\newline
+\begin{figure}[!ht]
+\centering
+\includegraphics*[width=\textwidth]{images/sprint4}
+\caption{\em Sprint 4 Burndown}
+\label{fig:sprint4}
+\end{figure}
+
+\underline{\textbf{Personal Reflection}}\newline
+After this sprint I had a deep understanding of the Docker API as creating the multiple endpoints in this sprint required a complete understanding of the Docker documentation. It also proved valuable as I learned how to properly investigate tasks which may be required further into the project (metrics).
+
 \subsection{Sprint 5}
 Implemented searching docker hub feature
 Dockerfile upload feature added
@@ -241,6 +272,17 @@ Participants: Stephen Coady, David Martin, Jason Madigan
 	\item Sprint retrospective not carried out immediately after sprint ended, made it a more laborious task
 \end{itemize}
 
+\underline{\textbf{Sprint Burndown}}\newline
+\begin{figure}[!ht]
+\centering
+\includegraphics*[width=\textwidth]{images/sprint5}
+\caption{\em Sprint 5 Burndown}
+\label{fig:sprint5}
+\end{figure}
+
+\underline{\textbf{Personal Reflection}}\newline
+This sprint was valuable as I learned about security in a node application. It also allowed me to use drag and drop technologies which I had not previously been exposed to. I was also introduced to in-memory databases which I had not previously used.
+
 \subsection{Sprint Metrics}
 
 \subsubsection{Sprint Velocity}
@@ -248,21 +290,13 @@ Using Jira we can view the velocity for each sprint, which shows the story point
 
 \begin{figure}[!ht]
 \centering
-\includegraphics*[width=\textwidth]{images/velocity}
+\includegraphics*[width=\textwidth]{images/velocity2}
 \caption{\em Sprints Velocity}
 \label{fig:velocity}
 \end{figure}
 
+With regard to the \glspl{sprint} in this project it is evident that initially I was completing far more than I expected to. In sprint 1 I completed almost 40\% more story points than anticipated. In sprint 2 this was improved and the expected story points were closer to the completed. I then hit problems in sprint 3 and not everything was completed. However this set back was quickly remedied in sprint 4 as a break in college allowed for accelerated development. By sprint 5 I had become much more accurate at assigning story points and so this last sprint was by far the most productive and also accurate from a metrics point of view.
+
 \subsubsection{Sprint Burndowns}
 
-The burn down report for each sprint can be seen below in Figure \ref{fig:sprints}. The burn down chart shows the pace of development on a sprint. The red line on each graph is the development and the grey line is the recommended pace if the sprint is to be completed by the deadline. Burn down charts can be used to highlight problems if they exist. For example, on Sprint 1 we can see that the initial scoping of the tasks may not have been accurate as the red line peaks within 4 days, indicating either missed story points or tasks.
-
-\vfill
-\begin{figure}[!ht]
-\centering
-\includegraphics*[width=\textwidth]{images/sprints}
-\caption{\em Sprint Burn Downs}
-\label{fig:sprints}
-\end{figure}
-\vfill
-\clearpage
+Using burndown graphs for each sprint was a valuable resource as it enabled me to maintain a steady working pace while also keeping an eye on the deadline. This meant that the volume of tasks remaining was never overwhelming and remaining effort could be accurately judged. All burndown charts for each sprint can be seen above in their respective sprint sections.

@@ -17,13 +17,41 @@ Agile was chosen as the development methodology for this project for the followi
 
 \paragraph{Flexibility} Agile allows for change natively. Instead of setting a rigid time plan up front the timescale is set and each \gls{sprint} allows for the requirements to change and even for more to emerge as development continues.
 
-Agile uses time-boxed units called \glspl{sprint} throughout the development cycle \citep{Agile2016}. These are short development cycles designed to give the developer achievable goals while also allowing for change at short intervals.
+Agile uses time-boxed units throughout the development cycle \citep{Agile2016}. These are short development cycles designed to give the developer achievable goals while also allowing for change at short intervals.
 
 The Agile implementation used in this project will be discussed further in Section \ref{sec:implementation}.
 
+\subsubsection{Scrum}
+Within Agile this project will also follow \gls{Scrum} methodologies. This will include:
+
+\begin{enumerate}
+	\item Backlog Grooming - Each \gls{sprint} has a \gls{sprint} planning session to initially scope the product \gls{backlog} and to inform the total scope of the project. This typically involves the product owners who will help to shape the overall project direction by providing their priorities for the project.
+	\item Sprint Planning - Refining the \gls{backlog} to break large development tasks into smaller tasks which will fit better in a \gls{sprint}. This also helps to identify similar tasks which can be grouped together and reduce duplication.
+	\item Sprint - all development work is carried out here. There are daily stand ups which involved the developer taking into account the work achieved the previous day, what was going to be achieved today and also any difficulties encountered. While this project was a lone developer project it was still constructive as it forced consideration of the Jira board and also helped guide the day to day work.
+	\item Sprint Review - After a \gls{sprint} is completed a \gls{sprint} review is then performed which will evaluate goals achieved versus goals planned and the \gls{backlog} is then re-prioritised accordingly.
+	\item Sprint Retrospective - A retrospective will then analyse \gls{sprint} performance and help to highlight areas where improvement can be made. This will also enhance the accuracy of the following \gls{sprint}.
+\end{enumerate}
+
+\begin{figure}[!ht]
+\centering
+\includegraphics*[width=\textwidth]{images/scrum_process}
+\caption{\em Agile/Scrum Process}
+\label{fig:agile}
+\end{figure}
+
+To evaluate all tasks on the backlog a popular method of `story points' was used. This involves the developer rating tasks based on estimated effort. It uses the Fibonacci numbers as a guide and all tasks should be relative to each other. It is not an exact science but does provide a way of judging the amount of work remaining. For example when it is well established that a backlog item with a story point rating of 2 may take a day then it is reasonable to assume an item with a rating of 3 may take a day and a half to complete.
+
+The following roles were also identified within this project:
+
+\begin{itemize}
+	\item Product Owner - Red Hat
+	\item Scrum Master - Dr. Brenda Mullally
+	\item Scrum Team/Developer - Stephen Coady
+\end{itemize}
+
 \subsection{Jira}
 \label{sub:jira}
-The project management tool Jira was used to aid with Agile implementation and to track all project activity \citep{JBoss2016}. Jira is a professional grade project management software which is currently used by Red Hat Mobile. It provides functionality to graphically manage the product backlog and each \gls{sprint}. The developer is presented with a dashboard which allows them to create and edit tasks by assigning descriptions, estimation of work and subtasks.
+The project management tool Jira was used to aid with Agile implementation and to track all project activity \citep{JBoss2016}. Jira is a professional grade project management software used by companies to execute a distributed version of agile. It provides functionality to graphically manage the product backlog and each \gls{sprint}. The developer is presented with a dashboard which allows them to create and edit tasks by assigning descriptions, estimation of work and subtasks.
 
 Granular control over backlog items is important in an Agile environment as change is expected and so being able to have fine-grain control over everything makes this process much easier.
 \subsection{Gitflow}
@@ -147,7 +175,7 @@ Acceptance testing is the process of manually using an application to ensure it 
 
 \subsection{Code Quality/Coverage}
 \label{sub:code_quality}
-For an open source project it is vital to keep code quality at a high standard. If the project wishes to attract other developers to contribute then a good codebase with current best practices implemented and few bugs will help. To do this the tool SonarQube will be used, as discussed in Section \ref{sub:sonarqube-technologies}. SonarQube will scan the codebase an inform the developer of any \gls{code smell}s present and will also perform calculations such as \gls{technical debt} and \gls{code coverage}. 
+It is vital in any project to keep code quality at a high standard. If the project wishes to attract other developers to contribute then a good codebase with current best practices implemented and few bugs will help. To do this the tool SonarQube will be used, as discussed in Section \ref{sub:sonarqube-technologies}. SonarQube will scan the codebase an inform the developer of any \gls{code smell}s present and will also perform calculations such as \gls{technical debt} and \gls{code coverage}. 
 
 As we will see in the next section SonarQube is embedded in the \gls{ci} pipeline for this project. This will ensure that code is consistently monitored which in turn ensures code quality and test coverage is always at the forefront of the developers mind.
 
@@ -167,14 +195,14 @@ For this project, a complete pipeline was built to facilitate a full continuous 
 
 This pipeline can be seen in Figure \ref{fig:CICD} and will work as follows:
 
-\begin{itemize}
+\begin{enumerate}
 	\item Git commit is made
 	\item Travis CI build is triggered which runs all tests and \gls{code coverage} reports
 	\item If successful a SonarQube push is triggered and the code is sent for evaluation
-	\item Once this is complete Travis then builds a \gls{Docker image} from the newly passed code
-	\item This image is then pushed to the associated \gls{dockerhub} repository to be made public
+	\item Once this is complete Travis then builds a \gls{Docker image} from the newly passed code. This image is then pushed to the associated \gls{dockerhub} repository to be made public
 	\item Once the push is complete Travis then deploys the application (by running a container) on the \gls{staging server}.
-\end{itemize}
+	\item Travis then pushes a notification to the developer to inform of success/failure status
+\end{enumerate}
 
 \begin{figure}[!ht]
 \centering
@@ -192,7 +220,7 @@ There are several advantages to this method of integration and deployment which 
 	\item Staging the application provides immediate feedback for anybody wishing to evaluate the current iteration of the project and whether or not it has met the requirements for the sprint.
 \end{itemize} 
 
-\subsection{12 Factor Application}
+\subsection{Twelve Factor Application}
 A recent methodology has emerged regarding web applications and the development best practices associated with creating and deploying them. This methodology is known as `The Twelve-Factor App' and dictates the guidelines to follow for an application to be easily setup, portable and suitable for deployment on various architectures \citep{Wiggins2017}. We will now examine each of these twelve factors and how they were included in the development of this application.
 
 \paragraph{1. Codebase}\mbox{}\\
@@ -266,14 +294,14 @@ The second set of user documentation uses a standalone application called Swagge
 
 \begin{figure}[!ht]
 \centering
-\includegraphics*[width=0.8\textwidth]{images/swagger-overview}
+\includegraphics*[width=\textwidth]{images/swagger-overview}
 \caption{\em Swagger Overview}
 \label{fig:swagger-overview}
 \end{figure}
 
 \begin{figure}[!ht]
 \centering
-\includegraphics*[width=0.9\textwidth]{images/swagger-individual}
+\includegraphics*[width=\textwidth]{images/swagger-individual}
 \caption{\em A Single Swagger Endpoint}
 \label{fig:swagger-individual}
 \end{figure}
@@ -292,4 +320,4 @@ In this project Latex was used exclusively to write this document. This offered 
 	\item Powerful compilation engine - The compilation engine behind Latex offers huge benefits such as auto-referencing all sections and figures etc. It also can auto-create sections such as glossaries and tables of contents.
 \end{itemize}
 
-The source code used to create this report can be seen in Appendix \ref{appendix:reports}.
+The source code used to create this report can be seen in Appendix \ref{appendix:reports} and will be made available as a template for future WIT students to use.
