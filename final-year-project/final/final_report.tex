@@ -9,18 +9,21 @@
 \usepackage[a4paper, total={6in, 8in}, top=2.54cm, bottom=2.54cm]{geometry}
 \usepackage[explicit]{titlesec}
 \usepackage[toc,page]{appendix}
-\usepackage{hyperref}
 \usepackage[dvipsnames]{xcolor}
 \usepackage{cleveref}
 \setcounter{tocdepth}{2}
 \usepackage[nottoc]{tocbibind}
 \usepackage[parfill]{parskip}
-
+\usepackage{hyperref}
 \usepackage{listings} % to use code snippets 
 \usepackage{color}
 
 \usepackage{glossaries} % for glossary
 \usepackage[final]{pdfpages}
+\usepackage{enumitem}
+
+\newlist{legal}{enumerate}{10}
+\setlist[legal]{label*=\arabic*.}
 \makeglossaries 
 \include{components/glossary} 
 
@@ -120,10 +123,12 @@
 \include{components/summary}
 
 \newpage
+\phantomsection
+\bibliography{bibliography}
+
+\newpage
 \include{components/appendix}
 
 
-\clearpage
-\bibliography{bibliography}
 
 \end{document}
