@@ -1,7 +1,7 @@
 % !TEX root = ../final_report.tex
 \section{Introduction}
 \label{sec:intro}
-This report will aim to guide the reader through the planning and development of the Lifecycle Management for Docker \gls{UI} application, termed Gantry from here on in. After reading this report the reader should have a clear idea of why the application was built, what was used to build it and how the process was carried out.
+This report will aim to guide the reader through the planning and development of the Lifecycle Management for Docker \gls{UI} application, termed Gantry for the remainder of this report. After reading this report the reader should have a clear idea of why the application was built, what was used to build it and how the process was carried out.
 
 This project is being undertaken with a local company, Red Hat, acting as product owners. Red Hat have a vested interest in solving the problem discussed in Section \ref{sub:problem} as the Red Hat Mobile Application Platform uses containers extensively. This will ensure that the initial requirements will accurately shape the project and the delivered solution passes a product review by Red Hat Mobile.
 
@@ -25,14 +25,14 @@ While the \gls{CLI} gives developers full control over the server-side component
 \begin{itemize}
 	\item Learning curve - the person using the command line must be familiar with typical commands used to achieve certain tasks. This precludes anybody without these skills from using Docker.
 	\item Vast set of Docker commands - there are a vast number of commands available to use from the Docker CLI. This is also a learning curve as even a developer who is familiar with a CLI must first learn the Docker commands to be able to use the client-side application. 
-	\item User friendliness - The command line does not produce content that is easily readable and can often format the data it is trying to present in an odd fashion depending on things like screen size etc.
+	\item User friendliness - The command line does not produce content that is easily readable and can often disrupt the data's format depending on things like screen size etc.
 \end{itemize}
 
 According to recent studies the usage of containers (and therefore of Docker) in production has increased at an exponential rate in recent years \citep{DockerUsage2016}. This is due to the many benefits provided by containers as a deployment mechanism. While the problems discussed above are a pain point for experienced developers they are the price one must pay to use a service. However, as new and possibly inexperienced developers become attracted to Docker the use of the command line will shift from being a pain point to a barrier to entry. This is where Gantry aims to provide an easy point of entry.
 
 \subsection{Aims and Objectives}
 \label{sub:aims}
-The aim of this project is to address all of these problems while also trying to increase the functionality available to anybody who wishes to use Docker.
+The aim of this project is to address all of these problems whilst also trying to increase the functionality available to anybody who wishes to use Docker.
 
 At a high level the primary objectives of this project are:
 
@@ -48,7 +48,7 @@ These objectives will then provide the following functionality:
 \begin{itemize}
 	\item A graphical user interface
 	\begin{itemize}
-		\item This user interface will remove the barrier to entry for new and inexperienced developers while also creating a fast and efficient overview to experienced developers who may not always require the command line for simple tasks. The overal aim of this \gls{UI} is to provide an educational tool with the potential to be built upon.
+		\item This user interface will remove the barrier to entry for new and inexperienced developers while also creating a fast and efficient overview to experienced developers who may not always require the command line for simple tasks. The overall aim of this \gls{UI} is to provide an educational tool with the potential to be built upon.
 	\end{itemize}
 	\item A \gls{Docker container} which has no external dependencies. The benefit of this is that the user does not need to install the application in the traditional sense. This will be discussed further in Section \ref{sec:technologies}.
 	\item An independent API which can be consumed by any front end application
@@ -60,12 +60,12 @@ These objectives will then provide the following functionality:
 \subsection{Semester One Summary}
 To gain a complete understanding of the process used to create this product and what was achieved previously the reader is encouraged to refer to the semester one report, which is available in Appendix \ref{appendix:reports}.
 
-We will however provide a brief summary of the prototype application here. The prototype was completed in semester one and the development consisted of two \glspl{sprint}, the first lasting two weeks and the second taking place over three weeks.
+However, a brief summary of the prototype application will be provided. The prototype was completed in semester one and the development consisted of two \glspl{sprint}, the first lasting two weeks and the second taking place over three weeks.
 
 \subsubsection{Semester One Sprints}
 \textbf{\underline{Sprint 1}}
 
-\textbf{Goal}: Initial research and investigation of the core technologies which were, at this point, candidates to be used.
+\textbf{Goal}: Initial research and investigation of the core technologies which at this point were candidates for the project.
 
 \textbf{Achieved}:
 \begin{itemize}
@@ -81,27 +81,27 @@ We will however provide a brief summary of the prototype application here. The p
 
 \textbf{Achieved}:
 \begin{itemize}
-	\item The prototype application was improved to include further and more complicated \gls{CRUD} calls
+	\item The prototype application was improved to include further and more complicated \gls{CRUD} calls.
 	\item A \gls{Travis} account was created and linked with the public \gls{github} repository of the application. Both of these can be seen in Appendices \ref{appendix:code} and \ref{appendix:travis}.
 	\item A travis.yml file was created which details the steps to be followed when building the application. The Travis repository in Appendix \ref{appendix:travis} will now build the application and run the unit tests every time a \gls{git} commit is made.
 	\item A \gls{sonarqube} account was associated with the Github repository and incorporated in the build pipeline. This can be viewed in Appendix \ref{appendix:sonarqube}.
 \end{itemize}
 	
-The final product of these two \glspl{sprint} was a prototype application which provided a proof of concept. It also validated the technology decisions which were discussed in detail in report 1 and which we will discuss further in Section \ref{sec:technologies}. While it was not a functionally complete application it did prove useful when reflecting on semester one.
+The final product of both \glspl{sprint} was a prototype application which provided a proof of concept. It also validated the technology decisions which were discussed in detail in report 1 and which will be discussed further in Section \ref{sec:technologies}. While it was not a functionally complete application it did prove useful when reflecting on semester one.
 	
 \subsubsection{Reflection}
 Once the prototype application had been built it offered valuable insight which could be used when moving forward into semester two.
 
-Some learning outcomes were:
+Learning outcomes include:
 \begin{itemize}
-	\item Using the prototype as an introduction to agile development really helped to stock the \gls{backlog} and gain an understanding of exactly what would be needed to successfully create this product.
+	\item Using the prototype as an introduction to agile development significantly helped to stock the \gls{backlog} and gain an understanding of exactly what would be needed to successfully create this product.
 	\item Feedback from my support group in the form of my supervisor and Red Hat also helped prioritise the development and gave a much better sense of awareness with regard to what was required in the project.
 \end{itemize}
 
-Some technical learning outcomes were:
+Technical learning outcomes include:
 \begin{itemize}
-	\item More time should be spent making the test suite robust. While complex tests cases require initial investment that outlay can save time in the long run.
-	\item Creating a large section of the \gls{ci/cd} pipeline was a good investment also as it meant a better development process was in place for semester two.
+	\item More time should be spent making the test suite robust. While complex tests cases require initial investment, this initial outlay can save time going forward.
+	\item Creating a large section of the \gls{ci/cd} pipeline was a good investment also as it meant an improved development process was in place for semester two.
 	\item Running the application at all times within a container is good practice as it means testing the application in the environment it will ultimately run in.
-	\item The decision to use Agile methodologies was a good one as it allowed for a flexible and fast development cycle. This is ideal when the project span is short at 12 weeks.
+	\item The decision to use Agile methodologies was positive for the product as it allowed for a flexible and fast development cycle. This is fitting when the project span is short at 12 weeks.
 \end{itemize}

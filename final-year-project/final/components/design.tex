@@ -1,10 +1,10 @@
 % !TEX root = ../final_report.tex
 \section{Design}
 \label{sec:design}
-The formal information modelling of the system remains unchanged from Report 1 and is available in Appendix \ref{appendix:models}. However in this section we will examine the system overview and all aspects of design will be discussed.
+The formal information modelling of the system remains unchanged from Report 1 and is available in Appendix \ref{appendix:models}. However in this section an examination of the system overview and all aspects of design will be discussed.
 
 \subsection{System Architecture Overview}
-To gain a better understanding of the system we will now look at it from a high-level architectural view. This will give the reader an idea of how all major components fit together.
+To gain a better understanding of the system it is important to look at it from a high-level architectural view. This will give the reader an idea of how all major components fit together.
 
 A diagram showing each major component of the application can be seen in Figure \ref{fig:architecture} below.
 
@@ -19,7 +19,7 @@ The whole application is bundled in a \gls{Docker container}. This is represente
 
 Most of the application's logic is in the Node JS server. It is the most important component as all others are built around it. It provides a mechanism to access the application through an Express API while also communicating with the Docker API using Dockerode as an external library. It also performs all communication with the database and serves the front end application.
 
-It is important to note that the design of this application is deliberately modular. This means a low cohesion between each component of the application which in turn means that any one component can be swapped for any another which provides the same functionality. For instance, if in the future it was decided that a different front end framework was required then Angular could easily be replaced. Everything in Figure \ref{fig:architecture} outside of the dashed rectangle can be easily swapped for a different technology in this same fashion.
+It is important to note that the design of this application is deliberately modular. This means a low cohesion between each component of the application which in turn means that any one component can be swapped for another which provides the same functionality. For instance, if in the future it was decided that a different front end framework was required then Angular could easily be replaced. Everything in Figure \ref{fig:architecture} outside of the dashed rectangle can be easily swapped for a different technology in this same fashion.
 
 The Node JS application `listens' on port 3000 within the \gls{Docker container} which in turn maps to port 3000 on the host it is running on. This is completely configurable by the user and any available port can instead be chosen. It also maps the Docker unix socket `/var/run/docker.socket' as a volume on the Docker container.  
 
@@ -39,7 +39,9 @@ As previously discussed the requirements for the front-end application are relat
 Therefore it was decided Angular was the best choice as it satisfied all of these conditions.
 
 \subsubsection{Wireframes}
-With these design decisions in mind an initial batch of wireframes were created which would be used when writing the front end code. These wireframes were used to elicit feedback from Red Hat and from my supervisor. That feedback focused on usability as well as good user interface practices which helped focus the development of the front end ensuring it stayed simple and intuitive. Several iterations of wireframe development was conducted and the final version included. One of these, the containers view, can be seen below in Figure \ref{fig:containers_wireframe} while the rest are available in Appendix \ref{appendix:wireframes}.
+With these design decisions in mind an initial batch of wireframes were created which would be used when writing the front end code. These wireframes were used to elicit feedback from Red Hat and from Dr. Brenda Mullally. That feedback focused on usability as well as good user interface practices which helped focus the development of the front end ensuring it stayed simple and intuitive. Several iterations of wireframe development were conducted and the final product of these iterations is included in this report. One of these, the containers view, can be seen below in Figure \ref{fig:containers_wireframe} while the rest are available in Appendix \ref{appendix:wireframes}.
+
+\clearpage
 
 \begin{figure}[!ht]
 \centering
@@ -62,7 +64,7 @@ The idea of creating a standalone dedicated mobile application was de-scoped ear
 When developing any application that will potentially be used in a production environment it is important to consider the implications of this in the design phase. There are several headings under which careful consideration must be given to ensure the application performs as it should while also being usable.
 
 \paragraph{Scalability}
-On a system which will potentially be used my many different users at the same time, how it scales and adapts to an increase in usage is important. To ensure that any user has complete flexibility in this regard this application is distributed using a \gls{Docker image}, and therfore it can easily be used in a system which natively supports scaling such as Docker swarm or Kubernetes \citep{DockerSwarm2017,Kubernetes2017}.
+On a system which will potentially be used by many different users at the same time, how it scales and adapts to an increase in usage is important. To ensure that any user has complete flexibility in this regard this application is distributed using a \gls{Docker image}, and therfore it can easily be used in a system which natively supports scaling such as Docker swarm or Kubernetes \citep{DockerSwarm2017,Kubernetes2017}.
 
 \paragraph{Performance}
 A number of previously mentioned technology choices significantly increase the performance of the application. 

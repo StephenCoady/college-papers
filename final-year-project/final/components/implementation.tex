@@ -7,15 +7,15 @@ The scrum development cycle can be seen in the previous Section \ref{sub:agile}.
 
 \subsection{Sprint 1}
 \underline{\textbf{Sprint Planning}}\newline
-The planning session for this sprint identified that it would be best to have a functional API developed early in the project and so those tasks associated with this were prioritised and refined. It was also deemed important to have \gls{sonarqube} integrated in the \gls{ci} pipeline early in the project. This ensured \gls{technical debt} was minimised from the beginning. For the same reason it was decided that the continuous integration pipeline should be finalised in this sprint to maximise its effectiveness throughout the project. Without working tests in place the value of this pipeline is minimal and so the testing tickets in the backlog were refined and placed in the sprint.
+The planning session for this sprint identified that it would be best to have a functional API developed early in the project and so the tasks associated with this were prioritised and refined. It was also deemed important to have \gls{sonarqube} integrated in the \gls{ci} pipeline early in the project. This ensured \gls{technical debt} was minimised from the beginning. For the same reason it was decided that the continuous integration pipeline should be finalised in this sprint to maximise its effectiveness throughout the project. Without working tests in place the value of this pipeline is minimal therefore the testing tickets in the backlog were refined and placed in the sprint.
 
 \underline{\textbf{Sprint Review}}\newline
 \textbf{Goals achieved:}
 \begin{itemize}
 	\item Large subset of necessary API endpoints created.
-	\item SonarQube integration completed
-	\item Continuous integration pipeline finalised
-	\item Full test suite for all current API endpoints implemented
+	\item SonarQube integration completed.
+	\item Continuous integration pipeline finalised.
+	\item Full test suite for all current API endpoints implemented.
 \end{itemize}
 
 This sprint delivered on all initial goals and with the experience gained the product \gls{backlog} was re-prioritised accordingly.
@@ -26,23 +26,23 @@ Participants: Leigh Griffin, Stephen Coady
 
 \textbf{What did we do well?}
 \begin{itemize}
-	\item Already had prototype in place to accelerate development
-	\item 3rd party module knowledge accelerated development
-	\item Guidance from Red Hat really helped focus the sprint
-	\item Scope on tickets well understood from Red Hats perspective
+	\item Already had prototype in place to accelerate development.
+	\item 3rd party module knowledge accelerated development.
+	\item Guidance from Red Hat was crucial in keeping the sprint focused.
+	\item Scope on tickets was well understood from Red Hats perspective.
 \end{itemize}
 
-\textbf{What should we have done better?}
+\textbf{What could we have done better?}
 \begin{itemize}
-	\item Story points were inflated because domain knowledge was higher than anticipated
-	\item Testing strategy needs to be revised, very time consuming
+	\item Story points were inflated because domain knowledge was higher than anticipated.
+	\item Testing strategy needs to be revised, very time consuming.
 \end{itemize}
 
 \textbf{Actions:}
 \begin{itemize}
-	\item Stephen Coady review backlog for story point accuracy based off of current domain knowledge
-	\item Stephen Coady add a ticket to review / spike testing strategies, feel free to consult David Martin and Leigh Griffin on specifics
-	\item Stephen Coady add a ticket for UI frameworks investigations and spikes, end result should be an Epic that we can triage and prioritise
+	\item Stephen Coady review backlog for story point accuracy based off of current domain knowledge.
+	\item Stephen Coady add a ticket to review / spike testing strategies, feel free to consult David Martin and Leigh Griffin on specifics.
+	\item Stephen Coady add a ticket for UI frameworks investigations and spikes, end result should be an Epic that we can triage and prioritise.
 \end{itemize}
 
 \underline{\textbf{Sprint Burndown}}\newline
@@ -59,19 +59,19 @@ This sprint highlighted the need for code quality and a continuous integration p
 
 \subsection{Sprint 2}
 \underline{\textbf{Sprint Planning}}\newline
-While reviewing the backlog after Sprint 1 several API endpoints were identified as missing and so were added to the backlog. It was decided that these would be developed in Sprint 2. Since the API should be a standalone component it is vital to have documentation available for any developer wishing to use it. For this reason a documentation tool investigation ticket was added to the sprint.
+While reviewing the backlog after Sprint 1 several API endpoints were identified as missing, therefore they were added to the backlog. It was decided that these would be developed in Sprint 2. Since the API should be a standalone component it is vital to have documentation available for any developer wishing to use it. For this reason a documentation tool investigation ticket was added to the sprint.
 
 \underline{\textbf{Sprint Review}}\newline
 \textbf{Goals achieved:}
 \begin{itemize}
-	\item Express API made considerably larger by adding multiple end points
-	\item Documentation investigation resulted in Swagger being decided on as the best method of writing documentation \citep{Swagger2017} 
-	\item Swagger implemented for existing API endpoints
+	\item Express API made considerably larger by adding multiple end points.
+	\item Documentation investigation resulted in Swagger being decided on as the best method of writing documentation \citep{Swagger2017}. 
+	\item Swagger implemented for existing API endpoints.
 \end{itemize}
 
 \textbf{Issues encountered:}
 \begin{itemize}
-	\item Testing method was found to be laborious and was impacting development speed
+	\item Testing method was found to be laborious and was negatively impacting development speed.
 \end{itemize}
 
 \underline{\textbf{Sprint Retrospective}}\newline
@@ -80,22 +80,22 @@ Participants: Leigh Griffin, Stephen Coady, David Martin
 
 \textbf{What did we do well?}
 \begin{itemize}
-	\item We performed a backlog review and set the priority for the remaining 3 sprints
-	\item Progression of the sprint was excellent, good pace to it and good story pointing
-	\item Comms was pretty good
-	\item Smooth sprint, story points and tickets were well scoped
-	\item Sprint Planning revisited the story points so very little surprises
-	\item Team (Stephen) came to the Stakeholders (Dave \& Leigh) with the plan for the next Sprint
+	\item A backlog review was performed and this set the priority for the remaining 3 sprints.
+	\item Progression of the sprint was excellent, good pace and good story pointing.
+	\item Communication was good.
+	\item Smooth sprint, story points and tickets were well scoped.
+	\item Sprint Planning revisited the story points so there were few unknowns during the sprint.
+	\item Team (Stephen) came to the Stakeholders (David \& Leigh) with the plan for the next Sprint.
 \end{itemize}
-\textbf{What should we have done better?}
+\textbf{What could we have done better?}
 \begin{itemize}
-	\item Sprint started at a bad time college wise, with other assignments due
-	\item Not keeping in touch with the sprint day to day (Dave \& Leigh)
+	\item Sprint started at a bad time in the college calendar, with other assignments due.
+	\item Not keeping in touch with the sprint day to day (Dave \& Leigh).
 \end{itemize}
 \textbf{Actions:}
 \begin{itemize}
-	\item Stephen Coady to share wireframes as a mid sprint review asynchronously. Would recommend emailing that to us both.
-	\item Stephen Coady metrics spike insight when you get to it (this sprint possibly)
+	\item Stephen Coady to share wireframes as a mid sprint review asynchronously. Recommended emailing this to stakeholders David \& Leigh.
+	\item Stephen Coady to complete metrics spike insight (this sprint possibly).
 \end{itemize}
 
 \underline{\textbf{Sprint Burndown}}\newline
@@ -107,17 +107,17 @@ Participants: Leigh Griffin, Stephen Coady, David Martin
 \end{figure}
 
 \underline{\textbf{Personal Reflection}}\newline
-This sprint helped the developer to improve story pointing skills and also the level of detail included in each development ticket. This meant less time at the beginning of each sprint deciding what needed to be done as the ticket was clear and concise before work commenced.
+This sprint helped the developer to improve story pointing skills and it also improved the level of detail included in each development ticket. This meant less time at the beginning of each sprint deciding the desired outcomes as the ticket was clear and concise before work commenced.
 
 \subsection{Sprint 3}
-Since the application was now well-formed from a server-side perspective it was decided that the front-end application should be started. This would mean a more visual component for the project stakeholders to view which would provide more useful feedback moving forward. To start this process tickets were created relating to the system wireframes. Also, since it was intended that the application would have a front-end component by the end of this sprint then it would be practical to build this into the \gls{ci} pipeline ensuring it was automatically deployed upon each build. As a result of the Sprint 2 retrospective it was decided that tests should be implemented on the staging server within a \gls{Docker container}.
+Since the application was now well-formed from a server-side perspective it was decided that the front-end application should be started. This would mean a more visual component for the project stakeholders to view which would provide more useful feedback moving forward. To start this process tickets were created relating to the system wireframes. Also, since it was intended that the application would have a front-end component by the end of this sprint it would be practical to build this into the \gls{ci} pipeline ensuring it was automatically deployed upon each build. As a result of the Sprint 2 retrospective it was decided that tests should be implemented on the staging server within a \gls{Docker container}.
 
 \underline{\textbf{Sprint Review}}\newline
 \textbf{Goals achieved:}
 \begin{itemize}
-	\item Continuous deployment implemented using bash scripts and Travis CI. Staging server can be seen in Appendix \ref{appendix:staging}
-	\item Wireframes created and passed to stakeholders for review. Following feedback they were revised and improved
-	\item Front end application was then built using these wireframes
+	\item Continuous deployment implemented using bash scripts and Travis CI. Staging server can be seen in Appendix \ref{appendix:staging}.
+	\item Wireframes created and passed to stakeholders for review. Following feedback they were revised and improved.
+	\item Front end application was then built using these wireframes.
 \end{itemize}
 
 \textbf{Issues encountered:}
@@ -131,28 +131,28 @@ Participants: Leigh Griffin, Stephen Coady
 
 \textbf{What did we do well?}
 \begin{itemize}
-	\item The UI is very usable, lots of nice feedback and functionality visible now
-	\item Consistency in the velocity at 20 points
-	\item Got the wireframe relationship, it really helped with my front end skills which I was not confident in
-	\item Wireframe feedback was excellent, really helped scope the work
-	\item Got to demo to my supervisor which gave her a lot of insight
-	\item Overall work pace was judged well for the most part, consistent delivery
+	\item The UI is very usable, positive feedback and functionality visible now.
+	\item Consistency in the velocity at 20 points.
+	\item Got the wireframe relationship, it really helped with the developer's front end skills.
+	\item Wireframe feedback was excellent, helped scope the work.
+	\item Got to demo to Dr. Brenda Mullally which gave her insight to the product
+	\item Overall work pace was judged well for the most part, consistent delivery.
 \end{itemize}
-\textbf{What should we have done better?}
+\textbf{What could we have done better?}
 \begin{itemize}
-	\item The story pointing on the skeleton was completely off, it could have derailed the entire sprint
-	\item Velocity last sprint was off 
-	\item you should have de-scoped when you realised how big the UI was
-	\item you should have re story pointed the UI mid sprint to allow a controlled de-scope
-	\item Tickets are not descriptive enough, need to add more metadata
-	\item Didn't de-scope the testing in a container ticket, should have done that when the UI became so big
+	\item The story pointing on the skeleton was completely off, it could have derailed the entire sprint.
+	\item Velocity in the last sprint was off. 
+	\item The developer should have de-scoped when it was realised how big the UI was.
+	\item The developer should have re story pointed the UI mid sprint to allow a controlled de-scope.
+	\item Tickets are not descriptive enough, need to add more metadata.
+	\item Didn't de-scope the testing in a container ticket, this should have happened when it was realised how large the UI ticket was.
 \end{itemize}
 
 \textbf{Actions:}
 \begin{itemize}
-	\item Stephen Coady to review the backlog with a view to WHAT and WHY being evolved in the tickets as well as story points
-	\item Stephen Coady to define the critical path through the project, ~80 story points left with a ~60 story point burn predicted
-	\item Stephen Coady to add some investigative tasks around KeyCloak SSO for future work i.e. out of scope of this project
+	\item Stephen Coady to review the backlog with a view to WHAT and WHY being evolved in the tickets as well as story points.
+	\item Stephen Coady to define the critical path through the project, ~80 story points left with a ~60 story point burn predicted.
+	\item Stephen Coady to add some investigative tasks around KeyCloak SSO for future work i.e. out of scope of this project.
 \end{itemize}
 
 \underline{\textbf{Sprint Burndown}}\newline
@@ -164,17 +164,9 @@ Participants: Leigh Griffin, Stephen Coady
 \end{figure}
 
 \underline{\textbf{Personal Reflection}}\newline
-This sprint highlighted the fact that some tasks, such as front end related tasks, were underestimated and needed to be revised. It also proved valuable as it produced wireframes which improved my ability to create a front end application from scratch.
+This sprint highlighted the fact that some tasks, such as front end related tasks, were underestimated and needed to be revised. It also proved valuable as it produced wireframes which improved my ability to create a front end application.
 
 \subsection{Sprint 4}
-Front end application
-	- images, containers, networks and volumes views created based on wireframes
-	- creation of volume, network
-	- addition of volumes to containers
-	- view a container's log
-	
-Investigation of metrics tools
-Addition of API endpoints
 
 \underline{\textbf{Sprint Planning}}\newline
 For this sprint the general direction was aimed at creating a more complete front-end application. Therefore the backlog was groomed and re-prioritised accordingly. Metrics tools and a means of collecting them was also identified as a desirable outcome of this sprint. Further API endpoints were identified and added to the sprint.
@@ -199,22 +191,22 @@ Participants: Stephen Coady, Leigh Griffin
 
 \textbf{What did we do well?}
 \begin{itemize}
-	\item Better scoping of story points as a result of last retrospective
-	\item Re-scoped mid sprint which I hadn't done before - leads to more accurate metrics
-	\item Tickets were made more descriptive before this sprint. This meant less time spent before starting a task figuring out what was needed
-	\item The velocity of this sprint was much higher than previous sprints, this is a combination of not having as many college commitments during this sprint and also as a result of better re-scoping mid-sprint.
-	\item Agile methodology maturity is clear to see now. Tickets are more accurate, estimates are accurate and a mastery of the methodology is really clear from my side (Leigh)
+	\item Better scoping of story points as a result of last retrospective.
+	\item Re-scoped mid sprint which the developer hadn't done before - leads to more accurate metrics.
+	\item Tickets were made more descriptive before this sprint. This meant less time spent before starting a task figuring out what was needed.
+	\item The velocity of this sprint was much higher than previous sprints, this is a combination of the developer not having as many college commitments during this sprint and also as a result of better re-scoping mid-sprint.
+	\item Agile methodology maturity is clear to see now. Tickets are more accurate, estimates are accurate and a mastery of the methodology is really clear from Red Hat's side (Leigh).
 \end{itemize}
-\textbf{What should we have done better?}
+\textbf{What could we have done better?}
 \begin{itemize}
 	\item Getting container logs had not been researched properly as the data was a stream but could also be requested as a JSON object, missed this flag which wasted a lot of time parsing streams to JSON.
-	\item Should have looked at the Docker remote API documentation in detail sooner. Would have saved time instead of relying on third party module 'Dockerode' which has little to no documentation.
+	\item Should have read the Docker remote API documentation in detail sooner. Would have saved time instead of relying on third party module 'Dockerode' which has little to no documentation.
 \end{itemize}
 
 \textbf{Actions}
 \begin{itemize}
-	\item Stephen Coady align defined critical path with remaining backlog so that 'nice-to-haves' are separated from 'must-haves'
-	\item Stephen Coady to send naming conventions is it LifeCycle Management for Docker, or UI or LCMS or something random!
+	\item Stephen Coady align defined critical path with remaining backlog so that 'nice-to-haves' are separated from 'must-haves'.
+	\item Stephen Coady to decide on project naming conventions.
 \end{itemize}
 
 \underline{\textbf{Sprint Burndown}}\newline
@@ -226,15 +218,9 @@ Participants: Stephen Coady, Leigh Griffin
 \end{figure}
 
 \underline{\textbf{Personal Reflection}}\newline
-After this sprint I had a deep understanding of the Docker API as creating the multiple endpoints in this sprint required a complete understanding of the Docker documentation. It also proved valuable as I learned how to properly investigate tasks which may be required further into the project (metrics).
+After this sprint the developer had a deep understanding of the Docker API as creating the multiple endpoints in this sprint required a complete understanding of the Docker documentation. It also proved valuable as I learned how to properly investigate tasks which may be required further into the project (metrics).
 
 \subsection{Sprint 5}
-Implemented searching docker hub feature
-Dockerfile upload feature added
-Implemented database
-Created Login page and server-side components
-Created User settings page
-Implemented JWT security once user logged in
 
 \underline{\textbf{Sprint Planning}}\newline
 Since this would be the last sprint of the project there were a number of core features remaining unimplemented. These were:
@@ -266,12 +252,12 @@ Participants: Stephen Coady, David Martin, Jason Madigan
 	\item Design choice of not using breadcrumbs was a good one, as validated by user acceptance testing
 	\item Managed to close out the last of the college project deliverables
 \end{itemize}
-\textbf{What should we have done better?}
+\textbf{What could we have done better?}
 \begin{itemize}
 	\item JWT implementation impeded by forgetting to include re-writing of tests in the ticket
 	\item Sprint retrospective not carried out immediately after sprint ended, made it a more laborious task
 \end{itemize}
-
+\clearpage
 \underline{\textbf{Sprint Burndown}}\newline
 \begin{figure}[!ht]
 \centering
@@ -286,7 +272,7 @@ This sprint was valuable as I learned about security in a node application. It a
 \subsection{Sprint Metrics}
 
 \subsubsection{Sprint Velocity}
-Using Jira we can view the velocity for each sprint, which shows the story points completed in each sprint compared to the initial commitment for that sprint. This gives the developer an indication as to their performance but also maturity from an Agile perspective. The velocity for this project can be seen below in Figure \ref{fig:velocity}.
+Using Jira the velocity for each sprint can be easily viewed, which shows the story points completed in each sprint compared to the initial commitment for that sprint. This gives the developer an indication as to their performance but also maturity from an Agile perspective. The velocity for this project can be seen below in Figure \ref{fig:velocity}.
 
 \begin{figure}[!ht]
 \centering
@@ -295,8 +281,8 @@ Using Jira we can view the velocity for each sprint, which shows the story point
 \label{fig:velocity}
 \end{figure}
 
-With regard to the \glspl{sprint} in this project it is evident that initially I was completing far more than I expected to. In sprint 1 I completed almost 40\% more story points than anticipated. In sprint 2 this was improved and the expected story points were closer to the completed. I then hit problems in sprint 3 and not everything was completed. However this set back was quickly remedied in sprint 4 as a break in college allowed for accelerated development. By sprint 5 I had become much more accurate at assigning story points and so this last sprint was by far the most productive and also accurate from a metrics point of view.
+With regard to the \glspl{sprint} in this project it is evident that initially the developer was completing far more than expected. In sprint 1 the developer completed almost 40\% more story points than anticipated. In sprint 2 this was improved and the expected story points were closer to the completed. Problems arose in sprint 3 and not everything was completed. However, this set back was quickly remedied in sprint 4 as a break in college pressures allowed for accelerated development. By sprint 5 the developer had become much more accurate at assigning story points and so this last sprint was by far the most productive and also accurate from a metrics point of view.
 
 \subsubsection{Sprint Burndowns}
 
-Using burndown graphs for each sprint was a valuable resource as it enabled me to maintain a steady working pace while also keeping an eye on the deadline. This meant that the volume of tasks remaining was never overwhelming and remaining effort could be accurately judged. All burndown charts for each sprint can be seen above in their respective sprint sections.
+Using burndown graphs for each sprint was a valuable resource as it enabled the developer to maintain a steady working pace while also keeping the deadline in sight. This meant that the volume of tasks remaining was never overwhelming and remaining effort could be accurately judged. All burndown charts for each sprint can be seen above in their respective sprint sections.
