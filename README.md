@@ -2,7 +2,7 @@
 
 This is a collection of some of the papers and reports I wrote during my final year of college. 
 
-LateX was used to write all of these reports and each has an associated practical element.
+LaTeX was used to write all of these reports and each has an associated practical element.
 
 ---
 
